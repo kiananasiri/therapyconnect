@@ -23,9 +23,9 @@ export default function Home() {
         <nav className="absolute top-5 left-5 flex items-center gap-4">
           <Link to="/profile">
             <img
-              src={avatar}
+              src={user.avatar}
               alt="User Avatar"
-              className="h-10 w-10 sm:h-12 sm:w-12 rounded-full border-2 border-white shadow-lg cursor-pointer"
+              className="h-10 w-10 sm:h-12 sm:w-12 rounded-full border-2 border-white shadow-lg hover:border-pink-400 transition-colors cursor-pointer"
             />
           </Link>
 
