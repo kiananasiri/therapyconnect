@@ -2,7 +2,7 @@ import { Player } from "@lottiefiles/react-lottie-player";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import avatar from "../assets/avatar.png";
+import { useUser } from "../contexts/UserContext";
 import bgGif1 from "../assets/background1.gif";
 import bgGif2 from "../assets/background2.gif";
 import therapyAnimation1 from "../assets/therapy-animation1.json";
@@ -10,6 +10,7 @@ import therapyAnimation2 from "../assets/therapy-animation2.json";
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { user } = useUser();
 
   return (
     <div className="text-white font-inter">

@@ -1,10 +1,27 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import avatar from "../assets/avatar.png";
+import { useUser } from "../contexts/UserContext";
 
 export default function Profile() {
   const [activeTab, setActiveTab] = useState("details");
+  const { user, updateAvatar } = useUser();
+  const fileInputRef = useRef();
+
+  const handleAvatarClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleAvatarChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        updateAvatar(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   return (
     <div className="min-h-screen font-inter" style={{ background: "linear-gradient(to bottom, #f8f4f1, #ffffff)" }}>
@@ -29,11 +46,24 @@ export default function Profile() {
           {/* Profile header with cover and avatar */}
           <div className="h-40 bg-gradient-to-r from-pink-100 to-pink-200 relative">
             <div className="absolute -bottom-16 left-8 flex items-end">
-              <div className="h-32 w-32 rounded-full border-4 border-white overflow-hidden bg-white">
-                <img src={avatar} alt="Profile" className="h-full w-full object-cover" />
+              <div 
+                className="h-32 w-32 rounded-full border-4 border-white overflow-hidden bg-white cursor-pointer group relative"
+                onClick={handleAvatarClick}
+              >
+                <img src={user.avatar} alt="Profile" className="h-full w-full object-cover" />
+                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <span className="text-white text-sm">Change Photo</span>
+                </div>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  className="hidden"
+                  accept="image/*"
+                  onChange={handleAvatarChange}
+                />
               </div>
               <div className="ml-4 mb-4">
-                <h2 className="text-2xl font-bold text-gray-700">Alex Johnson</h2>
+                <h2 className="text-2xl font-bold text-gray-700">{user.name || 'Your Name'}</h2>
                 <p className="text-gray-500">Member since 2023</p>
               </div>
             </div>
@@ -73,25 +103,25 @@ export default function Profile() {
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-500 mb-1">Full Name</label>
-                      <p className="text-gray-700">Alex Johnson</p>
+                      <p className="text-gray-700">{user.name || 'Your Name'}</p>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-500 mb-1">Email</label>
-                      <p className="text-gray-700">alex.johnson@example.com</p>
+                      <p className="text-gray-700">{user.email || 'Your Email'}</p>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-500 mb-1">Phone</label>
-                      <p className="text-gray-700">(555) 123-4567</p>
+                      <p className="text-gray-700">{user.phone || 'Your Phone'}</p>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-500 mb-1">Date of Birth</label>
-                      <p className="text-gray-700">May 15, 1988</p>
+                      <p className="text-gray-700">{user.dateOfBirth || 'Your Date of Birth'}</p>
                     </div>
                   </div>
                   
                   <div>
                     <label className="block text-sm font-medium text-gray-500 mb-1">Therapy Goals</label>
-                    <p className="text-gray-700">Manage anxiety, improve work-life balance, develop coping mechanisms for stress</p>
+                    <p className="text-gray-700">{user.therapyGoals || 'Your Therapy Goals'}</p>
                   </div>
                   
                   <button className="mt-4 px-6 py-2 bg-pink-50 hover:bg-pink-100 text-pink-500 rounded-lg transition flex items-center">
