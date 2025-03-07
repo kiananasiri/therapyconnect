@@ -1,262 +1,278 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import avatar from "../assets/avatar.png";
 
 export default function Profile() {
-  const [activeTab, setActiveTab] = useState("info");
-
-  // Sample user data (would come from an API in a real application)
-  const userData = {
-    name: "Sarah Johnson",
-    email: "sarah.j@example.com",
-    joinDate: "January 2023",
-    upcomingSessions: 2,
-    completedSessions: 14,
-    therapist: "Dr. Michael Chen",
-    progress: 75,
-    notes: [
-      { date: "June 15, 2023", content: "Great progress on anxiety management techniques." },
-      { date: "May 28, 2023", content: "Discussed work-life balance strategies." },
-    ]
-  };
+  const [activeTab, setActiveTab] = useState("details");
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 text-gray-800 py-10 px-4 sm:px-6">
-      {/* Back button */}
-      <div className="max-w-5xl mx-auto mb-8">
-        <Link to="/" className="flex items-center text-pink-500 hover:text-pink-600 transition">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z" clipRule="evenodd" />
+    <div className="min-h-screen font-inter" style={{ background: "linear-gradient(to bottom, #f8f4f1, #ffffff)" }}>
+      {/* Header with back navigation */}
+      <header className="py-6 px-8 flex items-center">
+        <Link to="/" className="text-gray-600 hover:text-pink-400 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
-          Back to Home
         </Link>
-      </div>
+        <h1 className="text-2xl font-semibold text-gray-700 ml-4">My Profile</h1>
+      </header>
 
-      {/* Profile header */}
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="max-w-5xl mx-auto bg-white rounded-2xl shadow-sm overflow-hidden mb-8"
-      >
-        <div className="bg-gradient-to-r from-pink-100 to-pink-200 h-48 flex items-end p-6">
-          <div className="flex flex-col sm:flex-row items-center sm:items-end gap-4 w-full relative -mb-16">
-            <div className="h-32 w-32 rounded-full bg-gradient-to-r from-pink-400 to-pink-500 border-4 border-white shadow-md flex items-center justify-center text-white text-4xl font-light">
-              {userData.name.charAt(0)}
-            </div>
-            <div className="sm:mb-4 text-center sm:text-left">
-              <h1 className="text-2xl font-bold text-gray-800">{userData.name}</h1>
-              <p className="text-gray-600">Member since {userData.joinDate}</p>
-            </div>
-          </div>
-        </div>
-        <div className="mt-16 px-6 pb-6"></div>
-      </motion.div>
-
-      {/* Tabs and content */}
-      <div className="max-w-5xl mx-auto">
-        {/* Tabs */}
-        <div className="flex border-b border-gray-200 mb-6">
-          <button 
-            onClick={() => setActiveTab("info")}
-            className={`px-6 py-3 font-medium text-sm focus:outline-none transition-colors ${
-              activeTab === "info" 
-                ? "text-pink-500 border-b-2 border-pink-500" 
-                : "text-gray-500 hover:text-gray-700"
-            }`}
-          >
-            Profile Info
-          </button>
-          <button 
-            onClick={() => setActiveTab("sessions")}
-            className={`px-6 py-3 font-medium text-sm focus:outline-none transition-colors ${
-              activeTab === "sessions" 
-                ? "text-pink-500 border-b-2 border-pink-500" 
-                : "text-gray-500 hover:text-gray-700"
-            }`}
-          >
-            Session History
-          </button>
-          <button 
-            onClick={() => setActiveTab("notes")}
-            className={`px-6 py-3 font-medium text-sm focus:outline-none transition-colors ${
-              activeTab === "notes" 
-                ? "text-pink-500 border-b-2 border-pink-500" 
-                : "text-gray-500 hover:text-gray-700"
-            }`}
-          >
-            Therapy Notes
-          </button>
-        </div>
-
-        {/* Tab content */}
-        <motion.div 
-          key={activeTab}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
-          className="bg-white rounded-2xl shadow-sm p-6 mb-8"
-        >
-          {activeTab === "info" && (
-            <div className="grid md:grid-cols-2 gap-8">
-              <div>
-                <h2 className="text-xl font-semibold mb-4 text-gray-800">Personal Details</h2>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-500">Full Name</label>
-                    <p className="mt-1 text-gray-800">{userData.name}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-500">Email Address</label>
-                    <p className="mt-1 text-gray-800">{userData.email}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-500">Therapist</label>
-                    <p className="mt-1 text-gray-800">{userData.therapist}</p>
-                  </div>
-                </div>
-
-                <button className="mt-6 px-4 py-2 bg-pink-100 text-pink-600 rounded-lg font-medium text-sm hover:bg-pink-200 transition">
-                  Edit Personal Details
-                </button>
-              </div>
-
-              <div>
-                <h2 className="text-xl font-semibold mb-4 text-gray-800">Therapy Progress</h2>
-                <div className="mb-4">
-                  <div className="flex justify-between mb-1">
-                    <span className="text-sm font-medium text-gray-500">Overall Progress</span>
-                    <span className="text-sm font-medium text-pink-500">{userData.progress}%</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2.5">
-                    <div className="bg-pink-500 h-2.5 rounded-full" style={{ width: `${userData.progress}%` }}></div>
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-4 mt-6">
-                  <div className="bg-amber-50 rounded-xl p-4 text-center">
-                    <p className="text-2xl font-bold text-gray-800">{userData.upcomingSessions}</p>
-                    <p className="text-xs text-gray-500 mt-1">Upcoming Sessions</p>
-                  </div>
-                  <div className="bg-pink-50 rounded-xl p-4 text-center">
-                    <p className="text-2xl font-bold text-gray-800">{userData.completedSessions}</p>
-                    <p className="text-xs text-gray-500 mt-1">Completed Sessions</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeTab === "sessions" && (
-            <div>
-              <h2 className="text-xl font-semibold mb-4 text-gray-800">Session History</h2>
-              <div className="bg-pink-50 rounded-lg p-4 mb-4">
-                <p className="text-pink-600 font-medium">Upcoming Session</p>
-                <p className="text-gray-800 mt-2">Thursday, July 15, 2023 • 3:00 PM</p>
-                <p className="text-gray-600 text-sm mt-1">With Dr. Michael Chen • 50 minutes</p>
-                <div className="mt-3 flex gap-2">
-                  <button className="px-3 py-1 bg-white text-pink-600 border border-pink-200 rounded text-sm font-medium hover:bg-pink-50">Reschedule</button>
-                  <button className="px-3 py-1 bg-white text-red-600 border border-red-200 rounded text-sm font-medium hover:bg-red-50">Cancel</button>
-                </div>
-              </div>
-
-              <div className="divide-y divide-gray-100">
-                {[
-                  { date: "June 30, 2023", time: "3:00 PM", therapist: "Dr. Michael Chen" },
-                  { date: "June 15, 2023", time: "3:00 PM", therapist: "Dr. Michael Chen" },
-                  { date: "May 28, 2023", time: "4:30 PM", therapist: "Dr. Michael Chen" },
-                ].map((session, index) => (
-                  <div key={index} className="py-4 flex justify-between items-center">
-                    <div>
-                      <p className="text-gray-800 font-medium">{session.date} • {session.time}</p>
-                      <p className="text-gray-500 text-sm">With {session.therapist}</p>
-                    </div>
-                    <button className="text-gray-500 hover:text-pink-500">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                        <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-                      </svg>
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {activeTab === "notes" && (
-            <div>
-              <h2 className="text-xl font-semibold mb-4 text-gray-800">Therapy Notes</h2>
-              <div className="space-y-4">
-                {userData.notes.map((note, index) => (
-                  <div key={index} className="bg-gray-50 rounded-lg p-4">
-                    <p className="text-sm text-pink-500 font-medium">{note.date}</p>
-                    <p className="text-gray-700 mt-2">{note.content}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </motion.div>
-
-        {/* Settings card */}
+      {/* Profile content container */}
+      <div className="max-w-4xl mx-auto px-6 pb-16">
+        {/* Profile card */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="bg-white rounded-2xl shadow-sm p-6"
+          className="bg-white rounded-2xl shadow-md overflow-hidden mb-8"
         >
-          <h2 className="text-xl font-semibold mb-4 text-gray-800">Account Settings</h2>
-          <div className="grid md:grid-cols-2 gap-4">
-            <Link to="/settings" className="flex items-center p-3 rounded-lg hover:bg-pink-50 transition group">
-              <div className="h-10 w-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-500 group-hover:bg-pink-200">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
+          {/* Profile header with cover and avatar */}
+          <div className="h-40 bg-gradient-to-r from-pink-100 to-pink-200 relative">
+            <div className="absolute -bottom-16 left-8 flex items-end">
+              <div className="h-32 w-32 rounded-full border-4 border-white overflow-hidden bg-white">
+                <img src={avatar} alt="Profile" className="h-full w-full object-cover" />
               </div>
-              <div className="ml-4">
-                <h3 className="font-medium text-gray-800">Account Settings</h3>
-                <p className="text-sm text-gray-500">Update your personal information</p>
+              <div className="ml-4 mb-4">
+                <h2 className="text-2xl font-bold text-gray-700">Alex Johnson</h2>
+                <p className="text-gray-500">Member since 2023</p>
               </div>
-            </Link>
+            </div>
+          </div>
 
-            <Link to="/settings?tab=security" className="flex items-center p-3 rounded-lg hover:bg-pink-50 transition group">
-              <div className="h-10 w-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-500 group-hover:bg-pink-200">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <h3 className="font-medium text-gray-800">Security</h3>
-                <p className="text-sm text-gray-500">Change password and security settings</p>
-              </div>
-            </Link>
+          {/* Profile tabs */}
+          <div className="pt-20 px-8">
+            <div className="flex border-b border-gray-200">
+              <button 
+                className={`pb-4 px-4 font-medium text-sm transition-colors ${activeTab === "details" ? "border-b-2 border-pink-400 text-pink-500" : "text-gray-400 hover:text-gray-600"}`}
+                onClick={() => setActiveTab("details")}
+              >
+                Personal Details
+              </button>
+              <button 
+                className={`pb-4 px-4 font-medium text-sm transition-colors ${activeTab === "sessions" ? "border-b-2 border-pink-400 text-pink-500" : "text-gray-400 hover:text-gray-600"}`}
+                onClick={() => setActiveTab("sessions")}
+              >
+                Therapy Sessions
+              </button>
+              <button 
+                className={`pb-4 px-4 font-medium text-sm transition-colors ${activeTab === "journal" ? "border-b-2 border-pink-400 text-pink-500" : "text-gray-400 hover:text-gray-600"}`}
+                onClick={() => setActiveTab("journal")}
+              >
+                Journal
+              </button>
+            </div>
 
-            <Link to="/settings?tab=notifications" className="flex items-center p-3 rounded-lg hover:bg-pink-50 transition group">
-              <div className="h-10 w-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-500 group-hover:bg-pink-200">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <h3 className="font-medium text-gray-800">Notifications</h3>
-                <p className="text-sm text-gray-500">Manage notification preferences</p>
-              </div>
-            </Link>
+            {/* Tab contents */}
+            <div className="py-8">
+              {activeTab === "details" && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="space-y-6"
+                >
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-500 mb-1">Full Name</label>
+                      <p className="text-gray-700">Alex Johnson</p>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-500 mb-1">Email</label>
+                      <p className="text-gray-700">alex.johnson@example.com</p>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-500 mb-1">Phone</label>
+                      <p className="text-gray-700">(555) 123-4567</p>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-500 mb-1">Date of Birth</label>
+                      <p className="text-gray-700">May 15, 1988</p>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-500 mb-1">Therapy Goals</label>
+                    <p className="text-gray-700">Manage anxiety, improve work-life balance, develop coping mechanisms for stress</p>
+                  </div>
+                  
+                  <button className="mt-4 px-6 py-2 bg-pink-50 hover:bg-pink-100 text-pink-500 rounded-lg transition flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    </svg>
+                    Edit Profile
+                  </button>
+                </motion.div>
+              )}
 
-            <Link to="/settings?tab=billing" className="flex items-center p-3 rounded-lg hover:bg-pink-50 transition group">
-              <div className="h-10 w-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-500 group-hover:bg-pink-200">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <h3 className="font-medium text-gray-800">Billing & Payments</h3>
-                <p className="text-sm text-gray-500">Manage payment information</p>
-              </div>
-            </Link>
+              {activeTab === "sessions" && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="space-y-4"
+                >
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-lg font-medium text-gray-700">Upcoming Sessions</h3>
+                    <button className="px-4 py-2 bg-pink-50 hover:bg-pink-100 text-pink-500 rounded-lg transition text-sm">
+                      Book New Session
+                    </button>
+                  </div>
+                  
+                  {/* Session cards */}
+                  <div className="space-y-3">
+                    <div className="p-4 bg-cream-50 rounded-lg border border-gray-100">
+                      <div className="flex justify-between">
+                        <div>
+                          <p className="text-pink-500 font-medium">Dr. Sarah Williams</p>
+                          <p className="text-gray-700">Anxiety Management</p>
+                          <div className="flex items-center mt-2 text-sm text-gray-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            May 10, 2023
+                          </div>
+                          <div className="flex items-center mt-1 text-sm text-gray-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            2:00 PM - 3:00 PM
+                          </div>
+                        </div>
+                        <div className="flex flex-col space-y-2">
+                          <button className="px-3 py-1 bg-white text-pink-500 border border-pink-200 rounded text-sm hover:bg-pink-50 transition">
+                            Reschedule
+                          </button>
+                          <button className="px-3 py-1 bg-white text-gray-500 border border-gray-200 rounded text-sm hover:bg-gray-50 transition">
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <h3 className="text-lg font-medium text-gray-700 mt-8">Past Sessions</h3>
+                  <div className="space-y-3">
+                    <div className="p-4 bg-gray-50 rounded-lg border border-gray-100">
+                      <div className="flex justify-between">
+                        <div>
+                          <p className="text-gray-600 font-medium">Dr. Sarah Williams</p>
+                          <p className="text-gray-600">Initial Consultation</p>
+                          <div className="flex items-center mt-2 text-sm text-gray-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            April 26, 2023
+                          </div>
+                        </div>
+                        <button className="px-3 py-1 h-8 bg-white text-gray-500 border border-gray-200 rounded text-sm hover:bg-gray-50 transition">
+                          View Notes
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {activeTab === "journal" && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="space-y-6"
+                >
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-lg font-medium text-gray-700">Journal Entries</h3>
+                    <button className="px-4 py-2 bg-pink-50 hover:bg-pink-100 text-pink-500 rounded-lg transition text-sm flex items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                      </svg>
+                      New Entry
+                    </button>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <div className="p-5 bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h4 className="font-medium text-gray-700">Reflecting on Progress</h4>
+                          <p className="text-gray-500 text-sm mt-1">May 5, 2023</p>
+                        </div>
+                        <div className="bg-pink-50 text-pink-500 px-2 py-1 rounded text-xs">
+                          Positive
+                        </div>
+                      </div>
+                      <p className="text-gray-600 mt-3 line-clamp-3">
+                        Today was a good day. I practiced the mindfulness techniques Dr. Williams suggested, and I found myself feeling much more grounded throughout the workday. The breathing exercises really help when I feel overwhelmed...
+                      </p>
+                      <button className="mt-3 text-pink-500 text-sm font-medium hover:text-pink-600 transition">
+                        Read more
+                      </button>
+                    </div>
+                    
+                    <div className="p-5 bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h4 className="font-medium text-gray-700">Challenging Day</h4>
+                          <p className="text-gray-500 text-sm mt-1">April 28, 2023</p>
+                        </div>
+                        <div className="bg-gray-50 text-gray-500 px-2 py-1 rounded text-xs">
+                          Neutral
+                        </div>
+                      </div>
+                      <p className="text-gray-600 mt-3 line-clamp-3">
+                        I had a difficult conversation with a coworker today. I tried to use the communication strategies we discussed in our last session. While the conversation was still challenging, I feel I handled it better than I would have before...
+                      </p>
+                      <button className="mt-3 text-pink-500 text-sm font-medium hover:text-pink-600 transition">
+                        Read more
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </div>
           </div>
         </motion.div>
+        
+        {/* Additional profile sections */}
+        <div className="grid md:grid-cols-2 gap-6">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0, transition: { delay: 0.1 } }}
+            className="bg-white rounded-xl p-6 shadow-sm"
+          >
+            <h3 className="text-lg font-medium text-gray-700 mb-4">Mood Tracker</h3>
+            <div className="h-40 bg-gray-50 rounded-lg flex items-center justify-center">
+              {/* Placeholder for mood chart */}
+              <p className="text-gray-400">Mood trends visualization</p>
+            </div>
+          </motion.div>
+          
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0, transition: { delay: 0.2 } }}
+            className="bg-white rounded-xl p-6 shadow-sm"
+          >
+            <h3 className="text-lg font-medium text-gray-700 mb-4">Resources</h3>
+            <ul className="space-y-3">
+              <li className="flex items-center text-gray-600 hover:text-pink-500 transition cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Anxiety Management Guide
+              </li>
+              <li className="flex items-center text-gray-600 hover:text-pink-500 transition cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Guided Meditation Videos
+              </li>
+              <li className="flex items-center text-gray-600 hover:text-pink-500 transition cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                Weekly Mindfulness Calendar
+              </li>
+            </ul>
+          </motion.div>
+        </div>
       </div>
     </div>
   );
