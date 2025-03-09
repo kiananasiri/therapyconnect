@@ -25,7 +25,7 @@ export default function Profile() {
 
   return (
     <div className="min-h-screen font-inter" style={{ background: "linear-gradient(to bottom, #f8f4f1, #ffffff)" }}>
-      {/* Header with back navigation */}
+      {/* Header with back navigation changes*/}
       <header className="py-6 px-8 flex items-center">
         <Link to="/" className="text-gray-600 hover:text-pink-400 transition">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
