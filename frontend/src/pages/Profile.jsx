@@ -1,12 +1,20 @@
 import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useUser } from "../contexts/UserContext";
 
 export default function Profile() {
   const [activeTab, setActiveTab] = useState("details");
-  const { user, updateAvatar } = useUser();
   const fileInputRef = useRef();
+
+  // Hardcoded user data for testing
+  const user = {
+    avatar: "https://via.placeholder.com/150", // Placeholder image URL
+    name: "Alex Johnson",
+    email: "alex.johnson@example.com",
+    phone: "(555) 123-4567",
+    dateOfBirth: "May 15, 1988",
+    therapyGoals: "Manage anxiety, improve work-life balance, develop coping mechanisms for stress",
+  };
 
   const handleAvatarClick = () => {
     fileInputRef.current.click();
@@ -17,7 +25,7 @@ export default function Profile() {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        updateAvatar(reader.result);
+        console.log("Avatar updated:", reader.result); // Log the new avatar data URL
       };
       reader.readAsDataURL(file);
     }
@@ -25,7 +33,7 @@ export default function Profile() {
 
   return (
     <div className="min-h-screen font-inter" style={{ background: "linear-gradient(to bottom, #f8f4f1, #ffffff)" }}>
-      {/* Header with back navigation changes*/}
+      {/* Header with back navigation */}
       <header className="py-6 px-8 flex items-center">
         <Link to="/" className="text-gray-600 hover:text-pink-400 transition">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -63,7 +71,7 @@ export default function Profile() {
                 />
               </div>
               <div className="ml-4 mb-4">
-                <h2 className="text-2xl font-bold text-gray-700">{user.name || 'Your Name'}</h2>
+                <h2 className="text-2xl font-bold text-gray-700">{user.name}</h2>
                 <p className="text-gray-500">Member since 2023</p>
               </div>
             </div>
@@ -103,25 +111,25 @@ export default function Profile() {
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-500 mb-1">Full Name</label>
-                      <p className="text-gray-700">{user.name || 'Your Name'}</p>
+                      <p className="text-gray-700">{user.name}</p>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-500 mb-1">Email</label>
-                      <p className="text-gray-700">{user.email || 'Your Email'}</p>
+                      <p className="text-gray-700">{user.email}</p>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-500 mb-1">Phone</label>
-                      <p className="text-gray-700">{user.phone || 'Your Phone'}</p>
+                      <p className="text-gray-700">{user.phone}</p>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-500 mb-1">Date of Birth</label>
-                      <p className="text-gray-700">{user.dateOfBirth || 'Your Date of Birth'}</p>
+                      <p className="text-gray-700">{user.dateOfBirth}</p>
                     </div>
                   </div>
                   
                   <div>
                     <label className="block text-sm font-medium text-gray-500 mb-1">Therapy Goals</label>
-                    <p className="text-gray-700">{user.therapyGoals || 'Your Therapy Goals'}</p>
+                    <p className="text-gray-700">{user.therapyGoals}</p>
                   </div>
                   
                   <button className="mt-4 px-6 py-2 bg-pink-50 hover:bg-pink-100 text-pink-500 rounded-lg transition flex items-center">
