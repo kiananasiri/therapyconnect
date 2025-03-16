@@ -9,4 +9,5 @@ RUN echo "module.exports = { plugins: [require('postcss-import'), require('tailw
 RUN touch tailwind.config.js && echo "module.exports = { content: ['./src/**/*.{js,jsx,ts,tsx}'], theme: { extend: { fontFamily: { inter: ['Inter', 'sans-serif'] } } }, plugins: [], }" > tailwind.config.js
 ENV HTTPS=true
 ENV HTTP=true
+COPY public/ /app/public/
 CMD ["npm", "start"]
