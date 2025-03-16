@@ -43,6 +43,9 @@ install_therapyconnect() {
   echo "Updating configuration files with your domain..."
   sed -i "s|DOMAIN|$DOMAIN|g" $NGINX_CONF
 
+  echo "Rebuilding Docker images to ensure the latest code is used..."
+  docker-compose -f $THERAPYCONNECT_DIR/docker-compose.yml build --no-cache
+
   echo "Starting TherapyConnect..."
   docker-compose -f $THERAPYCONNECT_DIR/docker-compose.yml up -d
   echo "TherapyConnect is now installed and running!"
