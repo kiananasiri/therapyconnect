@@ -9,7 +9,7 @@ export default function Profile() {
   // Hardcoded user data for testing
   const user = {
     avatar: "https://via.placeholder.com/150", // Placeholder image URL
-    name: "Alex JJJJJJ",
+    name: "Alex JJJJJJJJ HHHHHH",
     email: "alex.johnson@example.com",
     phone: "(555) 123-4567",
     dateOfBirth: "May 15, 1988",
