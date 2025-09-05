@@ -1,11 +1,12 @@
 django
 djangorestframework
-mysqlclient
+psycopg2-binary
 django-cors-headers
-djangorestframework
 djangorestframework-simplejwt
-django-cors-headers
 social-auth-app-django
 google-auth
 google-auth-oauthlib
 google-auth-httplib2
+Pillow
+channels
+channels-redis

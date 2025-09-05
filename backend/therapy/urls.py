@@ -1,10 +1,24 @@
-from django.urls import path
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .views import GoogleLogin, AppleLogin
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import (
+    PatientViewSet, TherapistViewSet, SessionViewSet, PaymentViewSet,
+    ChatViewSet, MessageViewSet, ChatRoomViewSet, ReviewViewSet, NotebookViewSet, PageViewSet,
+    AvailabilityViewSet
+)
+
+router = DefaultRouter()
+router.register(r'patients', PatientViewSet)
+router.register(r'therapists', TherapistViewSet)
+router.register(r'sessions', SessionViewSet)
+router.register(r'payments', PaymentViewSet)
+router.register(r'chats', ChatViewSet)
+router.register(r'messages', MessageViewSet)
+router.register(r'chat-rooms', ChatRoomViewSet)
+router.register(r'reviews', ReviewViewSet)
+router.register(r'notebooks', NotebookViewSet)
+router.register(r'pages', PageViewSet)
+router.register(r'availabilities', AvailabilityViewSet)
 
 urlpatterns = [
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/auth/google/', GoogleLogin.as_view(), name='google_login'),
-    path('api/auth/apple/', AppleLogin.as_view(), name='apple_login'),
+    path('', include(router.urls)),
 ]

@@ -1,0 +1,147 @@
+
+[
+  {
+    "model": "therapy.patient",
+    "pk": "p_abc123",
+    "fields": {
+      "password": "securepass123",
+      "first_name": "John",
+      "last_name": "Doe",
+      "ssn": "123-45-6789",
+      "phone_no": "+1234567890",
+      "email": "john.doe@email.com",
+      "address": "123 Main St, Anytown, USA",
+      "added_note": "Patient prefers morning appointments",
+      "allergies_and_medication": "Allergic to penicillin. Currently taking vitamin D supplements.",
+      "date_of_birth": "1990-05-15",
+      "sex": "M",
+      "about_note": "Experienced software developer seeking therapy for work-related stress.",
+      "tags": ["new_patient", "vip", "morning_preference"],
+      "wallet_balance": "150.00",
+      "sessions": [
+        {
+          "date": "2024-01-15",
+          "duration": 60,
+          "therapist": "Dr. Smith",
+          "notes": "Initial consultation - discussed work stress and anxiety",
+          "cost": "120.00"
+        }
+      ],
+      "created_at": "2024-01-10T10:00:00Z",
+      "updated_at": "2024-01-15T14:30:00Z"
+    }
+  },
+  {
+    "model": "therapy.patient",
+    "pk": "p_def456",
+    "fields": {
+      "password": "mypassword456",
+      "first_name": "Jane",
+      "last_name": "Smith",
+      "ssn": "987-65-4321",
+      "phone_no": "+1987654321",
+      "email": "jane.smith@email.com",
+      "address": "456 Oak Ave, Somewhere, USA",
+      "added_note": "Patient has difficulty with evening appointments due to childcare",
+      "allergies_and_medication": "No known allergies. Taking antidepressants as prescribed.",
+      "date_of_birth": "1985-12-03",
+      "sex": "F",
+      "about_note": "Single mother of two seeking support for depression and anxiety.",
+      "tags": ["returning_patient", "evening_available", "parent"],
+      "wallet_balance": "75.50",
+      "sessions": [
+        {
+          "date": "2024-01-12",
+          "duration": 45,
+          "therapist": "Dr. Johnson",
+          "notes": "Follow-up session - discussed coping strategies for parenting stress",
+          "cost": "90.00"
+        },
+        {
+          "date": "2024-01-05",
+          "duration": 60,
+          "therapist": "Dr. Johnson",
+          "notes": "Initial assessment - diagnosed with moderate depression",
+          "cost": "120.00"
+        }
+      ],
+      "created_at": "2024-01-01T09:00:00Z",
+      "updated_at": "2024-01-12T16:00:00Z"
+    }
+  },
+  {
+    "model": "therapy.patient",
+    "pk": "p_ghi789",
+    "fields": {
+      "password": "strongpass789",
+      "first_name": "Michael",
+      "last_name": "Johnson",
+      "phone_no": "+1555123456",
+      "email": "michael.j@email.com",
+      "address": "789 Pine St, Elsewhere, USA",
+      "added_note": "Patient prefers online sessions when possible",
+      "allergies_and_medication": "Allergic to shellfish. No current medications.",
+      "date_of_birth": "1995-08-22",
+      "sex": "M",
+      "about_note": "Recent college graduate dealing with career transition anxiety.",
+      "tags": ["new_patient", "online_preference", "career_issues"],
+      "wallet_balance": "200.00",
+      "sessions": [],
+      "created_at": "2024-01-14T11:00:00Z",
+      "updated_at": "2024-01-14T11:00:00Z"
+    }
+  },
+  {
+    "model": "therapy.patient",
+    "pk": "p_jkl012",
+    "fields": {
+      "password": "testpass012",
+      "first_name": "Sarah",
+      "last_name": "Williams",
+      "ssn": "456-78-9012",
+      "phone_no": "+1444555666",
+      "email": "sarah.w@email.com",
+      "address": "321 Elm St, Nowhere, USA",
+      "added_note": "Patient has mobility issues - ground floor access required",
+      "allergies_and_medication": "Allergic to latex. Taking blood pressure medication.",
+      "date_of_birth": "1978-03-10",
+      "sex": "F",
+      "about_note": "Retired teacher seeking therapy for grief and life transition.",
+      "tags": ["returning_patient", "accessibility_needs", "senior"],
+      "wallet_balance": "300.00",
+      "sessions": [
+        {
+          "date": "2024-01-08",
+          "duration": 90,
+          "therapist": "Dr. Brown",
+          "notes": "Extended session - grief counseling for loss of spouse",
+          "cost": "180.00"
+        }
+      ],
+      "created_at": "2023-12-20T13:00:00Z",
+      "updated_at": "2024-01-08T17:00:00Z"
+    }
+  },
+  {
+    "model": "therapy.patient",
+    "pk": "p_mno345",
+    "fields": {
+      "password": "password345",
+      "first_name": "David",
+      "last_name": "Brown",
+      "phone_no": "+1777888999",
+      "email": "david.brown@email.com",
+      "address": "654 Maple Dr, Anywhere, USA",
+      "added_note": "Patient prefers group therapy sessions",
+      "allergies_and_medication": "No known allergies. Taking ADHD medication.",
+      "date_of_birth": "2000-11-18",
+      "sex": "M",
+      "about_note": "College student with ADHD seeking support for academic challenges.",
+      "tags": ["new_patient", "group_therapy", "student", "adhd"],
+      "wallet_balance": "50.00",
+      "sessions": [],
+      "created_at": "2024-01-16T15:00:00Z",
+      "updated_at": "2024-01-16T15:00:00Z"
+    }
+  }
+]
