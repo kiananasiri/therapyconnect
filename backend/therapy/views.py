@@ -669,6 +669,96 @@ class SessionViewSet(viewsets.ModelViewSet):
             "patient_rating": session.patient_rating,
             "patient_input": session.patient_input
         })
+    
+    @action(detail=True, methods=['post'])
+    def cancel_session(self, request, pk=None):
+        """Cancel a session from therapist side"""
+        session = get_object_or_404(Session, pk=pk)
+        therapist_id = request.data.get('therapist_id')
+        reason = request.data.get('reason', '')
+        
+        # Validate therapist ID
+        if not therapist_id:
+            return Response(
+                {"error": "Therapist ID is required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Check if the therapist is authorized to cancel this session
+        if session.therapist_id != therapist_id:
+            return Response(
+                {"error": "Unauthorized: You can only cancel your own sessions"},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        
+        # Check if session can be cancelled (not already completed or cancelled)
+        if session.status in ['completed', 'cancelled']:
+            return Response(
+                {"error": f"Cannot cancel session with status: {session.status}"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Check cancellation policy (24 hours before session)
+        from datetime import datetime, timedelta
+        if not session.can_be_cancelled():
+            return Response(
+                {"error": "Sessions can only be cancelled at least 24 hours before the scheduled time"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Update session status to cancelled
+        old_status = session.status
+        session.status = 'cancelled'
+        
+        # Add cancellation reason to therapist notes
+        if reason:
+            cancellation_note = f"[CANCELLED BY THERAPIST] {reason}"
+            if session.therapist_notes:
+                session.therapist_notes += f"\n\n{cancellation_note}"
+            else:
+                session.therapist_notes = cancellation_note
+        else:
+            cancellation_note = "[CANCELLED BY THERAPIST] No reason provided"
+            if session.therapist_notes:
+                session.therapist_notes += f"\n\n{cancellation_note}"
+            else:
+                session.therapist_notes = cancellation_note
+        
+        session.save()
+        
+        # Free up the availability slot if it exists
+        try:
+            from .models import Availability
+            availability = Availability.objects.get(session_id=session.id)
+            availability.free_slot()
+        except Availability.DoesNotExist:
+            # No availability record found, which is fine
+            pass
+        
+        # Handle payment refund if session was paid for
+        try:
+            from .models import Payment
+            payment = Payment.objects.get(session_id=session.id)
+            if payment.stat == 'successful':
+                # Process refund
+                patient = Patient.objects.get(id=session.patient_id)
+                therapist = Therapist.objects.get(id=session.therapist_id)
+                payment.refund_payment(patient, therapist)
+                payment.stat = 'refunded'
+                payment.save()
+        except Payment.DoesNotExist:
+            # No payment record found
+            pass
+        
+        return Response({
+            "message": "Session cancelled successfully",
+            "session_id": session.id,
+            "old_status": old_status,
+            "new_status": session.status,
+            "cancellation_reason": reason,
+            "cancelled_at": datetime.now().isoformat(),
+            "refund_processed": True if 'payment' in locals() and payment.stat == 'refunded' else False
+        })
 
 
 class PaymentViewSet(viewsets.ModelViewSet):

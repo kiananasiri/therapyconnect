@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getTherapist, getTherapistPatients, getTherapistCalendarSessions } from "../api";
+import { getTherapist, getTherapistPatients, getTherapistCalendarSessions, cancelSession } from "../api";
 import { useUser } from "../contexts/UserContext";
 import avatar from "../assets/avatar.png"; // ✅ use local asset
 
@@ -18,9 +18,73 @@ export default function TherapistDashboard() {
   const [sessionLoading, setSessionLoading] = useState(false);
   const [selectedDay, setSelectedDay] = useState(null);
   const [dayViewSessions, setDayViewSessions] = useState([]);
+  const [cancelingSession, setCancelingSession] = useState(null);
+  const [cancelReason, setCancelReason] = useState('');
+  const [showCancelModal, setShowCancelModal] = useState(false);
 
   // Get therapist ID from user context
   const therapistId = user?.id;
+
+  // Handle session cancellation
+  const handleCancelSession = async (sessionId) => {
+    try {
+      setCancelingSession(sessionId);
+      const response = await cancelSession(sessionId, therapistId, cancelReason);
+      
+      // Show success message
+      alert(`Session cancelled successfully! ${response.data.refund_processed ? 'Refund processed.' : ''}`);
+      
+      // Refresh data
+      if (selectedPatient) {
+        await handlePatientClick(selectedPatient);
+      }
+      
+      // Refresh calendar data
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth() + 1;
+      const sessionsResponse = await getTherapistCalendarSessions(therapistId, year, month);
+      setCalendarSessions(sessionsResponse.data.sessions);
+      
+      // Close modal and reset state
+      setShowCancelModal(false);
+      setCancelReason('');
+      setCancelingSession(null);
+      
+    } catch (error) {
+      console.error('Error cancelling session:', error);
+      const errorMessage = error.response?.data?.error || 'Failed to cancel session';
+      alert(`Error: ${errorMessage}`);
+      setCancelingSession(null);
+    }
+  };
+
+  // Open cancel modal
+  const openCancelModal = (sessionId) => {
+    setCancelingSession(sessionId);
+    setShowCancelModal(true);
+    setCancelReason('');
+  };
+
+  // Close cancel modal
+  const closeCancelModal = () => {
+    setShowCancelModal(false);
+    setCancelingSession(null);
+    setCancelReason('');
+  };
+
+  // Check if session can be cancelled (24 hours before and not completed/cancelled)
+  const canCancelSession = (session) => {
+    if (session.status === 'completed' || session.status === 'cancelled') {
+      return false;
+    }
+    
+    const sessionTime = new Date(session.scheduled_start_datetime);
+    const now = new Date();
+    const timeDifference = sessionTime.getTime() - now.getTime();
+    const hoursDifference = timeDifference / (1000 * 3600);
+    
+    return hoursDifference >= 24; // Must be at least 24 hours before
+  };
 
   // Fetch therapist data and dashboard info
   useEffect(() => {
@@ -1020,7 +1084,60 @@ export default function TherapistDashboard() {
                           <strong style={{ color: "#2E7D32", fontSize: "0.9rem" }}>Therapist Notes:</strong>
                           <div style={{ fontSize: "0.9rem", marginTop: "0.25rem" }}>
                             {session.therapist_notes}
-      </div>
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Cancel Session Button */}
+                      {canCancelSession(session) && (
+                        <div style={{
+                          marginTop: "0.75rem",
+                          display: "flex",
+                          justifyContent: "flex-end"
+                        }}>
+                          <button
+                            onClick={() => openCancelModal(session.id)}
+                            disabled={cancelingSession === session.id}
+                            style={{
+                              background: "#dc3545",
+                              color: "white",
+                              border: "none",
+                              padding: "0.5rem 1rem",
+                              borderRadius: "6px",
+                              fontSize: "0.9rem",
+                              cursor: cancelingSession === session.id ? "not-allowed" : "pointer",
+                              opacity: cancelingSession === session.id ? 0.6 : 1,
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "0.5rem"
+                            }}
+                          >
+                            {cancelingSession === session.id ? (
+                              <>
+                                <span>⏳</span>
+                                Cancelling...
+                              </>
+                            ) : (
+                              <>
+                                <span>❌</span>
+                                Cancel Session
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      )}
+                      
+                      {/* Session cannot be cancelled message */}
+                      {session.status === 'scheduled' && !canCancelSession(session) && (
+                        <div style={{
+                          marginTop: "0.75rem",
+                          padding: "0.5rem",
+                          background: "#fff3cd",
+                          borderRadius: "6px",
+                          fontSize: "0.8rem",
+                          color: "#856404"
+                        }}>
+                          ⚠️ Sessions can only be cancelled at least 24 hours in advance
                         </div>
                       )}
                     </div>
@@ -1254,6 +1371,136 @@ export default function TherapistDashboard() {
               fontSize: "0.9rem"
             }}>
               Click on a session to view patient details
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Cancel Session Modal */}
+      {showCancelModal && (
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          background: "rgba(0,0,0,0.5)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          zIndex: 1000
+        }}>
+          <div style={{
+            background: "white",
+            borderRadius: "12px",
+            padding: "2rem",
+            width: "90%",
+            maxWidth: "500px",
+            boxShadow: "0 10px 30px rgba(0,0,0,0.3)"
+          }}>
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              marginBottom: "1.5rem"
+            }}>
+              <span style={{ fontSize: "1.5rem", marginRight: "0.5rem" }}>❌</span>
+              <h3 style={{ margin: 0, color: "#dc3545" }}>Cancel Session</h3>
+            </div>
+            
+            <p style={{ 
+              margin: "0 0 1.5rem 0", 
+              color: "#666",
+              lineHeight: "1.5"
+            }}>
+              Are you sure you want to cancel this session? This action cannot be undone. 
+              If the session was paid for, the payment will be refunded to the patient.
+            </p>
+            
+            <div style={{ marginBottom: "1.5rem" }}>
+              <label style={{
+                display: "block",
+                marginBottom: "0.5rem",
+                fontWeight: "500",
+                color: "#333"
+              }}>
+                Cancellation Reason (Optional):
+              </label>
+              <textarea
+                value={cancelReason}
+                onChange={(e) => setCancelReason(e.target.value)}
+                placeholder="Please provide a reason for cancelling this session..."
+                style={{
+                  width: "100%",
+                  minHeight: "80px",
+                  padding: "0.75rem",
+                  border: "1px solid #ddd",
+                  borderRadius: "6px",
+                  fontSize: "0.9rem",
+                  resize: "vertical",
+                  fontFamily: "inherit"
+                }}
+                maxLength={500}
+              />
+              <div style={{
+                fontSize: "0.8rem",
+                color: "#666",
+                textAlign: "right",
+                marginTop: "0.25rem"
+              }}>
+                {cancelReason.length}/500 characters
+              </div>
+            </div>
+            
+            <div style={{
+              display: "flex",
+              gap: "1rem",
+              justifyContent: "flex-end"
+            }}>
+              <button
+                onClick={closeCancelModal}
+                disabled={cancelingSession}
+                style={{
+                  background: "#f8f9fa",
+                  color: "#666",
+                  border: "1px solid #ddd",
+                  padding: "0.75rem 1.5rem",
+                  borderRadius: "6px",
+                  fontSize: "0.9rem",
+                  cursor: cancelingSession ? "not-allowed" : "pointer",
+                  opacity: cancelingSession ? 0.6 : 1
+                }}
+              >
+                Keep Session
+              </button>
+              <button
+                onClick={() => handleCancelSession(cancelingSession)}
+                disabled={cancelingSession}
+                style={{
+                  background: "#dc3545",
+                  color: "white",
+                  border: "none",
+                  padding: "0.75rem 1.5rem",
+                  borderRadius: "6px",
+                  fontSize: "0.9rem",
+                  cursor: cancelingSession ? "not-allowed" : "pointer",
+                  opacity: cancelingSession ? 0.6 : 1,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.5rem"
+                }}
+              >
+                {cancelingSession ? (
+                  <>
+                    <span>⏳</span>
+                    Cancelling...
+                  </>
+                ) : (
+                  <>
+                    <span>❌</span>
+                    Cancel Session
+                  </>
+                )}
+              </button>
             </div>
           </div>
         </div>

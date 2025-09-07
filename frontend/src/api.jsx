@@ -40,6 +40,16 @@ export const therapistLogin = (email, password) => {
 export const getTherapistReviews = (therapistId) => API.get(`/reviews/?therapist_id=${therapistId}`);
 export const createReview = (data) => API.post(`/reviews/`, data);
 
+// Session APIs
+export const getSessions = (params = {}) => API.get('/sessions/', { params });
+export const getSession = (id) => API.get(`/sessions/${id}/`);
+export const updateSessionStatus = (id, status) => API.post(`/sessions/${id}/update_status/`, { status });
+export const cancelSession = (sessionId, therapistId, reason = '') => 
+  API.post(`/sessions/${sessionId}/cancel_session/`, { 
+    therapist_id: therapistId, 
+    reason: reason 
+  });
+
 // Availability APIs  
 export const getTherapistAvailability = (therapistId, date) => 
   API.get(`/availabilities/?therapist_id=${therapistId}&date=${date}`);
