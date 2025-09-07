@@ -12,6 +12,7 @@ export const updatePatientPassword = (id, password) =>
   API.put(`/patients/${id}/password`, { password });
 
 // Therapist APIs
+export const getTherapists = () => API.get(`/therapists/`);
 export const getTherapist = (id) => API.get(`/therapists/${id}`);
 export const updateTherapist = (id, data) => API.put(`/therapists/${id}`, data);
 export const uploadTherapistPic = (id, file) => {
