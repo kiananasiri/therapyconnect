@@ -24,5 +24,14 @@ export const getTherapistPatients = (id) => API.get(`/therapists/${id}/patients/
 export const getTherapistCalendarSessions = (id, year, month) => 
   API.get(`/therapists/${id}/calendar_sessions/`, { params: { year, month } });
 
+// Reviews APIs
+export const getTherapistReviews = (therapistId) => API.get(`/reviews/?therapist_id=${therapistId}`);
+export const createReview = (data) => API.post(`/reviews/`, data);
+
+// Availability APIs  
+export const getTherapistAvailability = (therapistId, date) => 
+  API.get(`/availabilities/?therapist_id=${therapistId}&date=${date}`);
+export const bookSession = (data) => API.post(`/sessions/`, data);
+
 export default API;
 
