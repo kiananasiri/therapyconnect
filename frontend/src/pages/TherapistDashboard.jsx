@@ -140,55 +140,6 @@ export default function TherapistDashboard() {
         position: "relative",
         zIndex: 1
       }}>
-        {/* Header */}
-        <div style={{ 
-          display: "flex", 
-          justifyContent: "space-between", 
-          alignItems: "center",
-          marginBottom: "2rem",
-          background: "rgba(255,255,255,0.1)",
-          backdropFilter: "blur(10px)",
-          borderRadius: "20px",
-          padding: "1.5rem 2rem",
-          boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
-          border: "1px solid rgba(255,255,255,0.2)"
-        }}>
-          <div>
-            <h1 style={{ 
-              margin: 0,
-              fontSize: "2.5rem",
-              background: "linear-gradient(45deg, #fff, #f0f8ff)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              fontWeight: "300",
-              textShadow: "0 0 30px rgba(255,255,255,0.3)"
-            }}>
-              ✨ Therapist Dashboard
-            </h1>
-            <p style={{
-              margin: "0.5rem 0 0 0",
-              color: "rgba(255,255,255,0.8)",
-              fontSize: "1.1rem"
-            }}>
-              Welcome back, {therapist ? `${therapist.first_name}!` : 'Doctor!'}
-            </p>
-          </div>
-        <div
-          style={{
-              background: "linear-gradient(135deg, #4CAF50, #45a049)",
-              padding: "1rem 2rem",
-              borderRadius: "25px",
-              color: "white",
-            fontWeight: "bold",
-              fontSize: "1.2rem",
-              boxShadow: "0 8px 25px rgba(76, 175, 80, 0.3)",
-              border: "2px solid rgba(255,255,255,0.2)",
-              animation: "pulse 2s infinite"
-          }}
-        >
-            💰 ${therapist?.wallet_balance || 0}
-        </div>
-      </div>
 
         {/* Main Content: 3 Columns */}
         <div style={{ 
@@ -411,24 +362,28 @@ export default function TherapistDashboard() {
               <button
                 onClick={() => navigateMonth(1)}
                 style={{
-                  background: "rgba(255,255,255,0.2)",
-                  border: "2px solid rgba(255,255,255,0.3)",
+                  background: "linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.15))",
+                  border: "2px solid rgba(255,255,255,0.4)",
                   color: "white",
-                  padding: "0.75rem 1.5rem",
-                  borderRadius: "15px",
+                  padding: "1rem 2rem",
+                  borderRadius: "20px",
                   cursor: "pointer",
-                  fontSize: "1rem",
-                  fontWeight: "500",
+                  fontSize: "1.1rem",
+                  fontWeight: "600",
                   transition: "all 0.3s ease",
-                  backdropFilter: "blur(10px)"
+                  backdropFilter: "blur(15px)",
+                  boxShadow: "0 8px 20px rgba(0,0,0,0.1)",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.2)"
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.background = "rgba(255,255,255,0.3)";
-                  e.target.style.transform = "translateY(-2px)";
+                  e.target.style.background = "linear-gradient(135deg, rgba(255,255,255,0.35), rgba(255,255,255,0.25))";
+                  e.target.style.transform = "translateY(-3px) scale(1.05)";
+                  e.target.style.boxShadow = "0 12px 30px rgba(0,0,0,0.2)";
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.background = "rgba(255,255,255,0.2)";
-                  e.target.style.transform = "translateY(0)";
+                  e.target.style.background = "linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.15))";
+                  e.target.style.transform = "translateY(0) scale(1)";
+                  e.target.style.boxShadow = "0 8px 20px rgba(0,0,0,0.1)";
                 }}
               >
                 Next →
@@ -631,8 +586,8 @@ export default function TherapistDashboard() {
             )}
         </div>
 
-          {/* Right Column: Patient List */}
-          <div style={{
+        {/* Right Column: Patient List */}
+        <div style={{
             background: "rgba(255,255,255,0.95)",
             backdropFilter: "blur(20px)",
             padding: "2rem",
