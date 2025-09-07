@@ -107,15 +107,13 @@ I have successfully developed a comprehensive one-to-one messaging system for th
 - Added database indexes for performance
 
 #### Docker Configuration
-- Added Redis service for WebSocket support
 - Updated backend dependencies
-- Configured Channels with Redis backend
+- Configured for JWT-based authentication
 
 #### Django Settings
-- Added Channels to INSTALLED_APPS
-- Configured ASGI application
-- Set up Redis channel layers
-- Added WebSocket allowed hosts
+- Configured ASGI application for standard HTTP
+- Set up JWT authentication
+- Added CORS configuration
 
 ## 🚀 Key Features
 
@@ -151,10 +149,7 @@ I have successfully developed a comprehensive one-to-one messaging system for th
 ## 📁 Files Created/Modified
 
 ### New Files
-- `backend/therapy/consumers.py` - WebSocket consumers
-- `backend/therapy/routing.py` - WebSocket routing
 - `backend/CHAT_API_DOCUMENTATION.md` - API documentation
-- `backend/websocket_client_example.html` - WebSocket test client
 - `backend/CHAT_IMPLEMENTATION_SUMMARY.md` - This summary
 
 ### Modified Files
@@ -162,10 +157,10 @@ I have successfully developed a comprehensive one-to-one messaging system for th
 - `backend/therapy/views.py` - Enhanced ViewSets with new actions
 - `backend/therapy/serializers.py` - New serializers for enhanced functionality
 - `backend/therapy/urls.py` - Added ChatRoomViewSet routing
-- `backend/backend/asgi.py` - WebSocket configuration
-- `backend/backend/settings.py` - Channels and Redis configuration
-- `backend/requirements.txt` - Added channels and channels-redis
-- `docker-compose.yml` - Added Redis service
+- `backend/backend/asgi.py` - Standard HTTP configuration
+- `backend/backend/settings.py` - JWT authentication configuration
+- `backend/requirements.txt` - Added JWT packages
+- `docker-compose.yml` - Configured for PostgreSQL only
 
 ## 🔧 Setup Instructions
 
@@ -185,8 +180,8 @@ python manage.py migrate
 docker-compose up -d
 ```
 
-### 4. Test WebSocket Connection
-Open `backend/websocket_client_example.html` in a browser to test real-time messaging.
+### 4. Test API Endpoints
+Use the API endpoints documented in `CHAT_API_DOCUMENTATION.md` to test messaging functionality.
 
 ## 📊 API Usage Examples
 
