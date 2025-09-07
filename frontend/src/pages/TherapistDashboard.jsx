@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { getTherapist, getTherapistPatients, getTherapistCalendarSessions } from "../api";
+import { useUser } from "../contexts/UserContext";
 import avatar from "../assets/avatar.png"; // ✅ use local asset
 
-// Mock therapist ID for now - in real app, this would come from auth context
-const MOCK_THERAPIST_ID = "t_abc123";
-
 export default function TherapistDashboard() {
+  const { user } = useUser();
   const [therapist, setTherapist] = useState(null);
   const [patients, setPatients] = useState([]);
   const [calendarSessions, setCalendarSessions] = useState({});
@@ -15,21 +14,30 @@ export default function TherapistDashboard() {
   const [patientsLoading, setPatientsLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Get therapist ID from user context
+  const therapistId = user?.id;
+
   // Fetch therapist data and dashboard info
   useEffect(() => {
     const fetchDashboardData = async () => {
+      if (!therapistId) {
+        setError('No therapist ID found. Please log in again.');
+        setLoading(false);
+        return;
+      }
+
       try {
         setLoading(true);
         setError(null);
         
         // Fetch therapist profile
-        const therapistResponse = await getTherapist(MOCK_THERAPIST_ID);
+        const therapistResponse = await getTherapist(therapistId);
         setTherapist(therapistResponse.data);
         
         // Fetch calendar sessions for current month
         const year = currentDate.getFullYear();
         const month = currentDate.getMonth() + 1;
-        const sessionsResponse = await getTherapistCalendarSessions(MOCK_THERAPIST_ID, year, month);
+        const sessionsResponse = await getTherapistCalendarSessions(therapistId, year, month);
         setCalendarSessions(sessionsResponse.data.sessions);
         
       } catch (error) {
@@ -51,14 +59,16 @@ export default function TherapistDashboard() {
     };
 
     fetchDashboardData();
-  }, [currentDate]);
+  }, [currentDate, therapistId]);
 
   // Fetch patients data separately
   useEffect(() => {
     const fetchPatients = async () => {
+      if (!therapistId) return;
+
       try {
         setPatientsLoading(true);
-        const patientsResponse = await getTherapistPatients(MOCK_THERAPIST_ID);
+        const patientsResponse = await getTherapistPatients(therapistId);
         setPatients(patientsResponse.data);
       } catch (error) {
         console.error('Error fetching patients:', error);
@@ -69,7 +79,7 @@ export default function TherapistDashboard() {
     };
 
     fetchPatients();
-  }, []);
+  }, [therapistId]);
 
   // Navigate calendar months
   const navigateMonth = (direction) => {
@@ -171,11 +181,11 @@ export default function TherapistDashboard() {
       <div style={{
         background: "white",
         borderRadius: "12px",
-        padding: "2rem",
+        padding: "2rem", 
         marginBottom: "2rem",
         boxShadow: "0 2px 8px rgba(0,0,0,0.1)"
       }}>
-        <div style={{
+        <div style={{ 
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center"
@@ -212,7 +222,7 @@ export default function TherapistDashboard() {
               }}>
                 ${therapist?.wallet_balance || 0}
               </div>
-              <div style={{
+            <div style={{
                 color: "#666",
                 fontSize: "0.9rem"
               }}>
@@ -228,9 +238,9 @@ export default function TherapistDashboard() {
             }}>
               <img
                 src={therapist?.profile_picture || avatar}
-                alt="Profile"
-                style={{
-                  width: "100%",
+            alt="Profile"
+                style={{ 
+                  width: "100%", 
                   height: "100%",
                   borderRadius: "50%",
                   objectFit: "cover",
@@ -240,11 +250,11 @@ export default function TherapistDashboard() {
             </div>
           </div>
         </div>
-      </div>
+            </div>
 
       {/* Error Message */}
       {error && (
-        <div style={{
+                <div style={{ 
           background: "#ffebee",
           border: "1px solid #ffcdd2",
           color: "#c62828",
@@ -265,106 +275,106 @@ export default function TherapistDashboard() {
         height: "calc(100vh - 300px)"
       }}>
         {/* Left Column: Calendar */}
-        <div style={{
+          <div style={{
           background: "white",
           borderRadius: "12px",
-          padding: "2rem",
+            padding: "2rem",
           boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
           overflow: "hidden"
         }}>
-          {/* Calendar Header */}
-          <div style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "2rem",
+            {/* Calendar Header */}
+            <div style={{ 
+              display: "flex", 
+              justifyContent: "space-between", 
+              alignItems: "center",
+              marginBottom: "2rem",
             padding: "1rem",
             background: "#4CAF50",
             borderRadius: "8px",
             color: "white"
-          }}>
+            }}>
             <button
-              onClick={() => navigateMonth(-1)}
-              style={{
-                background: "rgba(255,255,255,0.2)",
+                onClick={() => navigateMonth(-1)}
+                style={{
+                  background: "rgba(255,255,255,0.2)",
                 border: "1px solid rgba(255,255,255,0.3)",
-                color: "white",
+                  color: "white",
                 padding: "0.5rem 1rem",
                 borderRadius: "6px",
-                cursor: "pointer",
+                  cursor: "pointer",
                 fontSize: "0.9rem"
-              }}
-            >
-              ← Previous
+                }}
+              >
+                ← Previous
             </button>
-            
-            <h3 style={{
-              margin: 0,
+              
+              <h3 style={{ 
+                margin: 0,
               fontSize: "1.3rem",
               fontWeight: "500"
             }}>
               {currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
-            </h3>
-            
-            <button
-              onClick={() => navigateMonth(1)}
-              style={{
+              </h3>
+              
+              <button
+                onClick={() => navigateMonth(1)}
+                style={{
                 background: "rgba(255,255,255,0.2)",
                 border: "1px solid rgba(255,255,255,0.3)",
-                color: "white",
+                  color: "white",
                 padding: "0.5rem 1rem",
                 borderRadius: "6px",
-                cursor: "pointer",
+                  cursor: "pointer",
                 fontSize: "0.9rem"
-              }}
-            >
-              Next →
-            </button>
-          </div>
+                }}
+              >
+                Next →
+              </button>
+            </div>
 
-          {/* Calendar Grid */}
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(7, 1fr)",
+            {/* Calendar Grid */}
+            <div style={{ 
+              display: "grid", 
+              gridTemplateColumns: "repeat(7, 1fr)", 
             gap: "1px",
             background: "#e0e0e0",
             borderRadius: "8px",
             overflow: "hidden"
-          }}>
-            {/* Day headers */}
+            }}>
+              {/* Day headers */}
             {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-              <div key={day} style={{
-                padding: "1rem 0.5rem",
-                textAlign: "center",
-                fontWeight: "600",
+                <div key={day} style={{
+                  padding: "1rem 0.5rem",
+                  textAlign: "center",
+                  fontWeight: "600",
                 fontSize: "0.9rem",
                 color: "#666",
                 background: "#f5f5f5"
-              }}>
-                {day}
-              </div>
-            ))}
+                }}>
+                  {day}
+                </div>
+              ))}
             
-            {/* Calendar days */}
-            {generateCalendarDays().map((day, index) => {
-              const dateStr = formatDate(day);
-              const daySessions = calendarSessions[dateStr] || [];
-              const isToday = day && new Date().getDate() === day && 
-                             new Date().getMonth() === currentDate.getMonth() &&
-                             new Date().getFullYear() === currentDate.getFullYear();
-              
-              return (
-                <div
-                  key={index}
-                  onMouseEnter={(e) => {
-                    if (day) {
+              {/* Calendar days */}
+              {generateCalendarDays().map((day, index) => {
+                const dateStr = formatDate(day);
+                const daySessions = calendarSessions[dateStr] || [];
+                const isToday = day && new Date().getDate() === day && 
+                               new Date().getMonth() === currentDate.getMonth() &&
+                               new Date().getFullYear() === currentDate.getFullYear();
+                
+                return (
+                  <div
+                    key={index}
+                    onMouseEnter={(e) => {
+                      if (day) {
                       setHoveredDate(dateStr);
                       e.target.style.background = "#e8f5e8";
-                    }
-                  }}
-                  onMouseLeave={(e) => {
+                      }
+                    }}
+                    onMouseLeave={(e) => {
                     setHoveredDate(null);
-                    if (day) {
+                      if (day) {
                       e.target.style.background = day ? 
                         (isToday ? "#4CAF50" :
                          daySessions.length > 0 ? "#81C784" :
@@ -385,37 +395,37 @@ export default function TherapistDashboard() {
                     color: day ? (isToday || daySessions.length > 0 ? "white" : "#333") : "#999",
                     transition: "background 0.2s ease"
                   }}
-                >
-                  {day && (
-                    <>
-                      <div style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "flex-start"
-                      }}>
-                        <span style={{
+                  >
+                    {day && (
+                      <>
+                        <div style={{ 
+                          display: "flex", 
+                          justifyContent: "space-between", 
+                          alignItems: "flex-start" 
+                        }}>
+                          <span style={{ 
                           fontSize: "0.9rem",
                           fontWeight: isToday ? "600" : "normal"
-                        }}>
-                          {day}
-                        </span>
-                      </div>
-                      
-                      {daySessions.length > 0 && (
-                        <div style={{
+                          }}>
+                            {day}
+                          </span>
+                        </div>
+                        
+                        {daySessions.length > 0 && (
+                          <div style={{
                           fontSize: "0.7rem",
                           textAlign: "center",
                           marginTop: "0.25rem"
-                        }}>
-                          {daySessions.length} session{daySessions.length > 1 ? 's' : ''}
-                        </div>
-                      )}
-                    </>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+                            }}>
+                              {daySessions.length} session{daySessions.length > 1 ? 's' : ''}
+                          </div>
+                        )}
+                      </>
+                    )}
+              </div>
+            );
+          })}
+            </div>
 
           {/* Session Details */}
           {hoveredDate && calendarSessions[hoveredDate] && (
@@ -474,10 +484,10 @@ export default function TherapistDashboard() {
           gap: "1.5rem"
         }}>
           {/* Therapist Info Card */}
-          <div style={{
+              <div style={{ 
             background: "white",
             borderRadius: "12px",
-            padding: "1.5rem",
+                padding: "1.5rem", 
             boxShadow: "0 2px 8px rgba(0,0,0,0.1)"
           }}>
             <h3 style={{
@@ -502,7 +512,7 @@ export default function TherapistDashboard() {
 
             {therapist?.area_of_expertise && (
               <div>
-                <h4 style={{
+                <h4 style={{ 
                   margin: "0 0 0.75rem 0",
                   color: "#333",
                   fontSize: "1rem",
@@ -543,11 +553,11 @@ export default function TherapistDashboard() {
             boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
             flex: 1,
             overflow: "hidden"
-          }}>
-            <div style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
+                  }}>
+                    <div style={{ 
+                      display: "flex", 
+                      justifyContent: "space-between", 
+                      alignItems: "center",
               marginBottom: "1rem"
             }}>
               <h3 style={{
@@ -558,17 +568,17 @@ export default function TherapistDashboard() {
               }}>
                 My Patients
               </h3>
-              <span style={{
+                      <span style={{ 
                 background: "#e8f5e8",
                 color: "#2E7D32",
-                padding: "0.25rem 0.75rem",
-                borderRadius: "12px",
+                        padding: "0.25rem 0.75rem",
+                        borderRadius: "12px",
                 fontSize: "0.8rem",
                 fontWeight: "500"
-              }}>
+                      }}>
                 {patients.length} patient{patients.length !== 1 ? 's' : ''}
-              </span>
-            </div>
+                      </span>
+                    </div>
 
             <div style={{
               maxHeight: "400px",
@@ -583,9 +593,9 @@ export default function TherapistDashboard() {
                   color: "#666"
                 }}>
                   Loading patients...
-                </div>
+                    </div>
               ) : patients.length === 0 ? (
-                <div style={{
+                    <div style={{ 
                   textAlign: "center",
                   color: "#666",
                   padding: "2rem 1rem"
@@ -698,7 +708,7 @@ export default function TherapistDashboard() {
                 ))
               )}
             </div>
-          </div>
+              </div>
         </div>
       </div>
     </div>

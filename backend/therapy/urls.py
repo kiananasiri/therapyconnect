@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .views import (
     PatientViewSet, TherapistViewSet, SessionViewSet, PaymentViewSet,
     ChatViewSet, MessageViewSet, ChatRoomViewSet, ReviewViewSet, NotebookViewSet, PageViewSet,
-    AvailabilityViewSet
+    AvailabilityViewSet, TherapistLoginView
 )
 
 router = DefaultRouter()
@@ -21,4 +21,5 @@ router.register(r'availabilities', AvailabilityViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('therapist-login/', TherapistLoginView.as_view(), name='therapist-login'),
 ]

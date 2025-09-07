@@ -163,10 +163,10 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:443",  # React frontend URL
-    "http://frontend:443",
-    "https://localhost:443",  # React frontend URL
-    "https://frontend:443",
+    "http://localhost:3000",  # React frontend URL
+    "http://frontend:3000",
+    "https://localhost:3000",  # React frontend URL
+    "https://frontend:3000",
 ]
 
 CORS_ALLOW_CREDENTIALS = True

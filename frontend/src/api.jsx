@@ -5,6 +5,12 @@ const API = axios.create({
   withCredentials: true,
 });
 
+console.log('🔧 API Configuration:', {
+  baseURL: API.defaults.baseURL,
+  env: process.env.REACT_APP_BACKEND_URL,
+  withCredentials: API.defaults.withCredentials
+});
+
 // Patient APIs
 export const getPatient = (id) => API.get(`/patients/${id}`);
 export const updatePatient = (id, data) => API.put(`/patients/${id}`, data);
@@ -23,6 +29,12 @@ export const uploadTherapistPic = (id, file) => {
 export const getTherapistPatients = (id) => API.get(`/therapists/${id}/patients/`);
 export const getTherapistCalendarSessions = (id, year, month) => 
   API.get(`/therapists/${id}/calendar_sessions/`, { params: { year, month } });
+export const therapistLogin = (email, password) => {
+  const url = `/therapist-login/`;
+  const fullUrl = `${API.defaults.baseURL}${url}`;
+  console.log('🔗 Therapist Login URL:', { url, fullUrl, baseURL: API.defaults.baseURL });
+  return API.post(url, { email, password });
+};
 
 // Reviews APIs
 export const getTherapistReviews = (therapistId) => API.get(`/reviews/?therapist_id=${therapistId}`);

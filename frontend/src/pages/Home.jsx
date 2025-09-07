@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { getTherapists } from "../api";
+import { getTherapists, therapistLogin } from "../api";
 import { useUser } from "../contexts/UserContext";
 import avatar from "../assets/avatar.png";
 
@@ -10,6 +10,8 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [showTherapistSignIn, setShowTherapistSignIn] = useState(false);
   const [therapistAuth, setTherapistAuth] = useState({ email: "", password: "" });
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [loginError, setLoginError] = useState("");
   const navigate = useNavigate();
   const { setUser } = useUser();
 
@@ -65,20 +67,50 @@ export default function Home() {
     navigate("/therapists");
   };
 
-  const handleTherapistSignIn = (e) => {
+  const handleTherapistSignIn = async (e) => {
     e.preventDefault();
     if (!therapistAuth.email || !therapistAuth.password) {
-      alert("Please enter email and password");
+      setLoginError("Please enter email and password");
       return;
     }
 
-    // Mock authentication - in real app, this would call an API
-    setUser({ 
-      role: "therapist", 
-      name: therapistAuth.email,
-      id: "t_abc123" // Mock therapist ID
-    });
-    navigate("/dashboard/therapist");
+    setLoginLoading(true);
+    setLoginError("");
+
+    try {
+      console.log('🔍 Attempting login with:', { 
+        email: therapistAuth.email, 
+        password: therapistAuth.password,
+        apiUrl: 'http://localhost:8000/api/therapist-login/'
+      });
+      
+      const response = await therapistLogin(therapistAuth.email, therapistAuth.password);
+      console.log('✅ Login successful:', response);
+      
+      // Login successful
+      const therapist = response.data.therapist;
+      console.log('👨‍⚕️ Therapist data:', therapist);
+      
+      setUser({ 
+        role: "therapist", 
+        name: therapist.full_name,
+        email: therapist.email,
+        id: therapist.id
+      });
+      navigate("/dashboard/therapist");
+      
+    } catch (error) {
+      console.error('❌ Login error full details:', error);
+      console.error('❌ Error response:', error.response);
+      console.error('❌ Error status:', error.response?.status);
+      console.error('❌ Error data:', error.response?.data);
+      console.error('❌ Error message:', error.message);
+      
+      const errorMessage = error.response?.data?.error || `Login failed: ${error.message}`;
+      setLoginError(errorMessage);
+    } finally {
+      setLoginLoading(false);
+    }
   };
 
   const handleTherapistAuthChange = (e) => {
@@ -100,10 +132,9 @@ export default function Home() {
         </p>
 
         {/* User Actions */}
-        <div style={{ margin: "2rem 0" }}>
+        <div style={{ margin: "2rem 0", display: "flex", justifyContent: "center", gap: "1rem", flexWrap: "wrap" }}>
           <Link to="/auth">
             <button style={{ 
-              margin: "0.5rem", 
               padding: "1rem 2rem",
               background: "rgba(255,255,255,0.2)",
               border: "2px solid white",
@@ -112,10 +143,39 @@ export default function Home() {
               fontSize: "1rem",
               cursor: "pointer",
               transition: "all 0.3s"
-            }}>
-              Patient Login / Signup
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.background = "rgba(255,255,255,0.3)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = "rgba(255,255,255,0.2)";
+            }}
+            >
+              👤 Patient Login
             </button>
           </Link>
+          
+          <button 
+            onClick={() => setShowTherapistSignIn(true)}
+            style={{ 
+              padding: "1rem 2rem",
+              background: "rgba(76, 175, 80, 0.8)",
+              border: "2px solid #4CAF50",
+              color: "white",
+              borderRadius: "50px",
+              fontSize: "1rem",
+              cursor: "pointer",
+              transition: "all 0.3s"
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.background = "rgba(76, 175, 80, 1)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = "rgba(76, 175, 80, 0.8)";
+            }}
+          >
+            🩺 Therapist Login
+          </button>
         </div>
 
         {/* Search Section */}
@@ -148,20 +208,185 @@ export default function Home() {
         </form>
       </div>
 
+      {/* Therapist Login Modal */}
+      {showTherapistSignIn && (
+        <div 
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            background: "rgba(0,0,0,0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1000
+          }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setShowTherapistSignIn(false);
+              setLoginError("");
+              setTherapistAuth({ email: "", password: "" });
+            }
+          }}
+        >
+          <div style={{
+            background: "white",
+            borderRadius: "20px",
+            padding: "2rem",
+            boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
+            width: "400px",
+            maxWidth: "90%"
+          }}>
+            <h2 style={{ 
+              textAlign: "center", 
+              color: "#333", 
+              marginBottom: "1.5rem",
+              fontSize: "1.5rem",
+              fontWeight: "300"
+            }}>
+              🩺 Therapist Login
+            </h2>
+            
+            <form onSubmit={handleTherapistSignIn}>
+              {loginError && (
+                <div style={{
+                  background: "#ffebee",
+                  color: "#c62828",
+                  padding: "0.75rem",
+                  borderRadius: "8px",
+                  marginBottom: "1rem",
+                  fontSize: "0.9rem",
+                  border: "1px solid #ffcdd2"
+                }}>
+                  {loginError}
+                </div>
+              )}
+              
+              <div style={{ marginBottom: "1rem" }}>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email Address"
+                  value={therapistAuth.email}
+                  onChange={handleTherapistAuthChange}
+                  required
+                  disabled={loginLoading}
+                  style={{
+                    width: "100%",
+                    padding: "1rem",
+                    border: "2px solid #e0e0e0",
+                    borderRadius: "10px",
+                    fontSize: "1rem",
+                    boxSizing: "border-box",
+                    opacity: loginLoading ? 0.7 : 1
+                  }}
+                />
+              </div>
+              
+              <div style={{ marginBottom: "1.5rem" }}>
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  value={therapistAuth.password}
+                  onChange={handleTherapistAuthChange}
+                  required
+                  disabled={loginLoading}
+                  style={{
+                    width: "100%",
+                    padding: "1rem",
+                    border: "2px solid #e0e0e0",
+                    borderRadius: "10px",
+                    fontSize: "1rem",
+                    boxSizing: "border-box",
+                    opacity: loginLoading ? 0.7 : 1
+                  }}
+                />
+              </div>
+              
+              <button
+                type="submit"
+                disabled={loginLoading}
+                style={{
+                  width: "100%",
+                  padding: "1rem",
+                  background: loginLoading ? "#ccc" : "#4CAF50",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "10px",
+                  fontSize: "1rem",
+                  cursor: loginLoading ? "not-allowed" : "pointer",
+                  marginBottom: "1rem",
+                  transition: "background 0.3s",
+                  opacity: loginLoading ? 0.7 : 1
+                }}
+                onMouseEnter={(e) => {
+                  if (!loginLoading) e.target.style.background = "#45a049";
+                }}
+                onMouseLeave={(e) => {
+                  if (!loginLoading) e.target.style.background = "#4CAF50";
+                }}
+              >
+                {loginLoading ? "Signing In..." : "Sign In"}
+              </button>
+              
+              <button
+                type="button"
+                onClick={() => {
+                  setShowTherapistSignIn(false);
+                  setLoginError("");
+                  setTherapistAuth({ email: "", password: "" });
+                }}
+                style={{
+                  width: "100%",
+                  padding: "0.75rem",
+                  background: "transparent",
+                  color: "#666",
+                  border: "1px solid #e0e0e0",
+                  borderRadius: "10px",
+                  fontSize: "0.9rem",
+                  cursor: "pointer"
+                }}
+              >
+                Cancel
+              </button>
+            </form>
+            
+            <div style={{ 
+              marginTop: "1.5rem", 
+              padding: "1rem", 
+              background: "#f8f9fa", 
+              borderRadius: "10px",
+              border: "1px solid #e9ecef"
+            }}>
+              <h4 style={{ margin: "0 0 0.5rem 0", color: "#495057", fontSize: "0.9rem" }}>
+                Test Credentials:
+              </h4>
+              <p style={{ margin: "0", color: "#6c757d", fontSize: "0.8rem" }}>
+                Email: alice.smith@therapyconnect.com<br/>
+                Password: password123
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Main Content Container */}
       <div style={{ 
-        display: "grid", 
-        gridTemplateColumns: "2fr 1fr", 
-        gap: "2rem",
-        maxWidth: "1400px",
+        display: "flex", 
+        justifyContent: "center",
+        maxWidth: "1200px",
         margin: "0 auto"
       }}>
-        {/* Left Side: Therapist Cards */}
+        {/* Therapist Cards */}
         <div style={{
           background: "rgba(255,255,255,0.95)",
           borderRadius: "20px",
           padding: "2rem",
-          boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
+          boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
+          width: "100%"
         }}>
           <h2 style={{ 
             textAlign: "center", 
@@ -304,145 +529,6 @@ export default function Home() {
               </Link>
             </div>
           )}
-        </div>
-
-        {/* Right Side: Therapist Sign In */}
-        <div style={{
-          background: "rgba(255,255,255,0.95)",
-          borderRadius: "20px",
-          padding: "2rem",
-          boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
-          height: "fit-content"
-        }}>
-          <h2 style={{ 
-            textAlign: "center", 
-            color: "#333", 
-            marginBottom: "1.5rem",
-            fontSize: "1.5rem",
-            fontWeight: "300"
-          }}>
-            Therapist Portal
-          </h2>
-          
-          {!showTherapistSignIn ? (
-            <div style={{ textAlign: "center" }}>
-              <p style={{ color: "#666", marginBottom: "1.5rem", lineHeight: "1.5" }}>
-                Are you a therapist? Access your dashboard to manage appointments, 
-                view patients, and track your schedule.
-              </p>
-              <button
-                onClick={() => setShowTherapistSignIn(true)}
-                style={{
-                  width: "100%",
-                  padding: "1rem",
-                  background: "#764ba2",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "10px",
-                  fontSize: "1rem",
-                  cursor: "pointer",
-                  transition: "background 0.3s"
-                }}
-                onMouseEnter={(e) => e.target.style.background = "#6a4190"}
-                onMouseLeave={(e) => e.target.style.background = "#764ba2"}
-              >
-                Therapist Sign In
-              </button>
-            </div>
-          ) : (
-            <form onSubmit={handleTherapistSignIn}>
-              <div style={{ marginBottom: "1rem" }}>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Email Address"
-                  value={therapistAuth.email}
-                  onChange={handleTherapistAuthChange}
-                  required
-                  style={{
-                    width: "100%",
-                    padding: "1rem",
-                    border: "2px solid #e0e0e0",
-                    borderRadius: "10px",
-                    fontSize: "1rem",
-                    boxSizing: "border-box"
-                  }}
-                />
-              </div>
-              
-              <div style={{ marginBottom: "1.5rem" }}>
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  value={therapistAuth.password}
-                  onChange={handleTherapistAuthChange}
-                  required
-                  style={{
-                    width: "100%",
-                    padding: "1rem",
-                    border: "2px solid #e0e0e0",
-                    borderRadius: "10px",
-                    fontSize: "1rem",
-                    boxSizing: "border-box"
-                  }}
-                />
-              </div>
-              
-              <button
-                type="submit"
-                style={{
-                  width: "100%",
-                  padding: "1rem",
-                  background: "#4CAF50",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "10px",
-                  fontSize: "1rem",
-                  cursor: "pointer",
-                  marginBottom: "1rem",
-                  transition: "background 0.3s"
-                }}
-                onMouseEnter={(e) => e.target.style.background = "#45a049"}
-                onMouseLeave={(e) => e.target.style.background = "#4CAF50"}
-              >
-                Sign In
-              </button>
-              
-              <button
-                type="button"
-                onClick={() => setShowTherapistSignIn(false)}
-                style={{
-                  width: "100%",
-                  padding: "0.75rem",
-                  background: "transparent",
-                  color: "#666",
-                  border: "1px solid #e0e0e0",
-                  borderRadius: "10px",
-                  fontSize: "0.9rem",
-                  cursor: "pointer"
-                }}
-              >
-                Back
-              </button>
-            </form>
-          )}
-          
-          <div style={{ 
-            marginTop: "2rem", 
-            padding: "1rem", 
-            background: "#f8f9fa", 
-            borderRadius: "10px",
-            border: "1px solid #e9ecef"
-          }}>
-            <h4 style={{ margin: "0 0 0.5rem 0", color: "#495057", fontSize: "0.9rem" }}>
-              Demo Credentials:
-            </h4>
-            <p style={{ margin: "0", color: "#6c757d", fontSize: "0.8rem" }}>
-              Email: demo@therapist.com<br/>
-              Password: demo123
-            </p>
-          </div>
         </div>
       </div>
 
