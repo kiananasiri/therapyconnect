@@ -1,7 +1,6 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from django.db import models
 from .models import Patient, Therapist, Session, Payment, Chat, Message, Review, Notebook, Page, Availability, ChatRoom
@@ -20,7 +19,6 @@ class PatientViewSet(viewsets.ModelViewSet):
     """
     queryset = Patient.objects.all()
     serializer_class = PatientSerializer
-    permission_classes = [IsAuthenticated]
     
     def get_serializer_class(self):
         """Use different serializers for different actions"""
@@ -202,7 +200,6 @@ class TherapistViewSet(viewsets.ModelViewSet):
     """
     queryset = Therapist.objects.all()
     serializer_class = TherapistSerializer
-    permission_classes = [IsAuthenticated]
     
     def get_serializer_class(self):
         """Use different serializers for different actions"""
@@ -536,7 +533,6 @@ class SessionViewSet(viewsets.ModelViewSet):
     """
     queryset = Session.objects.all()
     serializer_class = SessionSerializer
-    permission_classes = [IsAuthenticated]
     
     def get_serializer_class(self):
         """Use different serializers for different actions"""
@@ -679,7 +675,6 @@ class PaymentViewSet(viewsets.ModelViewSet):
     """
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
-    permission_classes = [IsAuthenticated]
     
     def get_serializer_class(self):
         """Use different serializers for different actions"""
@@ -746,7 +741,6 @@ class ChatViewSet(viewsets.ModelViewSet):
     """
     queryset = Chat.objects.all()
     serializer_class = ChatSerializer
-    permission_classes = [IsAuthenticated]
     
     def get_serializer_class(self):
         """Use different serializers for different actions"""
@@ -950,7 +944,6 @@ class MessageViewSet(viewsets.ModelViewSet):
     """
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
-    permission_classes = [IsAuthenticated]
     
     def get_serializer_class(self):
         """Use different serializers for different actions"""
@@ -1226,7 +1219,6 @@ class ChatRoomViewSet(viewsets.ModelViewSet):
     """
     queryset = ChatRoom.objects.all()
     serializer_class = ChatRoomSerializer
-    permission_classes = [IsAuthenticated]
     
     def get_serializer_class(self):
         """Use different serializers for different actions"""
@@ -1316,7 +1308,6 @@ class ReviewViewSet(viewsets.ModelViewSet):
     """
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    permission_classes = [IsAuthenticated]
     
     def get_serializer_class(self):
         """Use different serializers for different actions"""
@@ -1357,7 +1348,6 @@ class NotebookViewSet(viewsets.ModelViewSet):
     """
     queryset = Notebook.objects.all()
     serializer_class = NotebookSerializer
-    permission_classes = [IsAuthenticated]
     
     def get_serializer_class(self):
         """Use different serializers for different actions"""
@@ -1384,7 +1374,6 @@ class PageViewSet(viewsets.ModelViewSet):
     """
     queryset = Page.objects.all()
     serializer_class = PageSerializer
-    permission_classes = [IsAuthenticated]
     
     def get_serializer_class(self):
         """Use different serializers for different actions"""
@@ -1460,7 +1449,6 @@ class AvailabilityViewSet(viewsets.ModelViewSet):
     """
     queryset = Availability.objects.all()
     serializer_class = AvailabilitySerializer
-    permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
         if self.action == 'list':
