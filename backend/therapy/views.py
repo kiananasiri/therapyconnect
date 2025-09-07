@@ -1,10 +1,13 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
+from .authentication import TherapistJWTAuthentication
 from django.shortcuts import get_object_or_404
 from django.db import models
+from django.contrib.auth.hashers import check_password
 from .models import Patient, Therapist, Session, Payment, Chat, Message, Review, Notebook, Page, Availability, ChatRoom
 from .serializers import (
     PatientSerializer, PatientListSerializer, TherapistSerializer, TherapistListSerializer,
@@ -202,6 +205,7 @@ class TherapistViewSet(viewsets.ModelViewSet):
     """
     queryset = Therapist.objects.all()
     serializer_class = TherapistSerializer
+    permission_classes = [AllowAny]  # Allow public access to therapist list
     
     def get_serializer_class(self):
         """Use different serializers for different actions"""
@@ -535,6 +539,7 @@ class SessionViewSet(viewsets.ModelViewSet):
     """
     queryset = Session.objects.all()
     serializer_class = SessionSerializer
+    permission_classes = [IsAuthenticated]  # Require authentication for sessions
     
     def get_serializer_class(self):
         """Use different serializers for different actions"""
@@ -1580,7 +1585,7 @@ class AvailabilityViewSet(viewsets.ModelViewSet):
 # ✅ Therapist Login API
 class TherapistLoginView(APIView):
     """
-    API endpoint for therapist authentication
+    API endpoint for therapist authentication with JWT tokens
     """
     permission_classes = [AllowAny]
     
@@ -1599,14 +1604,29 @@ class TherapistLoginView(APIView):
             
             # Check password (in production, this should be hashed)
             if therapist.password == password:
+                # Create JWT tokens
+                refresh = RefreshToken()
+                refresh['therapist_id'] = therapist.id  # Use therapist_id instead of user_id
+                refresh['user_type'] = 'therapist'
+                refresh['email'] = therapist.email
+                
                 return Response({
                     "message": "Login successful",
+                    "access_token": str(refresh.access_token),
+                    "refresh_token": str(refresh),
+                    "token_type": "Bearer",
+                    "expires_in": 86400,  # 24 hours in seconds
                     "therapist": {
                         "id": therapist.id,
                         "first_name": therapist.first_name,
                         "last_name": therapist.last_name,
                         "email": therapist.email,
-                        "full_name": therapist.get_full_name()
+                        "full_name": therapist.get_full_name(),
+                        "profile_picture": therapist.profile_picture.url if therapist.profile_picture else None,
+                        "area_of_expertise": therapist.area_of_expertise,
+                        "about_note": therapist.about_note,
+                        "wallet_balance": float(therapist.wallet_balance),
+                        "average_score": float(therapist.average_score)
                     }
                 }, status=status.HTTP_200_OK)
             else:
@@ -1617,4 +1637,57 @@ class TherapistLoginView(APIView):
         except Therapist.DoesNotExist:
             return Response({
                 "error": "Invalid credentials"
+            }, status=status.HTTP_401_UNAUTHORIZED)
+
+
+class TherapistLogoutView(APIView):
+    """
+    API endpoint for therapist logout (JWT token blacklisting)
+    """
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TherapistJWTAuthentication]
+    
+    def post(self, request):
+        try:
+            refresh_token = request.data.get('refresh_token')
+            if refresh_token:
+                token = RefreshToken(refresh_token)
+                token.blacklist()
+                return Response({
+                    "message": "Successfully logged out"
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({
+                    "error": "Refresh token is required"
+                }, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({
+                "error": "Invalid token"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TherapistRefreshTokenView(APIView):
+    """
+    API endpoint to refresh JWT access token
+    """
+    permission_classes = [AllowAny]
+    
+    def post(self, request):
+        try:
+            refresh_token = request.data.get('refresh_token')
+            if not refresh_token:
+                return Response({
+                    "error": "Refresh token is required"
+                }, status=status.HTTP_400_BAD_REQUEST)
+            
+            token = RefreshToken(refresh_token)
+            return Response({
+                "access_token": str(token.access_token),
+                "token_type": "Bearer",
+                "expires_in": 86400,  # 24 hours in seconds
+            }, status=status.HTTP_200_OK)
+            
+        except Exception as e:
+            return Response({
+                "error": "Invalid refresh token"
             }, status=status.HTTP_401_UNAUTHORIZED)

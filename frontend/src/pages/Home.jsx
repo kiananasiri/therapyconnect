@@ -19,11 +19,35 @@ export default function Home() {
   useEffect(() => {
     const fetchTherapists = async () => {
       try {
+        console.log('🔄 Fetching therapists from API...');
         const response = await getTherapists();
-        setTherapists(response.data || []);
+        console.log('✅ API Response:', response);
+        console.log('📊 Therapists data:', response.data);
+        
+        if (response.data && response.data.length > 0) {
+          setTherapists(response.data);
+          console.log(`✅ Successfully loaded ${response.data.length} therapists from database`);
+        } else {
+          console.log('⚠️ No therapists found in database, using fallback data');
+          // Only use fallback if no data from API
+          setTherapists([
+            {
+              id: "t_abc123",
+              first_name: "Dr. Alice",
+              last_name: "Smith",
+              area_of_expertise: ["Cognitive Therapy", "Anxiety"],
+              about_note: "Specializing in cognitive behavioral therapy with 10+ years experience.",
+              average_score: 4.8,
+              profile_picture: null
+            }
+          ]);
+        }
       } catch (error) {
-        console.error('Error fetching therapists:', error);
-        // Fallback to mock data
+        console.error('❌ Error fetching therapists:', error);
+        console.error('Error details:', error.response?.data || error.message);
+        
+        // Fallback to mock data only on error
+        console.log('🔄 Using fallback mock data due to API error');
         setTherapists([
           {
             id: "t_abc123",
