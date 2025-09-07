@@ -16,6 +16,8 @@ export default function TherapistDashboard() {
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [patientSessions, setPatientSessions] = useState([]);
   const [sessionLoading, setSessionLoading] = useState(false);
+  const [selectedDay, setSelectedDay] = useState(null);
+  const [dayViewSessions, setDayViewSessions] = useState([]);
 
   // Get therapist ID from user context
   const therapistId = user?.id;
@@ -112,6 +114,26 @@ export default function TherapistDashboard() {
   const closePatientModal = () => {
     setSelectedPatient(null);
     setPatientSessions([]);
+  };
+
+  // Handle day selection for day view
+  const handleDayClick = (day, dateStr) => {
+    if (!day) return; // Don't open for empty calendar cells
+    
+    const sessions = calendarSessions[dateStr] || [];
+    setSelectedDay({
+      date: dateStr,
+      day: day,
+      month: currentDate.getMonth(),
+      year: currentDate.getFullYear()
+    });
+    setDayViewSessions(sessions);
+  };
+
+  // Close day view modal
+  const closeDayView = () => {
+    setSelectedDay(null);
+    setDayViewSessions([]);
   };
 
   // Navigate calendar months
@@ -399,6 +421,7 @@ export default function TherapistDashboard() {
                 return (
                   <div
                     key={index}
+                  onClick={() => handleDayClick(day, dateStr)}
                     onMouseEnter={(e) => {
                       if (day) {
                       setHoveredDate(dateStr);
@@ -1004,6 +1027,233 @@ export default function TherapistDashboard() {
                   ))}
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Day View Modal */}
+      {selectedDay && (
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          background: "rgba(0,0,0,0.5)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          zIndex: 1000
+        }}
+        onClick={(e) => {
+          if (e.target === e.currentTarget) {
+            closeDayView();
+          }
+        }}
+        >
+          <div style={{
+            background: "white",
+            borderRadius: "20px",
+            padding: "2rem",
+            boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
+            width: "700px",
+            maxWidth: "90%",
+            maxHeight: "80%",
+            overflow: "hidden",
+            display: "flex",
+            flexDirection: "column"
+          }}>
+            {/* Modal Header */}
+            <div style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "1.5rem",
+              paddingBottom: "1rem",
+              borderBottom: "1px solid #e0e0e0"
+            }}>
+              <h2 style={{
+                margin: 0,
+                color: "#2E7D32",
+                fontSize: "1.5rem",
+                fontWeight: "600"
+              }}>
+                📅 {new Date(selectedDay.year, selectedDay.month, selectedDay.day).toLocaleDateString('en-US', {
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </h2>
+              <button
+                onClick={closeDayView}
+                style={{
+                  background: "none",
+                  border: "none",
+                  fontSize: "1.5rem",
+                  cursor: "pointer",
+                  color: "#666",
+                  padding: "0.5rem"
+                }}
+              >
+                ×
+              </button>
+            </div>
+
+            {/* Day Schedule */}
+            <div style={{
+              flex: 1,
+              overflow: "auto",
+              position: "relative"
+            }}>
+              {dayViewSessions.length === 0 ? (
+                <div style={{
+                  textAlign: "center",
+                  color: "#666",
+                  padding: "4rem 2rem",
+                  background: "#f8f9fa",
+                  borderRadius: "8px"
+                }}>
+                  <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>📅</div>
+                  <h3 style={{ margin: "0 0 0.5rem 0", color: "#333" }}>No sessions scheduled</h3>
+                  <p style={{ margin: 0, fontSize: "0.9rem" }}>This day is free for new appointments</p>
+                </div>
+              ) : (
+                <div style={{
+                  position: "relative",
+                  minHeight: "600px"
+                }}>
+                  {/* Hour Grid */}
+                  {Array.from({ length: 12 }, (_, i) => {
+                    const hour = i + 8; // Start from 8 AM
+                    const hour12 = hour > 12 ? hour - 12 : hour;
+                    const ampm = hour >= 12 ? 'PM' : 'AM';
+                    const displayHour = hour12 === 0 ? 12 : hour12;
+                    
+                    return (
+                      <div
+                        key={hour}
+                        style={{
+                          position: "absolute",
+                          top: `${i * 50}px`,
+                          left: 0,
+                          right: 0,
+                          height: "50px",
+                          borderBottom: "1px solid #e0e0e0",
+                          display: "flex",
+                          alignItems: "flex-start"
+                        }}
+                      >
+                        <div style={{
+                          width: "80px",
+                          fontSize: "0.8rem",
+                          color: "#666",
+                          textAlign: "right",
+                          paddingRight: "1rem",
+                          paddingTop: "0.25rem"
+                        }}>
+                          {displayHour}:00 {ampm}
+                        </div>
+                        <div style={{
+                          flex: 1,
+                          height: "100%",
+                          position: "relative"
+                        }} />
+                      </div>
+                    );
+                  })}
+
+                  {/* Sessions */}
+                  {dayViewSessions.map((session) => {
+                    const startTime = new Date(`2000-01-01T${session.start_time}:00`);
+                    const startHour = startTime.getHours();
+                    const startMinute = startTime.getMinutes();
+                    
+                    // Calculate position (8 AM = 0, so subtract 8 from hour)
+                    const topPosition = ((startHour - 8) * 50) + (startMinute / 60 * 50);
+                    const height = Math.max((session.duration / 60) * 50, 30); // Minimum 30px height
+                    
+                    // Only show sessions that fall within our 8 AM - 8 PM range
+                    if (startHour < 8 || startHour >= 20) return null;
+                    
+                    return (
+                      <div
+                        key={session.id}
+                        style={{
+                          position: "absolute",
+                          top: `${topPosition}px`,
+                          left: "90px",
+                          right: "10px",
+                          height: `${height}px`,
+                          background: session.status === 'completed' ? 
+                            "linear-gradient(135deg, #4CAF50, #66BB6A)" : 
+                            session.status === 'scheduled' ?
+                            "linear-gradient(135deg, #2196F3, #42A5F5)" :
+                            "linear-gradient(135deg, #FF9800, #FFB74D)",
+                          borderRadius: "8px",
+                          color: "white",
+                          padding: "0.5rem",
+                          boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                          cursor: "pointer",
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                          zIndex: 1
+                        }}
+                        onClick={() => {
+                          // Find patient and open patient modal
+                          const patient = patients.find(p => p.id === session.patient_id);
+                          if (patient) {
+                            closeDayView();
+                            handlePatientClick(patient);
+                          }
+                        }}
+                      >
+                        <div style={{
+                          fontWeight: "600",
+                          fontSize: "0.9rem",
+                          marginBottom: "0.25rem",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap"
+                        }}>
+                          {session.patient_name}
+                        </div>
+                        <div style={{
+                          fontSize: "0.8rem",
+                          opacity: "0.9",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center"
+                        }}>
+                          <span>{session.start_time}</span>
+                          <span>{session.duration} min</span>
+                        </div>
+                        <div style={{
+                          fontSize: "0.7rem",
+                          opacity: "0.8",
+                          marginTop: "0.25rem"
+                        }}>
+                          ${session.fee} • {session.status}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div style={{
+              marginTop: "1rem",
+              paddingTop: "1rem",
+              borderTop: "1px solid #e0e0e0",
+              textAlign: "center",
+              color: "#666",
+              fontSize: "0.9rem"
+            }}>
+              Click on a session to view patient details
             </div>
           </div>
         </div>
