@@ -30,6 +30,7 @@ ALLOWED_HOSTS = [
     "frontend",
     "backend",
     "db",
+    "65.109.187.67",  # Server IP address
 ]
 
 
