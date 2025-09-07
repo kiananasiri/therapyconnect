@@ -399,8 +399,8 @@ class Session(models.Model):
     
     def can_be_reserved(self):
         """Check if session can be reserved (24 hours to 6 months in advance)"""
-        from datetime import datetime, timedelta
-        now = datetime.now()
+        from datetime import timedelta
+        now = timezone.now()
         session_time = self.scheduled_start_datetime
         
         # Must be at least 24 hours in advance
@@ -411,9 +411,8 @@ class Session(models.Model):
         return min_advance <= session_time <= max_advance
     
     def can_be_cancelled(self):
-        """Check if session can be cancelled (24 hours before start)"""
-        from datetime import datetime, timedelta
-        now = datetime.now()
+        """Check if session can be cancelled (24 hours before start)"""e        from datetime import timedelta
+        now = timezone.now()
         session_time = self.scheduled_start_datetime
         
         # Must be at least 24 hours before session
@@ -421,8 +420,8 @@ class Session(models.Model):
     
     def is_join_button_active(self):
         """Check if join button should be active (10 minutes before session)"""
-        from datetime import datetime, timedelta
-        now = datetime.now()
+        from datetime import timedelta
+        now = timezone.now()
         session_time = self.scheduled_start_datetime
         
         # Active 10 minutes before session start
@@ -434,8 +433,8 @@ class Session(models.Model):
     
     def can_be_joined(self):
         """Check if session can be joined (within time window)"""
-        from datetime import datetime, timedelta
-        now = datetime.now()
+        from datetime import timedelta
+        now = timezone.now()
         session_time = self.scheduled_start_datetime
         
         # Can join 10 minutes before until session time
@@ -900,8 +899,8 @@ class Availability(models.Model):
     def can_be_booked(self):
         """Check if availability can be booked (within time constraints)"""
         from datetime import datetime, timedelta, date
-        now = datetime.now()
-        session_datetime = datetime.combine(self.date, datetime.min.time().replace(hour=int(self.time_slot.split('-')[0])))
+        now = timezone.now()
+        session_datetime = timezone.make_aware(datetime.combine(self.date, datetime.min.time().replace(hour=int(self.time_slot.split('-')[0]))))
         
         # Must be at least 24 hours in advance
         min_advance = now + timedelta(hours=24)

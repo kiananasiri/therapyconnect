@@ -21,15 +21,21 @@ export default function TherapistDashboard() {
   const [cancelingSession, setCancelingSession] = useState(null);
   const [cancelReason, setCancelReason] = useState('');
   const [showCancelModal, setShowCancelModal] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
 
   // Get therapist ID from user context
   const therapistId = user?.id;
 
   // Handle session cancellation
   const handleCancelSession = async (sessionId) => {
+    if (isCancelling) return; // Prevent double-clicks
+    
     try {
-      setCancelingSession(sessionId);
+      setIsCancelling(true);
+      console.log('🔄 Cancelling session:', sessionId, 'with reason:', cancelReason);
+      
       const response = await cancelSession(sessionId, therapistId, cancelReason);
+      console.log('✅ Cancellation response:', response);
       
       // Show success message
       alert(`Session cancelled successfully! ${response.data.refund_processed ? 'Refund processed.' : ''}`);
@@ -51,10 +57,11 @@ export default function TherapistDashboard() {
       setCancelingSession(null);
       
     } catch (error) {
-      console.error('Error cancelling session:', error);
+      console.error('❌ Error cancelling session:', error);
       const errorMessage = error.response?.data?.error || 'Failed to cancel session';
       alert(`Error: ${errorMessage}`);
-      setCancelingSession(null);
+    } finally {
+      setIsCancelling(false);
     }
   };
 
@@ -1471,7 +1478,7 @@ export default function TherapistDashboard() {
             }}>
               <button
                 onClick={closeCancelModal}
-                disabled={cancelingSession}
+                disabled={isCancelling}
                 style={{
                   background: "#f8f9fa",
                   color: "#666",
@@ -1479,15 +1486,15 @@ export default function TherapistDashboard() {
                   padding: "0.75rem 1.5rem",
                   borderRadius: "6px",
                   fontSize: "0.9rem",
-                  cursor: cancelingSession ? "not-allowed" : "pointer",
-                  opacity: cancelingSession ? 0.6 : 1
+                  cursor: isCancelling ? "not-allowed" : "pointer",
+                  opacity: isCancelling ? 0.6 : 1
                 }}
               >
                 Keep Session
               </button>
               <button
                 onClick={() => handleCancelSession(cancelingSession)}
-                disabled={cancelingSession}
+                disabled={isCancelling}
                 style={{
                   background: "#dc3545",
                   color: "white",
@@ -1495,14 +1502,14 @@ export default function TherapistDashboard() {
                   padding: "0.75rem 1.5rem",
                   borderRadius: "6px",
                   fontSize: "0.9rem",
-                  cursor: cancelingSession ? "not-allowed" : "pointer",
-                  opacity: cancelingSession ? 0.6 : 1,
+                  cursor: isCancelling ? "not-allowed" : "pointer",
+                  opacity: isCancelling ? 0.6 : 1,
                   display: "flex",
                   alignItems: "center",
                   gap: "0.5rem"
                 }}
               >
-                {cancelingSession ? (
+                {isCancelling ? (
                   <>
                     <span>⏳</span>
                     Cancelling...
