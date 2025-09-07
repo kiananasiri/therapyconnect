@@ -13,6 +13,9 @@ export default function TherapistDashboard() {
   const [loading, setLoading] = useState(true);
   const [patientsLoading, setPatientsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedPatient, setSelectedPatient] = useState(null);
+  const [patientSessions, setPatientSessions] = useState([]);
+  const [sessionLoading, setSessionLoading] = useState(false);
 
   // Get therapist ID from user context
   const therapistId = user?.id;
@@ -81,6 +84,36 @@ export default function TherapistDashboard() {
     fetchPatients();
   }, [therapistId]);
 
+  // Handle patient selection and fetch their sessions
+  const handlePatientClick = async (patient) => {
+    setSelectedPatient(patient);
+    setSessionLoading(true);
+    
+    try {
+      // Fetch sessions for this specific patient with this therapist
+      const response = await fetch(`http://localhost:8000/api/sessions/?therapist_id=${therapistId}&patient_id=${patient.id}`);
+      const sessions = await response.json();
+      
+      // Sort sessions by date (most recent first)
+      const sortedSessions = sessions.sort((a, b) => 
+        new Date(b.scheduled_start_datetime) - new Date(a.scheduled_start_datetime)
+      );
+      
+      setPatientSessions(sortedSessions);
+    } catch (error) {
+      console.error('Error fetching patient sessions:', error);
+      setPatientSessions([]);
+    } finally {
+      setSessionLoading(false);
+    }
+  };
+
+  // Close patient modal
+  const closePatientModal = () => {
+    setSelectedPatient(null);
+    setPatientSessions([]);
+  };
+
   // Navigate calendar months
   const navigateMonth = (direction) => {
     const newDate = new Date(currentDate);
@@ -120,31 +153,31 @@ export default function TherapistDashboard() {
   };
 
   if (loading) {
-    return (
-      <div style={{ 
-        minHeight: "100vh",
+  return (
+    <div style={{ 
+      minHeight: "100vh",
         background: "#f5f7fa",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "column"
       }}>
-        <div style={{
+      <div style={{
           background: "white",
           padding: "3rem",
           borderRadius: "12px",
           textAlign: "center",
           boxShadow: "0 4px 12px rgba(0,0,0,0.1)"
         }}>
-          <div style={{
+      <div style={{
             width: "40px",
             height: "40px",
             border: "4px solid #f3f3f3",
             borderTop: "4px solid #4CAF50",
-            borderRadius: "50%",
+        borderRadius: "50%",
             animation: "spin 1s linear infinite",
             margin: "0 auto 1.5rem"
-          }}></div>
+      }}></div>
           <h3 style={{ 
             color: "#2E7D32", 
             margin: "0 0 0.5rem 0",
@@ -171,14 +204,14 @@ export default function TherapistDashboard() {
   }
 
   return (
-    <div style={{ 
+      <div style={{
       minHeight: "100vh",
       background: "#f5f7fa",
       padding: "2rem"
     }}>
 
       {/* Header */}
-      <div style={{
+      <div style={{ 
         background: "white",
         borderRadius: "12px",
         padding: "2rem", 
@@ -215,7 +248,7 @@ export default function TherapistDashboard() {
             <div style={{
               textAlign: "right"
             }}>
-              <div style={{
+            <div style={{
                 color: "#2E7D32",
                 fontSize: "1.2rem",
                 fontWeight: "600"
@@ -264,18 +297,18 @@ export default function TherapistDashboard() {
           textAlign: "center"
         }}>
           ⚠️ {error}
-        </div>
-      )}
+          </div>
+            )}
 
       {/* Main Content Grid */}
-      <div style={{
+          <div style={{
         display: "grid",
         gridTemplateColumns: "1fr 400px",
         gap: "2rem",
         height: "calc(100vh - 300px)"
       }}>
         {/* Left Column: Calendar */}
-          <div style={{
+            <div style={{
           background: "white",
           borderRadius: "12px",
             padding: "2rem",
@@ -425,52 +458,52 @@ export default function TherapistDashboard() {
               </div>
             );
           })}
-            </div>
+        </div>
 
           {/* Session Details */}
-          {hoveredDate && calendarSessions[hoveredDate] && (
-            <div style={{
+            {hoveredDate && calendarSessions[hoveredDate] && (
+              <div style={{ 
               marginTop: "2rem",
               padding: "1rem",
               background: "#f8f9fa",
               borderRadius: "8px",
               border: "1px solid #e0e0e0"
-            }}>
-              <h4 style={{
-                margin: "0 0 1rem 0",
+              }}>
+                <h4 style={{ 
+                  margin: "0 0 1rem 0",
                 color: "#2E7D32",
                 fontSize: "1.1rem"
               }}>
                 Sessions on {new Date(hoveredDate).toLocaleDateString()}
-              </h4>
+                </h4>
               {calendarSessions[hoveredDate].map((session) => (
-                <div key={session.id} style={{
+                  <div key={session.id} style={{ 
                   padding: "0.75rem",
                   marginBottom: "0.5rem",
                   background: "white",
                   borderRadius: "6px",
                   border: "1px solid #e0e0e0"
-                }}>
-                  <div style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    marginBottom: "0.25rem"
                   }}>
+                    <div style={{ 
+                      display: "flex", 
+                      justifyContent: "space-between", 
+                      alignItems: "center",
+                    marginBottom: "0.25rem"
+                    }}>
                     <strong style={{ color: "#2E7D32" }}>{session.start_time}</strong>
-                    <span style={{
+                      <span style={{ 
                       background: "#e8f5e8",
                       color: "#2E7D32",
                       padding: "0.25rem 0.5rem",
                       borderRadius: "4px",
-                      fontSize: "0.8rem"
-                    }}>
-                      {session.status}
-                    </span>
-                  </div>
+                        fontSize: "0.8rem"
+                      }}>
+                        {session.status}
+                      </span>
+                    </div>
                   <div style={{ fontSize: "0.9rem", color: "#666" }}>
                     {session.patient_name} • {session.duration} min • ${session.fee}
-                  </div>
+                    </div>
                 </div>
               ))}
             </div>
@@ -478,7 +511,7 @@ export default function TherapistDashboard() {
         </div>
 
         {/* Right Column: Therapist Info & Patients */}
-        <div style={{
+                    <div style={{ 
           display: "flex",
           flexDirection: "column",
           gap: "1.5rem"
@@ -503,7 +536,7 @@ export default function TherapistDashboard() {
               <p style={{
                 margin: "0 0 1rem 0",
                 color: "#666",
-                fontSize: "0.9rem",
+                      fontSize: "0.9rem", 
                 lineHeight: "1.5"
               }}>
                 {therapist.about_note}
@@ -521,7 +554,7 @@ export default function TherapistDashboard() {
                   Specialties
                 </h4>
                 <div style={{
-                  display: "flex",
+                      display: "flex",
                   flexWrap: "wrap",
                   gap: "0.5rem"
                 }}>
@@ -543,7 +576,7 @@ export default function TherapistDashboard() {
                 </div>
               </div>
             )}
-          </div>
+        </div>
 
           {/* Patients Section */}
           <div style={{
@@ -607,6 +640,7 @@ export default function TherapistDashboard() {
                 patients.map((patient) => (
                   <div
                     key={patient.id}
+                    onClick={() => handlePatientClick(patient)}
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -619,12 +653,16 @@ export default function TherapistDashboard() {
                       transition: "all 0.2s ease"
                     }}
                     onMouseEnter={(e) => {
-                      e.target.style.background = "#e8f5e8";
-                      e.target.style.borderColor = "#4CAF50";
+                      e.currentTarget.style.background = "#e8f5e8";
+                      e.currentTarget.style.borderColor = "#4CAF50";
+                      e.currentTarget.style.transform = "translateY(-2px)";
+                      e.currentTarget.style.boxShadow = "0 4px 12px rgba(76, 175, 80, 0.2)";
                     }}
                     onMouseLeave={(e) => {
-                      e.target.style.background = "#f8f9fa";
-                      e.target.style.borderColor = "#e9ecef";
+                      e.currentTarget.style.background = "#f8f9fa";
+                      e.currentTarget.style.borderColor = "#e9ecef";
+                      e.currentTarget.style.transform = "translateY(0)";
+                      e.currentTarget.style.boxShadow = "none";
                     }}
                   >
                     <div style={{
@@ -711,6 +749,265 @@ export default function TherapistDashboard() {
               </div>
         </div>
       </div>
+
+      {/* Patient Details Modal */}
+      {selectedPatient && (
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          background: "rgba(0,0,0,0.5)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          zIndex: 1000
+        }}
+        onClick={(e) => {
+          if (e.target === e.currentTarget) {
+            closePatientModal();
+          }
+        }}
+        >
+          <div style={{
+            background: "white",
+            borderRadius: "20px",
+            padding: "2rem",
+            boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
+            width: "800px",
+            maxWidth: "90%",
+            maxHeight: "80%",
+            overflow: "auto"
+          }}>
+            {/* Modal Header */}
+            <div style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "2rem",
+              paddingBottom: "1rem",
+              borderBottom: "1px solid #e0e0e0"
+            }}>
+              <h2 style={{
+                margin: 0,
+                color: "#2E7D32",
+                fontSize: "1.5rem",
+                fontWeight: "600"
+              }}>
+                👤 {selectedPatient.full_name || `${selectedPatient.first_name} ${selectedPatient.last_name}`}
+              </h2>
+              <button
+                onClick={closePatientModal}
+                style={{
+                  background: "none",
+                  border: "none",
+                  fontSize: "1.5rem",
+                  cursor: "pointer",
+                  color: "#666",
+                  padding: "0.5rem"
+                }}
+              >
+                ×
+              </button>
+            </div>
+
+            {/* Patient Info Section */}
+            <div style={{
+              background: "#f8f9fa",
+              borderRadius: "12px",
+              padding: "1.5rem",
+              marginBottom: "2rem"
+            }}>
+              <h3 style={{
+                margin: "0 0 1rem 0",
+                color: "#333",
+                fontSize: "1.2rem"
+              }}>
+                Patient Information
+              </h3>
+              
+              <div style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+                gap: "1rem"
+              }}>
+                <div>
+                  <strong style={{ color: "#2E7D32" }}>Total Sessions:</strong>
+                  <div>{selectedPatient.session_count || 0}</div>
+                </div>
+                <div>
+                  <strong style={{ color: "#2E7D32" }}>Last Session:</strong>
+                  <div>
+                    {selectedPatient.last_session_date 
+                      ? new Date(selectedPatient.last_session_date).toLocaleDateString()
+                      : "No sessions yet"
+                    }
+                  </div>
+                </div>
+                {selectedPatient.tags && selectedPatient.tags.length > 0 && (
+                  <div style={{ gridColumn: "1 / -1" }}>
+                    <strong style={{ color: "#2E7D32" }}>Tags:</strong>
+                    <div style={{ marginTop: "0.5rem" }}>
+                      {selectedPatient.tags.map((tag, index) => (
+                        <span
+                          key={index}
+                          style={{
+                            background: "rgba(76, 175, 80, 0.1)",
+                            color: "#2E7D32",
+                            padding: "0.25rem 0.75rem",
+                            borderRadius: "15px",
+                            fontSize: "0.8rem",
+                            marginRight: "0.5rem",
+                            display: "inline-block"
+                          }}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Sessions History Section */}
+            <div>
+              <h3 style={{
+                margin: "0 0 1rem 0",
+                color: "#333",
+                fontSize: "1.2rem"
+              }}>
+                Session History
+              </h3>
+
+              {sessionLoading ? (
+                <div style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "200px",
+                  color: "#666"
+                }}>
+                  <div style={{
+                    width: "30px",
+                    height: "30px",
+                    border: "3px solid #f3f3f3",
+                    borderTop: "3px solid #4CAF50",
+                    borderRadius: "50%",
+                    animation: "spin 1s linear infinite",
+                    marginRight: "1rem"
+                  }}></div>
+                  Loading sessions...
+                </div>
+              ) : patientSessions.length === 0 ? (
+                <div style={{
+                  textAlign: "center",
+                  color: "#666",
+                  padding: "2rem",
+                  background: "#f8f9fa",
+                  borderRadius: "8px"
+                }}>
+                  <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>📅</div>
+                  No sessions found
+                </div>
+              ) : (
+                <div style={{
+                  maxHeight: "300px",
+                  overflowY: "auto"
+                }}>
+                  {patientSessions.map((session) => (
+                    <div
+                      key={session.id}
+                      style={{
+                        background: "white",
+                        border: "1px solid #e0e0e0",
+                        borderRadius: "8px",
+                        padding: "1rem",
+                        marginBottom: "0.75rem"
+                      }}
+                    >
+                      <div style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginBottom: "0.5rem"
+                      }}>
+                        <div style={{
+                          fontSize: "1rem",
+                          fontWeight: "500",
+                          color: "#333"
+                        }}>
+                          {new Date(session.scheduled_start_datetime).toLocaleDateString('en-US', {
+                            weekday: 'short',
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                          })}
+                        </div>
+                        <span style={{
+                          background: session.status === 'completed' ? "#e8f5e8" : 
+                                     session.status === 'scheduled' ? "#e3f2fd" :
+                                     session.status === 'cancelled' ? "#ffebee" : "#f5f5f5",
+                          color: session.status === 'completed' ? "#2E7D32" : 
+                                session.status === 'scheduled' ? "#1976d2" :
+                                session.status === 'cancelled' ? "#c62828" : "#666",
+                          padding: "0.25rem 0.75rem",
+                          borderRadius: "12px",
+                          fontSize: "0.8rem",
+                          fontWeight: "500"
+                        }}>
+                          {session.status}
+                        </span>
+                      </div>
+                      
+                      <div style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+                        gap: "0.5rem",
+                        fontSize: "0.9rem",
+                        color: "#666"
+                      }}>
+                        <div>
+                          <strong>Time:</strong> {new Date(session.scheduled_start_datetime).toLocaleTimeString('en-US', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </div>
+                        <div>
+                          <strong>Duration:</strong> {session.duration} min
+                        </div>
+                        <div>
+                          <strong>Fee:</strong> ${session.fee}
+                        </div>
+                        {session.patient_rating && (
+                          <div>
+                            <strong>Rating:</strong> {session.patient_rating}/10
+                          </div>
+                        )}
+                      </div>
+                      
+                      {session.therapist_notes && (
+                        <div style={{
+                          marginTop: "0.75rem",
+                          padding: "0.75rem",
+                          background: "#f8f9fa",
+                          borderRadius: "6px"
+                        }}>
+                          <strong style={{ color: "#2E7D32", fontSize: "0.9rem" }}>Therapist Notes:</strong>
+                          <div style={{ fontSize: "0.9rem", marginTop: "0.25rem" }}>
+                            {session.therapist_notes}
+      </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
