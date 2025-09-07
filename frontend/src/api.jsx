@@ -17,14 +17,6 @@ export const updatePatient = (id, data) => API.put(`/patients/${id}`, data);
 export const updatePatientPassword = (id, password) =>
   API.put(`/patients/${id}/password`, { password });
 
-// Add patient login
-export const patientLogin = (email, password) => {
-  const url = `/patient-login/`;
-  const fullUrl = `${API.defaults.baseURL}${url}`;
-  console.log('🔗 Patient Login URL:', { url, fullUrl, baseURL: API.defaults.baseURL });
-  return API.post(url, { email, password });
-};
-
 // Therapist APIs
 export const getTherapists = () => API.get(`/therapists/`);
 export const getTherapist = (id) => API.get(`/therapists/${id}`);
@@ -54,3 +46,4 @@ export const getTherapistAvailability = (therapistId, date) =>
 export const bookSession = (data) => API.post(`/sessions/`, data);
 
 export default API;
+
