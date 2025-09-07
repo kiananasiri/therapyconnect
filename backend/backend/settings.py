@@ -181,6 +181,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://frontend:3000",
     "https://localhost:3000",  # React frontend URL
     "https://frontend:3000",
+    "http://65.109.187.67:3000",  # Server IP frontend URL
+    "https://65.109.187.67:3000",  # Server IP frontend URL (HTTPS)
 ]
 
 CORS_ALLOW_CREDENTIALS = True
