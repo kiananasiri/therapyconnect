@@ -6,12 +6,16 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isAuth, setIsAuth] = useState(false);
 
   // Initialize user from localStorage on app start
   useEffect(() => {
     const initializeUser = () => {
       try {
-        if (isAuthenticated()) {
+        const authenticated = isAuthenticated();
+        setIsAuth(authenticated);
+        
+        if (authenticated) {
           const userData = getCurrentUser();
           if (userData) {
             setUser({
@@ -26,12 +30,25 @@ export const UserProvider = ({ children }) => {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         localStorage.removeItem('user');
+        setIsAuth(false);
       } finally {
         setLoading(false);
       }
     };
 
+    // Handle token expiration events from API interceptor
+    const handleTokenExpired = () => {
+      console.log('Token expired event received, logging out user');
+      setUser(null);
+      setIsAuth(false);
+    };
+
     initializeUser();
+    window.addEventListener('tokenExpired', handleTokenExpired);
+
+    return () => {
+      window.removeEventListener('tokenExpired', handleTokenExpired);
+    };
   }, []);
 
   const login = (userData, tokens) => {
@@ -45,6 +62,7 @@ export const UserProvider = ({ children }) => {
       ...userData,
       role: 'therapist'
     });
+    setIsAuth(true);
   };
 
   const logout = async () => {
@@ -56,6 +74,7 @@ export const UserProvider = ({ children }) => {
       
       // Update context
       setUser(null);
+      setIsAuth(false);
     } catch (error) {
       console.error('Logout error:', error);
     }
@@ -74,7 +93,7 @@ export const UserProvider = ({ children }) => {
     logout,
     updateUser,
     loading,
-    isAuthenticated: isAuthenticated()
+    isAuthenticated: isAuth
   };
 
   return (

@@ -60,12 +60,16 @@ API.interceptors.response.use(
           // Refresh failed, clear tokens but don't redirect automatically
           clearTokens();
           console.log('Token refresh failed, user needs to login again');
+          // Dispatch custom event to notify UserContext
+          window.dispatchEvent(new CustomEvent('tokenExpired'));
           return Promise.reject(refreshError);
         }
       } else {
         // No refresh token, clear storage but don't redirect automatically
         clearTokens();
         console.log('No refresh token available, user needs to login');
+        // Dispatch custom event to notify UserContext
+        window.dispatchEvent(new CustomEvent('tokenExpired'));
       }
     }
     
