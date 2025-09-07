@@ -411,7 +411,8 @@ class Session(models.Model):
         return min_advance <= session_time <= max_advance
     
     def can_be_cancelled(self):
-        """Check if session can be cancelled (24 hours before start)"""e        from datetime import timedelta
+        """Check if session can be cancelled (24 hours before start)"""
+        from datetime import timedelta
         now = timezone.now()
         session_time = self.scheduled_start_datetime
         
