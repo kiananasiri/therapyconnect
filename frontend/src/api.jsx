@@ -19,6 +19,9 @@ export const uploadTherapistPic = (id, file) => {
   formData.append("image", file);
   return API.post(`/therapists/${id}/profile-picture`, formData);
 };
+export const getTherapistPatients = (id) => API.get(`/therapists/${id}/patients/`);
+export const getTherapistCalendarSessions = (id, year, month) => 
+  API.get(`/therapists/${id}/calendar_sessions/`, { params: { year, month } });
 
 export default API;
 

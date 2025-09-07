@@ -273,7 +273,6 @@ class ChatDetailSerializer(serializers.ModelSerializer):
                 return obj.get_unread_count(str(user_id))
         return 0
 
-
 class MessageSerializer(serializers.ModelSerializer):
     reply_to_text = serializers.CharField(source='reply_to.text', read_only=True)
     sender_name = serializers.SerializerMethodField()
@@ -389,7 +388,6 @@ class ChatRoomListSerializer(serializers.ModelSerializer):
             'id', 'room_type', 'is_active', 'is_archived', 'updated_at'
         ]
         read_only_fields = ['updated_at']
-
 
 class ReviewSerializer(serializers.ModelSerializer):
     therapist_full_name = serializers.ReadOnlyField(source='get_therapist_full_name')

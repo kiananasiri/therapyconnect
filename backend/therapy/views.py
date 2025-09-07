@@ -446,6 +446,88 @@ class TherapistViewSet(viewsets.ModelViewSet):
             "message": f"Emergency messages status updated. Current status: {therapist.receive_emergency_messages}",
             "receive_emergency_messages": therapist.receive_emergency_messages
         })
+    
+    @action(detail=True, methods=['get'])
+    def patients(self, request, pk=None):
+        """Get list of patients for this therapist"""
+        therapist = get_object_or_404(Therapist, pk=pk)
+        
+        # Get all unique patient IDs that have sessions with this therapist
+        patient_ids = Session.objects.filter(
+            therapist_id=therapist.id
+        ).values_list('patient_id', flat=True).distinct()
+        
+        # Get patient details
+        patients = Patient.objects.filter(id__in=patient_ids)
+        
+        # Create simplified patient data for the dashboard
+        patient_data = []
+        for patient in patients:
+            # Get latest session with this patient
+            latest_session = Session.objects.filter(
+                therapist_id=therapist.id,
+                patient_id=patient.id
+            ).order_by('-scheduled_start_datetime').first()
+            
+            # Get session count
+            session_count = Session.objects.filter(
+                therapist_id=therapist.id,
+                patient_id=patient.id
+            ).count()
+            
+            patient_data.append({
+                'id': patient.id,
+                'first_name': patient.first_name,
+                'last_name': patient.last_name,
+                'full_name': patient.get_full_name(),
+                'profile_picture': patient.profile_picture.url if patient.profile_picture else None,
+                'last_session_date': latest_session.scheduled_start_datetime if latest_session else None,
+                'session_count': session_count,
+                'tags': patient.tags
+            })
+        
+        return Response(patient_data)
+    
+    @action(detail=True, methods=['get'])
+    def calendar_sessions(self, request, pk=None):
+        """Get calendar view of sessions for this therapist"""
+        therapist = get_object_or_404(Therapist, pk=pk)
+        
+        # Get year and month from query parameters, default to current
+        from datetime import datetime, date
+        now = datetime.now()
+        year = int(request.query_params.get('year', now.year))
+        month = int(request.query_params.get('month', now.month))
+        
+        # Get sessions for the specified month
+        sessions = Session.objects.filter(
+            therapist_id=therapist.id,
+            scheduled_start_datetime__year=year,
+            scheduled_start_datetime__month=month
+        ).order_by('scheduled_start_datetime')
+        
+        # Group sessions by date
+        calendar_data = {}
+        for session in sessions:
+            session_date = session.scheduled_start_datetime.date().isoformat()
+            if session_date not in calendar_data:
+                calendar_data[session_date] = []
+            
+            calendar_data[session_date].append({
+                'id': session.id,
+                'patient_name': session.get_patient_full_name(),
+                'patient_id': session.patient_id,
+                'start_time': session.scheduled_start_datetime.strftime('%H:%M'),
+                'duration': session.duration,
+                'status': session.status,
+                'fee': float(session.fee)
+            })
+        
+        return Response({
+            'year': year,
+            'month': month,
+            'sessions': calendar_data
+        })
 
 
 class SessionViewSet(viewsets.ModelViewSet):
