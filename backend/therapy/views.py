@@ -539,7 +539,7 @@ class SessionViewSet(viewsets.ModelViewSet):
     """
     queryset = Session.objects.all()
     serializer_class = SessionSerializer
-    permission_classes = [IsAuthenticated]  # Require authentication for sessions
+    permission_classes = [AllowAny]  # Allow public access for now
     
     def get_serializer_class(self):
         """Use different serializers for different actions"""
@@ -675,7 +675,7 @@ class SessionViewSet(viewsets.ModelViewSet):
             "patient_input": session.patient_input
         })
     
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['post'], permission_classes=[AllowAny])
     def cancel_session(self, request, pk=None):
         """Cancel a session from therapist side"""
         session = get_object_or_404(Session, pk=pk)

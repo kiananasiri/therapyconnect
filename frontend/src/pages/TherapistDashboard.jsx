@@ -158,16 +158,29 @@ export default function TherapistDashboard() {
     try {
       // Fetch sessions for this specific patient with this therapist
       const response = await fetch(`http://localhost:8000/api/sessions/?therapist_id=${therapistId}&patient_id=${patient.id}`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
       const sessions = await response.json();
+      console.log('📊 Sessions data:', sessions);
       
-      // Sort sessions by date (most recent first)
-      const sortedSessions = sessions.sort((a, b) => 
-        new Date(b.scheduled_start_datetime) - new Date(a.scheduled_start_datetime)
-      );
-      
-      setPatientSessions(sortedSessions);
+      // Ensure sessions is an array before sorting
+      if (Array.isArray(sessions)) {
+        // Sort sessions by date (most recent first)
+        const sortedSessions = sessions.sort((a, b) => 
+          new Date(b.scheduled_start_datetime) - new Date(a.scheduled_start_datetime)
+        );
+        
+        setPatientSessions(sortedSessions);
+        console.log(`✅ Loaded ${sortedSessions.length} sessions for ${patient.first_name} ${patient.last_name}`);
+      } else {
+        console.error('❌ Sessions data is not an array:', sessions);
+        setPatientSessions([]);
+      }
     } catch (error) {
-      console.error('Error fetching patient sessions:', error);
+      console.error('❌ Error fetching patient sessions:', error);
       setPatientSessions([]);
     } finally {
       setSessionLoading(false);
