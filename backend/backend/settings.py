@@ -167,16 +167,18 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # React frontend URL
-    "http://frontend:3000",
-    "https://localhost:3000",  # React frontend URL
-    "https://frontend:3000",
-]
+# CORS_ALLOWED_ORIGINS = [
+#     BACKEND_URL := os.getenv('BACKEND_URL', 'http://localhost:8000'),
+#     "http://localhost:3000",
+# ]
+CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
 CORS_ALLOW_HEADERS = ["Authorization", "Content-Type"]
+CSRF_TRUSTED_ORIGINS = [
+    FRONTEND_URL := os.getenv('FRONTEND_URL', 'http://localhost:3000'),
+]
 
 # Channels Configuration
 CHANNEL_LAYERS = {

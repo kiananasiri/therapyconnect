@@ -20,11 +20,15 @@ POSTGRES_USER=postgres_user
 POSTGRES_PASSWORD=postgres_password
 DB_HOST=db
 DB_PORT=5432
+DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HOST}:${DB_PORT}/${POSTGRES_DB}
 
 # Social authentication (Google OAuth2)
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY=your-google-client-id
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET=your-google-client-secret
 
+# URLS
+BACKEND_URL=http://your-server-ip:8000
+FRONTEND_URL=http://your-server-ip:3000/
 
 👉 Notes:
 
