@@ -13,11 +13,12 @@ import TherapistDetail from "./pages/TherapistDetail";
 import { UserProvider } from "./contexts/UserContext";
 import Navbar from "./components/Navbar";
 
-function App() {
+function AppContent() {
+  // All pages with top navigation (including therapist dashboard)
   return (
-    <UserProvider>
-      <Router>
-        <Navbar />
+    <div>
+      <Navbar />
+      <main>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/auth" element={<Auth />} />
@@ -26,6 +27,16 @@ function App() {
           <Route path="/therapists" element={<TherapistList />} />
           <Route path="/therapists/:id" element={<TherapistDetail />} />
         </Routes>
+      </main>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <UserProvider>
+      <Router>
+        <AppContent />
       </Router>
     </UserProvider>
   );

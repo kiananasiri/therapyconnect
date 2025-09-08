@@ -404,7 +404,9 @@ export default function TherapistDetail() {
                       marginBottom: '1rem',
                       borderLeft: '4px solid #667eea'
                     }}>
-                      <div style={{ color: '#333', fontWeight: '500' }}>{edu}</div>
+                      <div style={{ color: '#333', fontWeight: '500' }}>
+                        {typeof edu === 'object' ? `${edu.degree} in ${edu.field}` : edu}
+                      </div>
                     </div>
                   ))}
                 </div>

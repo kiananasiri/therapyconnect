@@ -261,39 +261,42 @@ export default function TherapistDashboard() {
   return (
     <div style={{ 
       minHeight: "100vh",
-        background: "#f5f7fa",
+        background: "linear-gradient(135deg, #EBE5D9 0%, #CCBBDB 100%)",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "column"
       }}>
       <div style={{
-          background: "white",
-          padding: "3rem",
-          borderRadius: "12px",
+          background: "rgba(255, 255, 255, 0.95)",
+          padding: "3.5rem",
+          borderRadius: "24px",
           textAlign: "center",
-          boxShadow: "0 4px 12px rgba(0,0,0,0.1)"
+          boxShadow: "0 20px 60px rgba(158, 131, 184, 0.15)",
+          backdropFilter: "blur(10px)",
+          border: "1px solid rgba(158, 131, 184, 0.1)"
         }}>
       <div style={{
-            width: "40px",
-            height: "40px",
-            border: "4px solid #f3f3f3",
-            borderTop: "4px solid #4CAF50",
+            width: "48px",
+            height: "48px",
+            border: "4px solid #CCBBDB",
+            borderTop: "4px solid #9E83B8",
         borderRadius: "50%",
             animation: "spin 1s linear infinite",
             margin: "0 auto 1.5rem"
       }}></div>
           <h3 style={{ 
-            color: "#2E7D32", 
+            color: "#758976", 
             margin: "0 0 0.5rem 0",
-            fontSize: "1.3rem"
+            fontSize: "1.4rem",
+            fontWeight: "600"
           }}>
             Loading Dashboard...
           </h3>
           <p style={{ 
-            color: "#666", 
+            color: "#A2ABA1", 
             margin: 0,
-            fontSize: "0.9rem"
+            fontSize: "1rem"
           }}>
             Preparing your therapy session data
           </p>
@@ -311,17 +314,20 @@ export default function TherapistDashboard() {
   return (
       <div style={{
       minHeight: "100vh",
-      background: "#f5f7fa",
-      padding: "2rem"
+      background: "linear-gradient(135deg, #EBE5D9 0%, #CCBBDB 50%, #EBE5D9 100%)",
+      padding: "1.5rem",
+      overflow: "auto"
     }}>
 
       {/* Header */}
       <div style={{ 
-        background: "white",
-        borderRadius: "12px",
-        padding: "2rem", 
-        marginBottom: "2rem",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.1)"
+        background: "rgba(255, 255, 255, 0.95)",
+        borderRadius: "20px",
+        padding: "1.5rem 2rem", 
+        marginBottom: "1.5rem",
+        boxShadow: "0 20px 60px rgba(158, 131, 184, 0.1)",
+        backdropFilter: "blur(10px)",
+        border: "1px solid rgba(158, 131, 184, 0.1)"
       }}>
         <div style={{ 
           display: "flex",
@@ -331,48 +337,62 @@ export default function TherapistDashboard() {
           <div>
             <h1 style={{
               margin: "0 0 0.5rem 0",
-              color: "#2E7D32",
-              fontSize: "2rem",
-              fontWeight: "600"
+              color: "#758976",
+              fontSize: "2.5rem",
+              fontWeight: "700",
+              background: "linear-gradient(135deg, #9E83B8, #758976)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+              fontFamily: "'Times New Roman', serif"
             }}>
-              Therapist Dashboard
+              Good Day {therapist ? `Dr. ${therapist.first_name} ${therapist.last_name}` : "🌱"}
             </h1>
             <p style={{
               margin: 0,
-              color: "#666",
-              fontSize: "1.1rem"
+              color: "#A2ABA1",
+              fontSize: "1.2rem",
+              fontWeight: "400",
+              fontFamily: "'Times New Roman', serif"
             }}>
-              Welcome back, {therapist ? `Dr. ${therapist.first_name} ${therapist.last_name}` : "Loading..."}
+              Let's start the day with a smile!
             </p>
           </div>
           <div style={{
             display: "flex",
             alignItems: "center",
-            gap: "1rem"
+            gap: "1.5rem"
           }}>
             <div style={{
-              textAlign: "right"
+              textAlign: "right",
+              padding: "1.25rem 1.75rem",
+              background: "linear-gradient(135deg, #9E83B8, #CCBBDB)",
+              borderRadius: "20px",
+              color: "white",
+              boxShadow: "0 8px 24px rgba(158, 131, 184, 0.25)"
             }}>
             <div style={{
-                color: "#2E7D32",
-                fontSize: "1.2rem",
-                fontWeight: "600"
+                fontSize: "1.4rem",
+                fontWeight: "700",
+                marginBottom: "0.25rem"
               }}>
                 ${therapist?.wallet_balance || 0}
               </div>
             <div style={{
-                color: "#666",
-                fontSize: "0.9rem"
+                fontSize: "1rem",
+                opacity: "0.9",
+                fontWeight: "500"
               }}>
                 Wallet Balance
               </div>
             </div>
             <div style={{
-              width: "60px",
-              height: "60px",
+              width: "70px",
+              height: "70px",
               borderRadius: "50%",
-              background: "#4CAF50",
-              padding: "3px"
+              background: "linear-gradient(135deg, #9E83B8, #758976)",
+              padding: "4px",
+              boxShadow: "0 8px 24px rgba(158, 131, 184, 0.3)"
             }}>
               <img
                 src={therapist?.profile_picture || avatar}
@@ -382,7 +402,7 @@ export default function TherapistDashboard() {
                   height: "100%",
                   borderRadius: "50%",
                   objectFit: "cover",
-                  border: "2px solid white"
+                  border: "3px solid white"
                 }}
               />
             </div>
@@ -408,16 +428,19 @@ export default function TherapistDashboard() {
       {/* Main Content Grid */}
           <div style={{
         display: "grid",
-        gridTemplateColumns: "1fr 400px",
-        gap: "2rem",
-        height: "calc(100vh - 300px)"
+        gridTemplateColumns: "2fr 1fr",
+        gap: "1.5rem",
+        minHeight: "600px",
+        maxWidth: "100%"
       }}>
         {/* Left Column: Calendar */}
             <div style={{
-          background: "white",
-          borderRadius: "12px",
-            padding: "2rem",
-          boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+          background: "rgba(255, 255, 255, 0.95)",
+          borderRadius: "24px",
+            padding: "2.5rem",
+          boxShadow: "0 20px 60px rgba(158, 131, 184, 0.1)",
+          backdropFilter: "blur(10px)",
+          border: "1px solid rgba(158, 131, 184, 0.1)",
           overflow: "hidden"
         }}>
             {/* Calendar Header */}
@@ -425,22 +448,33 @@ export default function TherapistDashboard() {
               display: "flex", 
               justifyContent: "space-between", 
               alignItems: "center",
-              marginBottom: "2rem",
-            padding: "1rem",
-            background: "#4CAF50",
-            borderRadius: "8px",
-            color: "white"
+              marginBottom: "2.5rem",
+            padding: "1.5rem",
+            background: "linear-gradient(135deg, #9E83B8, #CCBBDB)",
+            borderRadius: "20px",
+            color: "white",
+            boxShadow: "0 8px 24px rgba(158, 131, 184, 0.25)"
             }}>
             <button
                 onClick={() => navigateMonth(-1)}
                 style={{
-                  background: "rgba(255,255,255,0.2)",
-                border: "1px solid rgba(255,255,255,0.3)",
+                  background: "rgba(255,255,255,0.25)",
+                border: "2px solid rgba(255,255,255,0.3)",
                   color: "white",
-                padding: "0.5rem 1rem",
-                borderRadius: "6px",
+                padding: "0.75rem 1.25rem",
+                borderRadius: "12px",
                   cursor: "pointer",
-                fontSize: "0.9rem"
+                fontSize: "1rem",
+                fontWeight: "600",
+                transition: "all 0.2s ease"
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = "rgba(255,255,255,0.35)";
+                  e.target.style.transform = "translateY(-1px)";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = "rgba(255,255,255,0.25)";
+                  e.target.style.transform = "translateY(0)";
                 }}
               >
                 ← Previous
@@ -448,46 +482,59 @@ export default function TherapistDashboard() {
               
               <h3 style={{ 
                 margin: 0,
-              fontSize: "1.3rem",
-              fontWeight: "500"
-            }}>
-              {currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+              fontSize: "1.6rem",
+              fontWeight: "700",
+              textShadow: "0 2px 4px rgba(0,0,0,0.1)"
+              }}>
+                {currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
               </h3>
               
-              <button
+            <button
                 onClick={() => navigateMonth(1)}
                 style={{
-                background: "rgba(255,255,255,0.2)",
-                border: "1px solid rgba(255,255,255,0.3)",
+                  background: "rgba(255,255,255,0.25)",
+                border: "2px solid rgba(255,255,255,0.3)",
                   color: "white",
-                padding: "0.5rem 1rem",
-                borderRadius: "6px",
+                padding: "0.75rem 1.25rem",
+                borderRadius: "12px",
                   cursor: "pointer",
-                fontSize: "0.9rem"
+                fontSize: "1rem",
+                fontWeight: "600",
+                transition: "all 0.2s ease"
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = "rgba(255,255,255,0.35)";
+                  e.target.style.transform = "translateY(-1px)";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = "rgba(255,255,255,0.25)";
+                  e.target.style.transform = "translateY(0)";
                 }}
               >
                 Next →
-              </button>
+            </button>
             </div>
 
             {/* Calendar Grid */}
             <div style={{ 
               display: "grid", 
               gridTemplateColumns: "repeat(7, 1fr)", 
-            gap: "1px",
-            background: "#e0e0e0",
-            borderRadius: "8px",
-            overflow: "hidden"
+            gap: "2px",
+            background: "linear-gradient(135deg, #CCBBDB, #A2ABA1)",
+            borderRadius: "16px",
+            overflow: "hidden",
+            padding: "2px"
             }}>
               {/* Day headers */}
             {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
                 <div key={day} style={{
-                  padding: "1rem 0.5rem",
+                  padding: "1.25rem 0.75rem",
                   textAlign: "center",
-                  fontWeight: "600",
-                fontSize: "0.9rem",
-                color: "#666",
-                background: "#f5f5f5"
+                  fontWeight: "700",
+                fontSize: "1rem",
+                color: "#758976",
+                background: "rgba(255, 255, 255, 0.9)",
+                borderRadius: "8px"
                 }}>
                   {day}
                 </div>
@@ -508,31 +555,36 @@ export default function TherapistDashboard() {
                     onMouseEnter={(e) => {
                       if (day) {
                       setHoveredDate(dateStr);
-                      e.target.style.background = "#e8f5e8";
+                      e.target.style.background = "rgba(158, 131, 184, 0.2)";
+                      e.target.style.transform = "scale(1.02)";
                       }
                     }}
                     onMouseLeave={(e) => {
                     setHoveredDate(null);
                       if (day) {
                       e.target.style.background = day ? 
-                        (isToday ? "#4CAF50" :
-                         daySessions.length > 0 ? "#81C784" :
-                         "white") : "#f9f9f9";
+                        (isToday ? "linear-gradient(135deg, #9E83B8, #CCBBDB)" :
+                         daySessions.length > 0 ? "linear-gradient(135deg, #CCBBDB, #EBE5D9)" :
+                         "rgba(255, 255, 255, 0.9)") : "rgba(235, 229, 217, 0.3)";
+                      e.target.style.transform = "scale(1)";
                     }
                   }}
                   style={{
-                    minHeight: "60px",
-                    padding: "0.5rem",
+                    minHeight: "70px",
+                    padding: "0.75rem",
                     background: day ? 
-                      (isToday ? "#4CAF50" :
-                       daySessions.length > 0 ? "#81C784" :
-                       "white") : "#f9f9f9",
+                      (isToday ? "linear-gradient(135deg, #9E83B8, #CCBBDB)" :
+                       daySessions.length > 0 ? "linear-gradient(135deg, #CCBBDB, #EBE5D9)" :
+                       "rgba(255, 255, 255, 0.9)") : "rgba(235, 229, 217, 0.3)",
                     cursor: day ? "pointer" : "default",
+                    borderRadius: "8px",
+                    transition: "all 0.2s ease",
+                    boxShadow: day && daySessions.length > 0 ? "0 2px 8px rgba(158, 131, 184, 0.2)" : "none",
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",
-                    color: day ? (isToday || daySessions.length > 0 ? "white" : "#333") : "#999",
-                    transition: "background 0.2s ease"
+                    color: day ? (isToday ? "white" : daySessions.length > 0 ? "#758976" : "#758976") : "#A2ABA1",
+                    fontWeight: day ? (isToday ? "700" : daySessions.length > 0 ? "600" : "500") : "400"
                   }}
                   >
                     {day && (
@@ -543,8 +595,8 @@ export default function TherapistDashboard() {
                           alignItems: "flex-start" 
                         }}>
                           <span style={{ 
-                          fontSize: "0.9rem",
-                          fontWeight: isToday ? "600" : "normal"
+                          fontSize: "1rem",
+                          fontWeight: isToday ? "700" : daySessions.length > 0 ? "600" : "500"
                           }}>
                             {day}
                           </span>
@@ -552,9 +604,13 @@ export default function TherapistDashboard() {
                         
                         {daySessions.length > 0 && (
                           <div style={{
-                          fontSize: "0.7rem",
+                          fontSize: "0.8rem",
                           textAlign: "center",
-                          marginTop: "0.25rem"
+                          marginTop: "0.5rem",
+                          padding: "0.25rem 0.5rem",
+                          background: isToday ? "rgba(255,255,255,0.2)" : "rgba(158, 131, 184, 0.15)",
+                          borderRadius: "12px",
+                          fontWeight: "600"
                             }}>
                               {daySessions.length} session{daySessions.length > 1 ? 's' : ''}
                           </div>
@@ -620,30 +676,39 @@ export default function TherapistDashboard() {
                     <div style={{ 
           display: "flex",
           flexDirection: "column",
-          gap: "1.5rem"
+          gap: "1.5rem",
+          height: "100%",
+          overflow: "hidden"
         }}>
           {/* Therapist Info Card */}
               <div style={{ 
-            background: "white",
-            borderRadius: "12px",
-                padding: "1.5rem", 
-            boxShadow: "0 2px 8px rgba(0,0,0,0.1)"
+            background: "rgba(255, 255, 255, 0.95)",
+            borderRadius: "20px",
+                padding: "2rem", 
+            boxShadow: "0 12px 40px rgba(158, 131, 184, 0.15)",
+            backdropFilter: "blur(10px)",
+            border: "1px solid rgba(158, 131, 184, 0.1)"
           }}>
             <h3 style={{
-              margin: "0 0 1rem 0",
-              color: "#2E7D32",
-              fontSize: "1.2rem",
-              fontWeight: "600"
+              margin: "0 0 1.25rem 0",
+              color: "#758976",
+              fontSize: "1.4rem",
+              fontWeight: "700",
+              background: "linear-gradient(135deg, #9E83B8, #758976)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text"
             }}>
               About Me
             </h3>
             
             {therapist?.about_note && (
               <p style={{
-                margin: "0 0 1rem 0",
-                color: "#666",
-                      fontSize: "0.9rem", 
-                lineHeight: "1.5"
+                margin: "0 0 1.25rem 0",
+                color: "#A2ABA1",
+                fontSize: "1rem",
+                lineHeight: "1.6",
+                fontWeight: "400"
               }}>
                 {therapist.about_note}
               </p>
@@ -686,42 +751,51 @@ export default function TherapistDashboard() {
 
           {/* Patients Section */}
           <div style={{
-            background: "white",
-            borderRadius: "12px",
-            padding: "1.5rem",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+            background: "rgba(255, 255, 255, 0.95)",
+            borderRadius: "20px",
+            padding: "2rem",
+            boxShadow: "0 12px 40px rgba(158, 131, 184, 0.15)",
+            backdropFilter: "blur(10px)",
+            border: "1px solid rgba(158, 131, 184, 0.1)",
             flex: 1,
-            overflow: "hidden"
+            overflow: "hidden",
+            display: "flex",
+            flexDirection: "column"
                   }}>
                     <div style={{ 
                       display: "flex", 
                       justifyContent: "space-between", 
                       alignItems: "center",
-              marginBottom: "1rem"
+              marginBottom: "1.5rem"
             }}>
               <h3 style={{
                 margin: 0,
-                color: "#2E7D32",
-                fontSize: "1.2rem",
-                fontWeight: "600"
+                color: "#758976",
+                fontSize: "1.4rem",
+                fontWeight: "700",
+                background: "linear-gradient(135deg, #9E83B8, #758976)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text"
               }}>
                 My Patients
               </h3>
                       <span style={{ 
-                background: "#e8f5e8",
-                color: "#2E7D32",
-                        padding: "0.25rem 0.75rem",
-                        borderRadius: "12px",
-                fontSize: "0.8rem",
-                fontWeight: "500"
+                background: "linear-gradient(135deg, #CCBBDB, #9E83B8)",
+                color: "white",
+                        padding: "0.5rem 1rem",
+                        borderRadius: "16px",
+                fontSize: "0.9rem",
+                fontWeight: "600",
+                boxShadow: "0 4px 12px rgba(158, 131, 184, 0.25)"
                       }}>
                 {patients.length} patient{patients.length !== 1 ? 's' : ''}
                       </span>
                     </div>
 
             <div style={{
-              maxHeight: "400px",
-              overflowY: "auto"
+              flex: 1,
+              overflow: "hidden"
             }}>
               {patientsLoading ? (
                 <div style={{

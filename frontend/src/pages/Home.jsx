@@ -311,13 +311,22 @@ export default function Home() {
   };
 
   return (
-    <div style={{ padding: "2rem", minHeight: "100vh", background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" }}>
+    <div style={{ padding: "0", minHeight: "100vh", background: "linear-gradient(135deg, #EBE5D9 0%, #CCBBDB 50%, #EBE5D9 100%)" }}>
+      <div style={{ padding: "2rem" }}>
       {/* Hero Section */}
-      <div style={{ textAlign: "center", color: "white", marginBottom: "3rem" }}>
-        <h1 style={{ fontSize: "3rem", margin: "0 0 1rem 0", fontWeight: "300" }}>
+      <div style={{ textAlign: "center", color: "#758976", marginBottom: "3rem" }}>
+        <h1 style={{ 
+          fontSize: "3rem", 
+          margin: "0 0 1rem 0", 
+          fontWeight: "700",
+          background: "linear-gradient(135deg, #9E83B8, #758976)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          backgroundClip: "text"
+        }}>
           Welcome to TherapyConnect
         </h1>
-        <p style={{ fontSize: "1.2rem", margin: "0 0 2rem 0", opacity: "0.9" }}>
+        <p style={{ fontSize: "1.2rem", margin: "0 0 2rem 0", color: "#A2ABA1", fontWeight: "500" }}>
           Find the right therapist for you, book sessions, and manage appointments.
         </p>
 
@@ -1297,6 +1306,7 @@ export default function Home() {
           background: transparent;
         }
       `}</style>
+      </div>
     </div>
   );
 }
