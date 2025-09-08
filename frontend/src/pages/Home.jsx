@@ -188,14 +188,46 @@ export default function Home() {
     e.preventDefault();
     setPatientError("");
     if (patientMode === "signup") {
-      if (!patientAuth.first_name || !patientAuth.last_name || !patientAuth.phone_no || !patientAuth.email || !patientAuth.password) {
+      // Trim values
+      const firstName = (patientAuth.first_name || "").trim();
+      const lastName = (patientAuth.last_name || "").trim();
+      const phoneRaw = (patientAuth.phone_no || "").trim();
+      const email = (patientAuth.email || "").trim();
+      const password = patientAuth.password || "";
+
+      if (!firstName || !lastName || !phoneRaw || !email || !password) {
         setPatientError("Please fill all required fields");
+        return;
+      }
+
+      // Basic validations
+      const nameRegex = /^[A-Za-z][A-Za-z'\-\s]{1,49}$/; // 2-50 chars letters, space, hyphen, apostrophe
+      if (!nameRegex.test(firstName)) {
+        setPatientError("Please enter a valid first name (letters only, 2-50 chars)");
+        return;
+      }
+      if (!nameRegex.test(lastName)) {
+        setPatientError("Please enter a valid last name (letters only, 2-50 chars)");
+        return;
+      }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+      if (!emailRegex.test(email)) {
+        setPatientError("Please enter a valid email address");
+        return;
+      }
+      const digitsOnly = phoneRaw.replace(/\D/g, "");
+      if (digitsOnly.length < 10 || digitsOnly.length > 15) {
+        setPatientError("Please enter a valid phone number (10-15 digits)");
+        return;
+      }
+      if (password.length < 8) {
+        setPatientError("Password must be at least 8 characters long");
         return;
       }
       try {
         setPatientLoading(true);
         // Check uniqueness for phone and email
-        const { phoneExists, emailExists } = await checkPatientUnique({ phone_no: patientAuth.phone_no, email: patientAuth.email });
+        const { phoneExists, emailExists } = await checkPatientUnique({ phone_no: digitsOnly, email });
         if (phoneExists || emailExists) {
           setPatientError(phoneExists ? "Phone number already in use. Please login instead or use a different phone number." : "Email already in use. Please login instead or use a different email.");
           return;
@@ -206,10 +238,10 @@ export default function Home() {
         // Prefill details from step 1
         const prefill = {
           password: patientAuth.password,
-          first_name: patientAuth.first_name,
-          last_name: patientAuth.last_name,
-          phone_no: patientAuth.phone_no,
-          email: patientAuth.email,
+          first_name: firstName,
+          last_name: lastName,
+          phone_no: digitsOnly,
+          email,
           address: "",
           added_note: "",
           allergies_and_medication: "",
@@ -723,6 +755,8 @@ export default function Home() {
                       onChange={handlePatientAuthChange}
                       required
                       disabled={patientLoading}
+                      pattern="[A-Za-z][A-Za-z'\-\s]{1,49}"
+                      title="Letters, spaces, hyphens, apostrophes; 2-50 characters"
                       style={{
                         width: "100%",
                         padding: "1rem",
@@ -744,6 +778,8 @@ export default function Home() {
                       onChange={handlePatientAuthChange}
                       required
                       disabled={patientLoading}
+                      pattern="[A-Za-z][A-Za-z'\-\s]{1,49}"
+                      title="Letters, spaces, hyphens, apostrophes; 2-50 characters"
                       style={{
                         width: "100%",
                         padding: "1rem",
@@ -758,13 +794,15 @@ export default function Home() {
                   <div style={{ marginBottom: "1rem" }}>
                     <div style={{ marginBottom: "0.25rem", color: "#333", fontSize: "0.9rem" }}>Phone Number <span style={{ color: "#d32f2f" }}>*</span></div>
                     <input
-                      type="text"
+                      type="tel"
                       name="phone_no"
                       placeholder="Phone Number"
                       value={patientAuth.phone_no}
                       onChange={handlePatientAuthChange}
                       required
                       disabled={patientLoading}
+                      pattern="[0-9+()\-\s]{10,20}"
+                      title="10-15 digits; you may use +, spaces, dashes, or parentheses"
                       style={{
                         width: "100%",
                         padding: "1rem",
@@ -786,6 +824,7 @@ export default function Home() {
                       onChange={handlePatientAuthChange}
                       required
                       disabled={patientLoading}
+                      inputMode="email"
                       style={{
                         width: "100%",
                         padding: "1rem",
@@ -808,6 +847,8 @@ export default function Home() {
                         onChange={handlePatientAuthChange}
                         required
                         disabled={patientLoading}
+                        minLength={8}
+                        title="At least 8 characters"
                         style={{
                           width: "100%",
                           padding: "1rem",
@@ -1011,7 +1052,7 @@ export default function Home() {
                 <button type="submit" disabled={patientDetailsLoading} style={{ flex: 1, padding: "0.95rem", background: patientDetailsLoading ? "#ccc" : "linear-gradient(90deg, #667eea, #5a6fd8)", color: "white", border: "none", borderRadius: "10px", cursor: patientDetailsLoading ? "not-allowed" : "pointer" }}>
                   {patientDetailsLoading ? "Creating..." : "Create Account"}
                 </button>
-                <button type="button" onClick={() => setShowPatientDetailsModal(false)} disabled={patientDetailsLoading} style={{ padding: "0.95rem 1rem", background: "transparent", color: "#666", border: "1px solid #e0e0e0", borderRadius: "10px", cursor: "pointer" }}>Cancel</button>
+                <button type="button" onClick={() => { setShowPatientDetailsModal(false); setShowPatientAuth(true); setPatientMode('signup'); }} disabled={patientDetailsLoading} style={{ padding: "0.95rem 1rem", background: "transparent", color: "#666", border: "1px solid #e0e0e0", borderRadius: "10px", cursor: "pointer" }}>Back</button>
               </div>
             </form>
           </div>

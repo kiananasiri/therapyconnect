@@ -44,14 +44,14 @@ class Patient(models.Model):
         ]
     )
     
-    # Required unique phone number
+    # Required unique phone number (09XXXXXXXXX)
     phone_no = models.CharField(
-        max_length=15,
+        max_length=11,
         unique=True,
         validators=[
             RegexValidator(
-                regex=r'^\+?1?\d{9,15}$',
-                message='Phone number must be valid and contain 9-15 digits'
+                regex=r'^09\d{9}$',
+                message='Phone number must be in the format 09XXXXXXXXX (11 digits)'
             )
         ]
     )
@@ -210,14 +210,14 @@ class Therapist(models.Model):
         ]
     )
     
-    # Required unique phone number
+    # Required unique phone number (09XXXXXXXXX)
     phone_no = models.CharField(
-        max_length=15,
+        max_length=11,
         unique=True,
         validators=[
             RegexValidator(
-                regex=r'^\+?1?\d{9,15}$',
-                message='Phone number must be valid and contain 9-15 digits'
+                regex=r'^09\d{9}$',
+                message='Phone number must be in the format 09XXXXXXXXX (11 digits)'
             )
         ]
     )
