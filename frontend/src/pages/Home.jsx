@@ -324,7 +324,7 @@ export default function Home() {
     <div style={{ 
       padding: "0", 
       minHeight: "100vh", 
-      background: "linear-gradient(135deg, #EBE5D9 0%, #CCBBDB 50%, #EBE5D9 100%)",
+      background: "linear-gradient(135deg, #E8F5E8 0%, #F3E5F5 30%, #FFF9C4 60%, #E8F5E8 100%)",
       position: "relative"
     }}>
       {/* Background GIF */}
@@ -333,81 +333,238 @@ export default function Home() {
         alt="Mental Health Support Background" 
         style={{
           position: "fixed",
-          top: "20%",
-          right: "5%",
-          width: "700px",
-          height: "700px",
-          zIndex: 1,
-          opacity: 0.7,
-          pointerEvents: "none"
+          top: "10%",
+          right: "-10%",
+          width: "500px",
+          height: "500px",
+          zIndex: -1,
+          opacity: 0.15,
+          pointerEvents: "none",
+          borderRadius: "50%",
+          filter: "blur(1px)"
         }}
       />
       
       <div style={{ padding: "2rem", position: "relative", zIndex: 1 }}>
       {/* Hero Section */}
-      <div style={{ textAlign: "center", color: "#758976", marginBottom: "3rem" }}>
+      <div style={{ 
+        textAlign: "center", 
+        padding: "4rem 2rem",
+        maxWidth: "1200px",
+        margin: "0 auto"
+      }}>
         <div style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: "2rem",
-          marginBottom: "2rem",
-          flexWrap: "wrap"
+          background: "rgba(255, 255, 255, 0.3)",
+          backdropFilter: "blur(20px)",
+          borderRadius: "30px",
+          padding: "4rem 3rem",
+          border: "1px solid rgba(255, 255, 255, 0.4)",
+          boxShadow: "0 20px 60px rgba(186, 104, 200, 0.2)"
         }}>
-          <div style={{ flex: "1", minWidth: "300px" }}>
-            <h1 style={{ 
-              fontSize: "3rem", 
-              margin: "0 0 1rem 0", 
-              fontWeight: "700",
+          <div style={{
+            display: "inline-block",
+            background: "linear-gradient(135deg, #BA68C8, #66BB6A)",
+            borderRadius: "20px",
+            padding: "0.5rem 2rem",
+            marginBottom: "2rem"
+          }}>
+            <span style={{
+              color: "white",
+              fontSize: "0.9rem",
+              fontWeight: "600",
+              letterSpacing: "1px",
+              textTransform: "uppercase",
+              fontFamily: "'Times New Roman', serif"
+            }}>
+              Mental Health Platform
+            </span>
+          </div>
+          
+          <h1 style={{ 
+            fontSize: "4rem", 
+            margin: "0 0 2rem 0", 
+            fontWeight: "300",
+            color: "#2C3E50",
+            fontFamily: "'Times New Roman', serif",
+            lineHeight: "1.2",
+            letterSpacing: "-1px"
+          }}>
+            Your Journey to
+            <br />
+            <span style={{
               background: "linear-gradient(135deg, #9E83B8, #758976)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
-              fontFamily: "'Times New Roman', serif"
+              fontWeight: "700"
             }}>
-              Welcome to TherapyConnect
-            </h1>
-            <p style={{ 
-              fontSize: "1.2rem", 
-              margin: "0 0 2rem 0", 
-              color: "#A2ABA1", 
-              fontWeight: "500",
-              fontFamily: "'Times New Roman', serif"
+              Wellness Starts Here
+            </span>
+          </h1>
+          
+          <p style={{ 
+            fontSize: "1.3rem", 
+            margin: "0 0 3rem 0", 
+            color: "#5D6D7E",
+            fontWeight: "400",
+            fontFamily: "'Times New Roman', serif",
+            lineHeight: "1.6",
+            maxWidth: "700px",
+            margin: "0 auto 3rem auto"
+          }}>
+            Connect with licensed therapists in a secure, convenient environment. 
+            <br />
+            Professional mental health care, tailored to your needs.
+          </p>
+
+          <div style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "1.5rem",
+            flexWrap: "wrap",
+            marginBottom: "2rem"
+          }}>
+            <div style={{
+              background: "rgba(102, 187, 106, 0.2)",
+              border: "2px solid rgba(102, 187, 106, 0.4)",
+              borderRadius: "15px",
+              padding: "1rem 1.5rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem"
             }}>
-              Find the right therapist for you, book sessions, and manage appointments.
-            </p>
+              <span style={{ fontSize: "1.2rem" }}>✓</span>
+              <span style={{
+                color: "#2E7D32",
+                fontWeight: "600",
+                fontSize: "0.9rem",
+                fontFamily: "'Times New Roman', serif"
+              }}>
+                Licensed Professionals
+              </span>
+            </div>
+            
+            <div style={{
+              background: "rgba(186, 104, 200, 0.2)",
+              border: "2px solid rgba(186, 104, 200, 0.4)",
+              borderRadius: "15px",
+              padding: "1rem 1.5rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem"
+            }}>
+              <span style={{ fontSize: "1.2rem" }}>✓</span>
+              <span style={{
+                color: "#7B1FA2",
+                fontWeight: "600",
+                fontSize: "0.9rem",
+                fontFamily: "'Times New Roman', serif"
+              }}>
+                Secure & Private
+              </span>
+            </div>
+            
+            <div style={{
+              background: "rgba(255, 213, 79, 0.2)",
+              border: "2px solid rgba(255, 213, 79, 0.4)",
+              borderRadius: "15px",
+              padding: "1rem 1.5rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem"
+            }}>
+              <span style={{ fontSize: "1.2rem" }}>✓</span>
+              <span style={{
+                color: "#F57F17",
+                fontWeight: "600",
+                fontSize: "0.9rem",
+                fontFamily: "'Times New Roman', serif"
+              }}>
+                24/7 Available
+              </span>
+            </div>
           </div>
         </div>
 
 
         {/* Search Section */}
-        <form onSubmit={handleSearch} style={{ marginBottom: "2rem" }}>
-          <input
-            type="text"
-            placeholder="Search therapists by name or specialty"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            style={{ 
-              padding: "1rem", 
-              width: "400px", 
-              marginRight: "1rem",
-              borderRadius: "50px",
-              border: "none",
-              fontSize: "1rem"
-            }}
-          />
-          <button type="submit" style={{ 
-            padding: "1rem 2rem",
-            background: "#4CAF50",
-            color: "white",
-            border: "none",
-            borderRadius: "50px",
-            fontSize: "1rem",
-            cursor: "pointer"
+        <div style={{
+          background: "rgba(255, 255, 255, 0.6)",
+          backdropFilter: "blur(15px)",
+          borderRadius: "25px",
+          padding: "2rem",
+          marginTop: "3rem",
+          border: "2px solid rgba(186, 104, 200, 0.3)",
+          boxShadow: "0 10px 40px rgba(186, 104, 200, 0.2)"
+        }}>
+          <form onSubmit={handleSearch} style={{ 
+            display: "flex",
+            alignItems: "center",
+            gap: "1rem",
+            maxWidth: "600px",
+            margin: "0 auto",
+            flexWrap: "wrap",
+            justifyContent: "center"
           }}>
-            Search
-          </button>
-        </form>
+            <div style={{ 
+              position: "relative",
+              flex: "1",
+              minWidth: "300px"
+            }}>
+              <input
+                type="text"
+                placeholder="Search therapists by name or specialty..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                style={{ 
+                  width: "100%",
+                  padding: "1.2rem 1.5rem", 
+                  borderRadius: "20px",
+                  border: "2px solid rgba(186, 104, 200, 0.3)",
+                  fontSize: "1rem",
+                  fontFamily: "'Times New Roman', serif",
+                  background: "rgba(255, 255, 255, 0.9)",
+                  transition: "all 0.3s ease",
+                  outline: "none"
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = "#BA68C8";
+                  e.target.style.boxShadow = "0 0 20px rgba(186, 104, 200, 0.4)";
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = "rgba(186, 104, 200, 0.3)";
+                  e.target.style.boxShadow = "none";
+                }}
+              />
+            </div>
+            <button 
+              type="submit" 
+              style={{ 
+                padding: "1.2rem 2.5rem",
+                background: "linear-gradient(135deg, #BA68C8, #FFD54F, #66BB6A)",
+                color: "white",
+                border: "none",
+                borderRadius: "20px",
+                fontSize: "1rem",
+                fontWeight: "600",
+                cursor: "pointer",
+                fontFamily: "'Times New Roman', serif",
+                transition: "all 0.3s ease",
+                boxShadow: "0 5px 20px rgba(186, 104, 200, 0.4)"
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = "translateY(-2px)";
+                e.target.style.boxShadow = "0 8px 30px rgba(186, 104, 200, 0.6)";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = "translateY(0px)";
+                e.target.style.boxShadow = "0 5px 20px rgba(186, 104, 200, 0.4)";
+              }}
+            >
+              🔍 Find Therapist
+            </button>
+          </form>
+        </div>
       </div>
 
       {/* Therapist Login Modal */}
@@ -1069,118 +1226,169 @@ export default function Home() {
 
       {/* Platform Information Section */}
       <div style={{
-        padding: "2rem",
-        textAlign: "center"
+        padding: "6rem 2rem",
+        maxWidth: "1200px",
+        margin: "0 auto"
       }}>
-        <h2 style={{
-          fontSize: "1.8rem",
-          fontWeight: "600",
-          color: "#758976",
-          fontFamily: "'Times New Roman', serif",
-          marginBottom: "1rem"
-        }}>
-          About TherapyConnect
-        </h2>
-        
-        <p style={{
-          fontSize: "1.1rem",
-          color: "#758976",
-          lineHeight: "1.6",
-          fontFamily: "'Times New Roman', serif",
-          marginBottom: "2rem",
-          maxWidth: "600px",
-          margin: "0 auto 2rem auto"
-        }}>
-          A comprehensive mental health platform connecting patients with qualified therapists for accessible, convenient, and effective care.
-        </p>
-
         <div style={{
-          display: "flex",
-          justifyContent: "center",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))",
           gap: "2rem",
-          flexWrap: "wrap"
+          alignItems: "center"
         }}>
           <div style={{
-            background: "#EBE5D9",
-            padding: "1.5rem",
-            borderRadius: "15px",
-            minWidth: "200px",
-            maxWidth: "250px"
-          }}>
-            <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>🩺</div>
+            background: "rgba(255, 255, 255, 0.8)",
+            backdropFilter: "blur(20px)",
+            padding: "3rem",
+            borderRadius: "25px",
+            border: "2px solid rgba(102, 187, 106, 0.3)",
+            boxShadow: "0 15px 50px rgba(102, 187, 106, 0.2)",
+            transition: "all 0.3s ease",
+            cursor: "pointer"
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-10px)";
+            e.currentTarget.style.boxShadow = "0 25px 70px rgba(102, 187, 106, 0.3)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "translateY(0px)";
+            e.currentTarget.style.boxShadow = "0 15px 50px rgba(102, 187, 106, 0.2)";
+          }}
+          >
+            <div style={{
+              width: "80px",
+              height: "80px",
+              background: "linear-gradient(135deg, #66BB6A, #A5D6A7)",
+              borderRadius: "20px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: "1.5rem",
+              fontSize: "2rem"
+            }}>
+              🩺
+            </div>
             <h3 style={{
-              fontSize: "1.1rem",
+              fontSize: "1.4rem",
               fontWeight: "600",
-              marginBottom: "0.5rem",
-              color: "#758976",
+              marginBottom: "1rem",
+              color: "#2C3E50",
               fontFamily: "'Times New Roman', serif"
             }}>
-              Qualified Therapists
+              Expert Therapists
             </h3>
             <p style={{
-              fontSize: "0.9rem",
-              lineHeight: "1.4",
-              color: "#758976",
+              fontSize: "1rem",
+              lineHeight: "1.6",
+              color: "#5D6D7E",
               fontFamily: "'Times New Roman', serif",
               margin: 0
             }}>
-              Licensed professionals ready to support you
+              Connect with board-certified mental health professionals who specialize in various therapeutic approaches.
             </p>
           </div>
 
           <div style={{
-            background: "#FFFBAD",
-            padding: "1.5rem",
-            borderRadius: "15px",
-            minWidth: "200px",
-            maxWidth: "250px"
-          }}>
-            <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>📅</div>
+            background: "rgba(255, 255, 255, 0.8)",
+            backdropFilter: "blur(20px)",
+            padding: "3rem",
+            borderRadius: "25px",
+            border: "2px solid rgba(186, 104, 200, 0.3)",
+            boxShadow: "0 15px 50px rgba(186, 104, 200, 0.2)",
+            transition: "all 0.3s ease",
+            cursor: "pointer"
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-10px)";
+            e.currentTarget.style.boxShadow = "0 25px 70px rgba(186, 104, 200, 0.3)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "translateY(0px)";
+            e.currentTarget.style.boxShadow = "0 15px 50px rgba(186, 104, 200, 0.2)";
+          }}
+          >
+            <div style={{
+              width: "80px",
+              height: "80px",
+              background: "linear-gradient(135deg, #BA68C8, #E1BEE7)",
+              borderRadius: "20px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: "1.5rem",
+              fontSize: "2rem"
+            }}>
+              📅
+            </div>
             <h3 style={{
-              fontSize: "1.1rem",
+              fontSize: "1.4rem",
               fontWeight: "600",
-              marginBottom: "0.5rem",
-              color: "#758976",
+              marginBottom: "1rem",
+              color: "#2C3E50",
               fontFamily: "'Times New Roman', serif"
             }}>
-              Easy Scheduling
+              Flexible Scheduling
             </h3>
             <p style={{
-              fontSize: "0.9rem",
-              lineHeight: "1.4",
-              color: "#758976",
+              fontSize: "1rem",
+              lineHeight: "1.6",
+              color: "#5D6D7E",
               fontFamily: "'Times New Roman', serif",
               margin: 0
             }}>
-              Book appointments at your convenience
+              Book sessions that fit your lifestyle with our intuitive scheduling system and real-time availability.
             </p>
           </div>
 
           <div style={{
-            background: "#EBE5D9",
-            padding: "1.5rem",
-            borderRadius: "15px",
-            minWidth: "200px",
-            maxWidth: "250px"
-          }}>
-            <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>🔒</div>
+            background: "rgba(255, 255, 255, 0.8)",
+            backdropFilter: "blur(20px)",
+            padding: "3rem",
+            borderRadius: "25px",
+            border: "2px solid rgba(255, 213, 79, 0.4)",
+            boxShadow: "0 15px 50px rgba(255, 213, 79, 0.2)",
+            transition: "all 0.3s ease",
+            cursor: "pointer"
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-10px)";
+            e.currentTarget.style.boxShadow = "0 25px 70px rgba(255, 213, 79, 0.3)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "translateY(0px)";
+            e.currentTarget.style.boxShadow = "0 15px 50px rgba(255, 213, 79, 0.2)";
+          }}
+          >
+            <div style={{
+              width: "80px",
+              height: "80px",
+              background: "linear-gradient(135deg, #FFD54F, #FFF176)",
+              borderRadius: "20px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: "1.5rem",
+              fontSize: "2rem"
+            }}>
+              🔒
+            </div>
             <h3 style={{
-              fontSize: "1.1rem",
+              fontSize: "1.4rem",
               fontWeight: "600",
-              marginBottom: "0.5rem",
-              color: "#758976",
+              marginBottom: "1rem",
+              color: "#2C3E50",
               fontFamily: "'Times New Roman', serif"
             }}>
-              Secure & Private
+              Complete Privacy
             </h3>
             <p style={{
-              fontSize: "0.9rem",
-              lineHeight: "1.4",
-              color: "#758976",
+              fontSize: "1rem",
+              lineHeight: "1.6",
+              color: "#5D6D7E",
               fontFamily: "'Times New Roman', serif",
               margin: 0
             }}>
-              Your privacy is our top priority
+              Your conversations are protected with end-to-end encryption and HIPAA-compliant security measures.
             </p>
           </div>
         </div>
