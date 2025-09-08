@@ -28,7 +28,7 @@ load_dotenv()
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-default-key-change-this')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.gFileEditViewInsertFormatToolsExtensionsHelpetenv('DEBUG', 'False') == 'True'
+DEBUG = os.getenv('DEBUG', True)
 
 ALLOWED_HOSTS = [
     "localhost",
