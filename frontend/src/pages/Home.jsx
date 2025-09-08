@@ -510,14 +510,7 @@ export default function Home() {
                 lineHeight: "1.6",
                 fontWeight: "400"
               }}>
-                Take the first step towards{" "}
-                <span style={{
-                  color: "#BA68C8",
-                  fontWeight: "600"
-                }}>
-                  better mental health
-                </span>{" "}
-                with our caring professionals.
+                Take the first step towards better mental health with our caring professionals.
               </p>
             </div>
           ) : (
@@ -554,14 +547,7 @@ export default function Home() {
                 lineHeight: "1.6",
                 fontWeight: "400"
               }}>
-                Nurture your mental wellness and{" "}
-                <span style={{
-                  color: "#66BB6A",
-                  fontWeight: "600"
-                }}>
-                  flourish
-                </span>{" "}
-                with personalized therapeutic support.
+                Nurture your mental wellness and flourish with personalized therapeutic support.
               </p>
             </div>
           )}
