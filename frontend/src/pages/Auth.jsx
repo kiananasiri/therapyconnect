@@ -12,6 +12,7 @@ export default function Auth() {
     email: "",
     password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -87,14 +88,24 @@ export default function Auth() {
           />
         )}
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          style={{ display: "block", margin: "0.5rem auto", padding: "0.5rem" }}
-        />
+        <div style={{ position: "relative", maxWidth: "400px", margin: "0.5rem auto" }}>
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={handleChange}
+            style={{ display: "block", width: "100%", padding: "0.5rem", paddingRight: "3rem" }}
+          />
+          <button
+            type="button"
+            aria-label={showPassword ? "Hide password" : "Show password"}
+            onClick={() => setShowPassword(!showPassword)}
+            style={{ position: "absolute", right: "0.5rem", top: "50%", transform: "translateY(-50%)", background: "transparent", border: "none", cursor: "pointer", color: "#667eea" }}
+          >
+            {showPassword ? "Hide" : "Show"}
+          </button>
+        </div>
 
         <button type="submit" style={{ marginTop: "1rem", padding: "0.75rem 1.5rem" }}>
           {role === "patient" ? "Sign Up / Login" : "Login"}

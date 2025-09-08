@@ -12,6 +12,7 @@ export default function PatientSettings() {
   const [dob, setDob] = useState("1990-04-12");
   const [phone, setPhone] = useState("+1-202-555-0147");
   const [password, setPassword] = useState("");
+  const [showSettingsPassword, setShowSettingsPassword] = useState(false);
   const [wallet] = useState(150); // mock, not editable
 
   // Profile pic upload
@@ -129,12 +130,23 @@ export default function PatientSettings() {
       {/* Password Change */}
       <section style={{ marginTop: "1.5rem" }}>
         <h2>Change Password</h2>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter new password"
-        />
+        <div style={{ position: "relative", maxWidth: "400px" }}>
+          <input
+            type={showSettingsPassword ? "text" : "password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter new password"
+            style={{ width: "100%", paddingRight: "3rem" }}
+          />
+          <button
+            type="button"
+            aria-label={showSettingsPassword ? "Hide password" : "Show password"}
+            onClick={() => setShowSettingsPassword(!showSettingsPassword)}
+            style={{ position: "absolute", right: "0.5rem", top: "50%", transform: "translateY(-50%)", background: "transparent", border: "none", cursor: "pointer", color: "#667eea" }}
+          >
+            {showSettingsPassword ? "Hide" : "Show"}
+          </button>
+        </div>
       </section>
 
       <button style={{ marginTop: "2rem", padding: "0.75rem 1.5rem" }}>

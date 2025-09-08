@@ -18,6 +18,9 @@ export default function Home() {
   const [showTherapistSignIn, setShowTherapistSignIn] = useState(false);
   const [showPatientAuth, setShowPatientAuth] = useState(false);
   const [patientMode, setPatientMode] = useState("login"); // 'login' | 'signup'
+  const [showTherapistPassword, setShowTherapistPassword] = useState(false);
+  const [showPatientLoginPassword, setShowPatientLoginPassword] = useState(false);
+  const [showPatientSignupPassword, setShowPatientSignupPassword] = useState(false);
   // Login: identifier (email or phone), password
   // Signup: first_name, last_name, phone_no, email, password
   const [patientAuth, setPatientAuth] = useState({ identifier: "", password: "", first_name: "", last_name: "", phone_no: "", email: "" });
@@ -390,13 +393,15 @@ export default function Home() {
             }
           }}
         >
-          <div style={{
+          <div className="modal-scroll" style={{
             background: "white",
             borderRadius: "20px",
             padding: "2rem",
             boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
             width: "400px",
-            maxWidth: "90%"
+            maxWidth: "90%",
+            maxHeight: "90vh",
+            overflowY: "auto"
           }}>
             <h2 style={{ 
               textAlign: "center", 
@@ -444,9 +449,9 @@ export default function Home() {
                 />
               </div>
               
-              <div style={{ marginBottom: "1.5rem" }}>
+              <div style={{ marginBottom: "1.5rem", position: "relative" }}>
                 <input
-                  type="password"
+                  type={showTherapistPassword ? "text" : "password"}
                   name="password"
                   placeholder="Password"
                   value={therapistAuth.password}
@@ -456,6 +461,7 @@ export default function Home() {
                   style={{
                     width: "100%",
                     padding: "1rem",
+                    paddingRight: "3rem",
                     border: "2px solid #e0e0e0",
                     borderRadius: "10px",
                     fontSize: "1rem",
@@ -463,6 +469,26 @@ export default function Home() {
                     opacity: loginLoading ? 0.7 : 1
                   }}
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowTherapistPassword(!showTherapistPassword)}
+                  disabled={loginLoading}
+                  aria-label={showTherapistPassword ? "Hide password" : "Show password"}
+                  style={{
+                    position: "absolute",
+                    right: "0.5rem",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    background: "transparent",
+                    border: "none",
+                    cursor: loginLoading ? "not-allowed" : "pointer",
+                    color: "#667eea",
+                    padding: "0.25rem 0.5rem",
+                    fontSize: "0.9rem"
+                  }}
+                >
+                  {showTherapistPassword ? "Hide" : "Show"}
+                </button>
               </div>
               
               <button
@@ -555,13 +581,15 @@ export default function Home() {
             }
           }}
         >
-          <div style={{
+          <div className="modal-scroll" style={{
             background: "white",
             borderRadius: "20px",
             padding: "2rem",
             boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
             width: "420px",
-            maxWidth: "90%"
+            maxWidth: "90%",
+            maxHeight: "90vh",
+            overflowY: "auto"
           }}>
             <h2 style={{ 
               textAlign: "center", 
@@ -640,24 +668,47 @@ export default function Home() {
                   </div>
                   <div style={{ marginBottom: "1.5rem" }}>
                     <div style={{ marginBottom: "0.25rem", color: "#333", fontSize: "0.9rem" }}>Password <span style={{ color: "#d32f2f" }}>*</span></div>
-                    <input
-                      type="password"
-                      name="password"
-                      placeholder="Password"
-                      value={patientAuth.password}
-                      onChange={handlePatientAuthChange}
-                      required
-                      disabled={patientLoading}
-                      style={{
-                        width: "100%",
-                        padding: "1rem",
-                        border: "2px solid #e0e0e0",
-                        borderRadius: "10px",
-                        fontSize: "1rem",
-                        boxSizing: "border-box",
-                        opacity: patientLoading ? 0.7 : 1
-                      }}
-                    />
+                    <div style={{ position: "relative" }}>
+                      <input
+                        type={showPatientLoginPassword ? "text" : "password"}
+                        name="password"
+                        placeholder="Password"
+                        value={patientAuth.password}
+                        onChange={handlePatientAuthChange}
+                        required
+                        disabled={patientLoading}
+                        style={{
+                          width: "100%",
+                          padding: "1rem",
+                          paddingRight: "3rem",
+                          border: "2px solid #e0e0e0",
+                          borderRadius: "10px",
+                          fontSize: "1rem",
+                          boxSizing: "border-box",
+                          opacity: patientLoading ? 0.7 : 1
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPatientLoginPassword(!showPatientLoginPassword)}
+                        disabled={patientLoading}
+                        aria-label={showPatientLoginPassword ? "Hide password" : "Show password"}
+                        style={{
+                          position: "absolute",
+                          right: "0.5rem",
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                          background: "transparent",
+                          border: "none",
+                          cursor: patientLoading ? "not-allowed" : "pointer",
+                          color: "#667eea",
+                          padding: "0.25rem 0.5rem",
+                          fontSize: "0.9rem"
+                        }}
+                      >
+                        {showPatientLoginPassword ? "Hide" : "Show"}
+                      </button>
+                    </div>
                   </div>
                 </>
               ) : (
@@ -748,24 +799,47 @@ export default function Home() {
                   </div>
                   <div style={{ marginBottom: "1.5rem" }}>
                     <div style={{ marginBottom: "0.25rem", color: "#333", fontSize: "0.9rem" }}>Password <span style={{ color: "#d32f2f" }}>*</span></div>
-                    <input
-                      type="password"
-                      name="password"
-                      placeholder="Password"
-                      value={patientAuth.password}
-                      onChange={handlePatientAuthChange}
-                      required
-                      disabled={patientLoading}
-                      style={{
-                        width: "100%",
-                        padding: "1rem",
-                        border: "2px solid #e0e0e0",
-                        borderRadius: "10px",
-                        fontSize: "1rem",
-                        boxSizing: "border-box",
-                        opacity: patientLoading ? 0.7 : 1
-                      }}
-                    />
+                    <div style={{ position: "relative" }}>
+                      <input
+                        type={showPatientSignupPassword ? "text" : "password"}
+                        name="password"
+                        placeholder="Password"
+                        value={patientAuth.password}
+                        onChange={handlePatientAuthChange}
+                        required
+                        disabled={patientLoading}
+                        style={{
+                          width: "100%",
+                          padding: "1rem",
+                          paddingRight: "3rem",
+                          border: "2px solid #e0e0e0",
+                          borderRadius: "10px",
+                          fontSize: "1rem",
+                          boxSizing: "border-box",
+                          opacity: patientLoading ? 0.7 : 1
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPatientSignupPassword(!showPatientSignupPassword)}
+                        disabled={patientLoading}
+                        aria-label={showPatientSignupPassword ? "Hide password" : "Show password"}
+                        style={{
+                          position: "absolute",
+                          right: "0.5rem",
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                          background: "transparent",
+                          border: "none",
+                          cursor: patientLoading ? "not-allowed" : "pointer",
+                          color: "#667eea",
+                          padding: "0.25rem 0.5rem",
+                          fontSize: "0.9rem"
+                        }}
+                      >
+                        {showPatientSignupPassword ? "Hide" : "Show"}
+                      </button>
+                    </div>
                   </div>
                 </>
               )}
@@ -858,17 +932,24 @@ export default function Home() {
             }
           }}
         >
-          <div style={{
+          <div className="modal-scroll" style={{
             background: "white",
             borderRadius: "20px",
-            padding: "2rem",
+            padding: "0",
             boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
-            width: "560px",
-            maxWidth: "95%"
+            width: "620px",
+            maxWidth: "95%",
+            maxHeight: "92vh",
+            overflowY: "auto",
+            border: "1px solid #eef0f4"
           }}>
-            <h2 style={{ textAlign: "center", color: "#333", marginBottom: "1rem", fontSize: "1.5rem", fontWeight: "300" }}>
-              👤 Complete Patient Profile
-            </h2>
+            <div style={{ height: "6px", width: "100%", background: "linear-gradient(90deg, #667eea, #4CAF50)", borderTopLeftRadius: "20px", borderTopRightRadius: "20px" }} />
+            <div style={{ padding: "1.5rem 2rem 0.5rem 2rem" }}>
+              <div style={{ textAlign: "center", color: "#667eea", fontSize: "0.85rem", marginBottom: "0.25rem" }}>Step 2 of 2</div>
+              <h2 style={{ textAlign: "center", color: "#333", margin: "0 0 1rem 0", fontSize: "1.6rem", fontWeight: "400" }}>
+                👤 Complete Patient Profile
+              </h2>
+            </div>
             {patientDetailsError && (
               <div style={{
                 background: "#ffebee",
@@ -882,31 +963,35 @@ export default function Home() {
                 {patientDetailsError}
               </div>
             )}
-            <form onSubmit={handlePatientDetailsSubmit}>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
+            <form onSubmit={handlePatientDetailsSubmit} style={{ padding: "0 2rem 1.5rem 2rem" }}>
+              <div style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+                gap: "0.9rem"
+              }}>
                 <div>
                   <div style={{ marginBottom: "0.25rem", color: "#333", fontSize: "0.9rem" }}>First Name <span style={{ color: "#d32f2f" }}>*</span></div>
-                  <input name="first_name" placeholder="First Name" value={patientDetails.first_name} onChange={handlePatientDetailsChange} required disabled={patientDetailsLoading} style={{ width: "100%", padding: "0.75rem", border: "1px solid #e0e0e0", borderRadius: "8px" }} />
+                  <input name="first_name" placeholder="First Name" value={patientDetails.first_name} onChange={handlePatientDetailsChange} required disabled={patientDetailsLoading} style={{ width: "100%", padding: "0.85rem", border: "1px solid #e0e0e0", borderRadius: "10px", boxSizing: "border-box" }} />
                 </div>
                 <div>
                   <div style={{ marginBottom: "0.25rem", color: "#333", fontSize: "0.9rem" }}>Last Name <span style={{ color: "#d32f2f" }}>*</span></div>
-                  <input name="last_name" placeholder="Last Name" value={patientDetails.last_name} onChange={handlePatientDetailsChange} required disabled={patientDetailsLoading} style={{ width: "100%", padding: "0.75rem", border: "1px solid #e0e0e0", borderRadius: "8px" }} />
+                  <input name="last_name" placeholder="Last Name" value={patientDetails.last_name} onChange={handlePatientDetailsChange} required disabled={patientDetailsLoading} style={{ width: "100%", padding: "0.85rem", border: "1px solid #e0e0e0", borderRadius: "10px", boxSizing: "border-box" }} />
                 </div>
                 <div>
                   <div style={{ marginBottom: "0.25rem", color: "#333", fontSize: "0.9rem" }}>Phone Number <span style={{ color: "#d32f2f" }}>*</span></div>
-                  <input name="phone_no" placeholder="Phone Number" value={patientDetails.phone_no} onChange={handlePatientDetailsChange} required disabled={patientDetailsLoading} style={{ width: "100%", padding: "0.75rem", border: "1px solid #e0e0e0", borderRadius: "8px" }} />
+                  <input name="phone_no" placeholder="Phone Number" value={patientDetails.phone_no} onChange={handlePatientDetailsChange} required disabled={patientDetailsLoading} style={{ width: "100%", padding: "0.85rem", border: "1px solid #e0e0e0", borderRadius: "10px", boxSizing: "border-box" }} />
                 </div>
                 <div>
                   <div style={{ marginBottom: "0.25rem", color: "#333", fontSize: "0.9rem" }}>Email <span style={{ color: "#d32f2f" }}>*</span></div>
-                  <input name="email" placeholder="Email" type="email" value={patientDetails.email || ""} onChange={handlePatientDetailsChange} required disabled={patientDetailsLoading} style={{ width: "100%", padding: "0.75rem", border: "1px solid #e0e0e0", borderRadius: "8px" }} />
+                  <input name="email" placeholder="Email" type="email" value={patientDetails.email || ""} onChange={handlePatientDetailsChange} required disabled={patientDetailsLoading} style={{ width: "100%", padding: "0.85rem", border: "1px solid #e0e0e0", borderRadius: "10px", boxSizing: "border-box" }} />
                 </div>
                 <div>
                   <div style={{ marginBottom: "0.25rem", color: "#333", fontSize: "0.9rem" }}>Date of Birth <span style={{ color: "#d32f2f" }}>*</span></div>
-                  <input name="date_of_birth" placeholder="Date of Birth" type="date" value={patientDetails.date_of_birth} onChange={handlePatientDetailsChange} required disabled={patientDetailsLoading} style={{ width: "100%", padding: "0.75rem", border: "1px solid #e0e0e0", borderRadius: "8px" }} />
+                  <input name="date_of_birth" placeholder="Date of Birth" type="date" value={patientDetails.date_of_birth} onChange={handlePatientDetailsChange} required disabled={patientDetailsLoading} style={{ width: "100%", padding: "0.85rem", border: "1px solid #e0e0e0", borderRadius: "10px", boxSizing: "border-box" }} />
                 </div>
                 <div>
                   <div style={{ marginBottom: "0.25rem", color: "#333", fontSize: "0.9rem" }}>Sex <span style={{ color: "#d32f2f" }}>*</span></div>
-                  <select name="sex" value={patientDetails.sex} onChange={handlePatientDetailsChange} required disabled={patientDetailsLoading} style={{ width: "100%", padding: "0.75rem", border: "1px solid #e0e0e0", borderRadius: "8px" }}>
+                  <select name="sex" value={patientDetails.sex} onChange={handlePatientDetailsChange} required disabled={patientDetailsLoading} style={{ width: "100%", padding: "0.85rem", border: "1px solid #e0e0e0", borderRadius: "10px", boxSizing: "border-box" }}>
                     <option value="">Select Sex</option>
                     <option value="M">Male</option>
                     <option value="F">Female</option>
@@ -916,15 +1001,17 @@ export default function Home() {
                 </div>
               </div>
               <div style={{ marginTop: "0.5rem", color: "#555", fontSize: "0.9rem" }}>If nothing applies, type 'none'.</div>
-              <div style={{ marginTop: "0.25rem", marginBottom: "0.25rem", color: "#333", fontSize: "0.9rem" }}>Allergies and Medication <span style={{ color: "#d32f2f" }}>*</span></div>
-              <textarea name="allergies_and_medication" placeholder="Allergies and Medication (required)" value={patientDetails.allergies_and_medication} onChange={handlePatientDetailsChange} required disabled={patientDetailsLoading} style={{ marginTop: "0.25rem", width: "100%", minHeight: "80px", padding: "0.75rem", border: "1px solid #e0e0e0", borderRadius: "8px" }} />
-              <textarea name="address" placeholder="Address (optional)" value={patientDetails.address || ""} onChange={handlePatientDetailsChange} disabled={patientDetailsLoading} style={{ marginTop: "0.75rem", width: "100%", minHeight: "60px", padding: "0.75rem", border: "1px solid #e0e0e0", borderRadius: "8px" }} />
-              <textarea name="about_note" placeholder="About (optional)" value={patientDetails.about_note || ""} onChange={handlePatientDetailsChange} disabled={patientDetailsLoading} style={{ marginTop: "0.75rem", width: "100%", minHeight: "60px", padding: "0.75rem", border: "1px solid #e0e0e0", borderRadius: "8px" }} />
-              <div style={{ display: "flex", gap: "0.5rem", marginTop: "1rem" }}>
-                <button type="submit" disabled={patientDetailsLoading} style={{ flex: 1, padding: "0.9rem", background: patientDetailsLoading ? "#ccc" : "#667eea", color: "white", border: "none", borderRadius: "10px", cursor: patientDetailsLoading ? "not-allowed" : "pointer" }}>
+              <div style={{ marginTop: "0.5rem", padding: "1rem", background: "#f8f9fb", border: "1px solid #eef0f4", borderRadius: "12px" }}>
+                <div style={{ marginBottom: "0.25rem", color: "#333", fontSize: "0.9rem" }}>Allergies and Medication <span style={{ color: "#d32f2f" }}>*</span></div>
+                <textarea name="allergies_and_medication" placeholder="Allergies and Medication (required)" value={patientDetails.allergies_and_medication} onChange={handlePatientDetailsChange} required disabled={patientDetailsLoading} style={{ marginTop: "0.25rem", width: "100%", minHeight: "90px", padding: "0.85rem", border: "1px solid #e0e0e0", borderRadius: "10px", boxSizing: "border-box" }} />
+                <textarea name="address" placeholder="Address (optional)" value={patientDetails.address || ""} onChange={handlePatientDetailsChange} disabled={patientDetailsLoading} style={{ marginTop: "0.75rem", width: "100%", minHeight: "70px", padding: "0.85rem", border: "1px solid #e0e0e0", borderRadius: "10px", boxSizing: "border-box" }} />
+                <textarea name="about_note" placeholder="About (optional)" value={patientDetails.about_note || ""} onChange={handlePatientDetailsChange} disabled={patientDetailsLoading} style={{ marginTop: "0.75rem", width: "100%", minHeight: "70px", padding: "0.85rem", border: "1px solid #e0e0e0", borderRadius: "10px", boxSizing: "border-box" }} />
+              </div>
+              <div style={{ display: "flex", gap: "0.5rem", marginTop: "1.1rem" }}>
+                <button type="submit" disabled={patientDetailsLoading} style={{ flex: 1, padding: "0.95rem", background: patientDetailsLoading ? "#ccc" : "linear-gradient(90deg, #667eea, #5a6fd8)", color: "white", border: "none", borderRadius: "10px", cursor: patientDetailsLoading ? "not-allowed" : "pointer" }}>
                   {patientDetailsLoading ? "Creating..." : "Create Account"}
                 </button>
-                <button type="button" onClick={() => setShowPatientDetailsModal(false)} disabled={patientDetailsLoading} style={{ padding: "0.9rem 1rem", background: "transparent", color: "#666", border: "1px solid #e0e0e0", borderRadius: "10px", cursor: "pointer" }}>Cancel</button>
+                <button type="button" onClick={() => setShowPatientDetailsModal(false)} disabled={patientDetailsLoading} style={{ padding: "0.95rem 1rem", background: "transparent", color: "#666", border: "1px solid #e0e0e0", borderRadius: "10px", cursor: "pointer" }}>Cancel</button>
               </div>
             </form>
           </div>
@@ -1095,6 +1182,79 @@ export default function Home() {
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
+        }
+
+        /* Custom Scrollbar for modals (no halo, fully rounded) */
+        .modal-scroll {
+          scrollbar-color: #8fa0ff transparent; /* Firefox: thumb | track */
+          scrollbar-width: none; /* Firefox: hide scrollbar incl. arrows */
+          -ms-overflow-style: none; /* IE/Edge (legacy): hide scrollbar */
+        }
+        .modal-scroll::-webkit-scrollbar {
+          width: 0 !important; /* Chrome/Safari/Edge: hide scrollbar */
+          height: 0 !important;
+          background: transparent;
+        }
+        /* Keep buttons hidden even if engine attempts to render */
+        .modal-scroll::-webkit-scrollbar-button {
+          display: none;
+          height: 0;
+          width: 0;
+          background: transparent;
+          background-image: none !important;
+          border: none;
+          outline: none;
+        }
+        .modal-scroll::-webkit-scrollbar-button:single-button {
+          display: none;
+          height: 0;
+          width: 0;
+          background: transparent;
+          background-image: none !important;
+          border: none;
+          outline: none;
+        }
+        .modal-scroll::-webkit-scrollbar-button:start:decrement,
+        .modal-scroll::-webkit-scrollbar-button:end:increment {
+          display: none;
+          height: 0;
+          width: 0;
+          background: transparent;
+          background-image: none !important;
+          border: none;
+          outline: none;
+        }
+        /* Explicitly hide all directional buttons */
+        .modal-scroll::-webkit-scrollbar-button:single-button:vertical:increment,
+        .modal-scroll::-webkit-scrollbar-button:single-button:vertical:decrement,
+        .modal-scroll::-webkit-scrollbar-button:single-button:horizontal:increment,
+        .modal-scroll::-webkit-scrollbar-button:single-button:horizontal:decrement,
+        .modal-scroll::-webkit-scrollbar-button:start:increment,
+        .modal-scroll::-webkit-scrollbar-button:end:decrement {
+          display: none;
+          height: 0;
+          width: 0;
+          background: transparent;
+          background-image: none !important;
+          border: none;
+          outline: none;
+        }
+        .modal-scroll::-webkit-scrollbar-track {
+          background: transparent;
+          border-radius: 999px;
+          margin: 12px 0; /* further inset to tuck ends cleanly */
+        }
+        .modal-scroll::-webkit-scrollbar-thumb {
+          background: linear-gradient(180deg, #667eea, #5a6fd8);
+          border-radius: 999px;
+          border: none; /* remove light outline/halo */
+          box-shadow: inset 0 0 0 0 rgba(0,0,0,0); /* ensure no halo */
+        }
+        .modal-scroll::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(180deg, #5a6fd8, #4c5fd2);
+        }
+        .modal-scroll::-webkit-scrollbar-corner {
+          background: transparent;
         }
       `}</style>
     </div>
