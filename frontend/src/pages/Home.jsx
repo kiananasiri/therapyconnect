@@ -465,7 +465,7 @@ export default function Home() {
               <p style={{ 
                 fontSize: "1.2rem", 
                 margin: "0 auto 2rem auto", 
-                color: "#5D6D7E",
+                color: "#2C3E50",
                 fontWeight: "400",
                 fontFamily: "'Times New Roman', serif",
                 lineHeight: "1.6",
