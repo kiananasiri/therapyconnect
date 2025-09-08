@@ -321,12 +321,28 @@ export default function Home() {
   };
 
   return (
-    <div style={{ 
-      padding: "0", 
-      minHeight: "100vh", 
-      background: "linear-gradient(135deg, #E8F5E8 0%, #F3E5F5 30%, #FFF9C4 60%, #E8F5E8 100%)",
-      position: "relative"
-    }}>
+    <>
+      <style>
+        {`
+          @keyframes gradientSlide {
+            0% {
+              background-position: 0% 50%;
+            }
+            50% {
+              background-position: 100% 50%;
+            }
+            100% {
+              background-position: 0% 50%;
+            }
+          }
+        `}
+      </style>
+      <div style={{ 
+        padding: "0", 
+        minHeight: "100vh", 
+        background: "linear-gradient(135deg, #F8E8FF 0%, #E8F8E8 25%, #FFF8E8 50%, #E8E8FF 75%, #F8E8FF 100%)",
+        position: "relative"
+      }}>
       {/* Background GIF */}
       <img 
         src={helpGif} 
@@ -354,7 +370,9 @@ export default function Home() {
         margin: "0 auto"
       }}>
         <div style={{
-          background: "rgba(255, 255, 255, 0.3)",
+          background: "linear-gradient(-45deg, rgba(255, 255, 255, 0.4), rgba(186, 104, 200, 0.2), rgba(102, 187, 106, 0.2), rgba(255, 213, 79, 0.2))",
+          backgroundSize: "400% 400%",
+          animation: "gradientSlide 8s ease infinite",
           backdropFilter: "blur(20px)",
           borderRadius: "30px",
           padding: "2.5rem 2rem",
@@ -1753,6 +1771,7 @@ export default function Home() {
       )}
       </div>
     </div>
+    </>
   );
 }
 
