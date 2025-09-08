@@ -23,13 +23,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-27d=@2*0o#($r1utfd3q-(=h4k(_igr2mom%9i7a^qa+)xttcr'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     "localhost",
     "frontend",
     "backend",
     "db",
+    "65.109.187.67",  # Server IP address
 ]
 
 
@@ -46,7 +47,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'social_django',
-    'channels',
     'authentication',
     'therapy',
 ]
@@ -64,8 +64,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'backend.urls'
 
-# ASGI Configuration
-ASGI_APPLICATION = 'backend.asgi.application'
+# WSGI Configuration for production
+# ASGI_APPLICATION = 'backend.asgi.application'  # Removed for JWT-only setup
 
 TEMPLATES = [
     {
@@ -126,8 +126,14 @@ AUTHENTICATION_BACKENDS = (
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'therapy.authentication.TherapistJWTAuthentication',  # Use our custom authentication
     ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',  # Changed to AllowAny by default
+    ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
 }
 
 # OAuth Credentials (replace with real keys)
@@ -145,11 +151,20 @@ USE_I18N = True
 USE_TZ = True
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=24),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
     "ROTATE_REFRESH_TOKENS": True,
-    "BLACKLIST_AFTER_ROTATION": True,
+    "BLACKLIST_AFTER_ROTATION": False,  # Disable blacklist for now
+    "UPDATE_LAST_LOGIN": False,  # Disable since we don't use Django User model
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": SECRET_KEY,
+    "VERIFYING_KEY": None,
     "AUTH_HEADER_TYPES": ("Bearer",),
+    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
+    "USER_ID_FIELD": "id",
+    "USER_ID_CLAIM": "therapist_id",  # Use therapist_id instead of user_id
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
+    "TOKEN_TYPE_CLAIM": "token_type",
 }
 
 # Static files (CSS, JavaScript, Images)
@@ -167,25 +182,21 @@ CORS_ALLOWED_ORIGINS = [
     "http://frontend:3000",
     "https://localhost:3000",  # React frontend URL
     "https://frontend:3000",
+    "http://65.109.187.67:3000",  # Server IP frontend URL
+    "https://65.109.187.67:3000",  # Server IP frontend URL (HTTPS)
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
 CORS_ALLOW_HEADERS = ["Authorization", "Content-Type"]
 
-# Channels Configuration
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('redis', 6379)],
-        },
-    },
-}
+# JWT Session Configuration
+# Sessions are now handled via JWT tokens instead of Redis/WebSocket
+# All real-time features will use HTTP polling or Server-Sent Events if needed
 
-# WebSocket Configuration
-WS_ALLOWED_HOSTS = [
-    "localhost",
-    "frontend",
-    "backend",
-]
+# Session Configuration (for admin and other Django features)
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_COOKIE_AGE = 86400  # 24 hours
+SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
