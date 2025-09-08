@@ -582,8 +582,8 @@ export default function Home() {
                 Test Credentials:
               </h4>
               <p style={{ margin: "0", color: "#6c757d", fontSize: "0.8rem" }}>
-                Email: alice.smith@therapyconnect.com<br/>
-                Password: password123
+                Email: john@example.com<br/>
+                Password: StrongPass123!
               </p>
             </div>
           </div>
