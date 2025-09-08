@@ -88,6 +88,10 @@ export const getPatient = (id) => API.get(`/patients/${id}`);
 export const updatePatient = (id, data) => API.put(`/patients/${id}`, data);
 export const updatePatientPassword = (id, password) =>
   API.put(`/patients/${id}/password`, { password });
+export const getPatientSessions = (patientId) => 
+  API.get(`/sessions/`, { params: { patient_id: patientId } });
+export const getPatientPayments = (patientId) => 
+  API.get(`/payments/`, { params: { patient_id: patientId } });
 
 // Therapist APIs
 export const getTherapists = () => API.get(`/therapists/`);
