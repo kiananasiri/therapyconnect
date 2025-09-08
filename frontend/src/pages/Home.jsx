@@ -1658,24 +1658,17 @@ export default function Home() {
             maxWidth: "400px",
             width: "90%"
           }}>
-            <h2 style={{
+            <p style={{
               fontSize: "1.8rem",
               fontWeight: "600",
               color: "#758976",
               fontFamily: "'Times New Roman', serif",
               marginBottom: "1rem"
             }}>
-              Choose Login Type
-            </h2>
-            
-            <p style={{
-              fontSize: "1rem",
-              color: "#666",
-              fontFamily: "'Times New Roman', serif",
-              marginBottom: "2rem"
-            }}>
-              Are you a patient looking for therapy or a therapist providing services?
+              Log in to your account.
             </p>
+            
+          
 
             <div style={{
               display: "flex",
@@ -1690,9 +1683,9 @@ export default function Home() {
                 }}
                 style={{
                   padding: "1rem 2rem",
-                  background: "linear-gradient(135deg, #4CAF50, #8BC34A)",
+                  background: "#e6ddd6",
                   border: "none",
-                  color: "white",
+                  color: "dark gray",
                   borderRadius: "15px",
                   fontSize: "1.1rem",
                   fontWeight: "600",
@@ -1703,7 +1696,7 @@ export default function Home() {
                 onMouseEnter={(e) => e.target.style.transform = "translateY(-2px)"}
                 onMouseLeave={(e) => e.target.style.transform = "translateY(0px)"}
               >
-                👤 I'm a Patient
+                👤 I'm a Client
               </button>
 
               <button
@@ -1713,7 +1706,7 @@ export default function Home() {
                 }}
                 style={{
                   padding: "1rem 2rem",
-                  background: "linear-gradient(135deg, #758976, #9E83B8)",
+                  background: "  linear-gradient(135deg, #4CAF50, #8BC34A)",
                   border: "none",
                   color: "white",
                   borderRadius: "15px",
