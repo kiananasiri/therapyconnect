@@ -141,8 +141,9 @@ export default function Navbar() {
             🚪 Logout
           </button>
         ) : (
-          <Link to="/?auth=patient">
-            <button style={{
+          <button 
+            onClick={() => window.dispatchEvent(new CustomEvent('showLoginPopup'))}
+            style={{
               padding: "0.5rem 1rem",
               borderRadius: "12px",
               background: "rgba(255, 255, 255, 0.9)",
@@ -155,10 +156,9 @@ export default function Navbar() {
             }}
             onMouseEnter={(e) => e.target.style.background = "white"}
             onMouseLeave={(e) => e.target.style.background = "rgba(255, 255, 255, 0.9)"}
-            >
-              🔐 Login / Signup
-            </button>
-          </Link>
+          >
+            🔐 Login / Signup
+          </button>
         )}
       </div>
     </nav>

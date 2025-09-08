@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { getTherapists, therapistLogin, patientLogin, patientCreate, checkPatientUnique } from "../api";
 import { useUser } from "../contexts/UserContext";
 import avatar from "../assets/avatar.png";
+import helpGif from "../assets/Mtv Help Sticker by INTO ACTION.gif";
 
 // Helper to persist patient user in localStorage (align with therapist handling)
 const storeUser = (user) => {
@@ -15,6 +16,7 @@ export default function Home() {
   const [search, setSearch] = useState("");
   const [therapists, setTherapists] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [showTherapistSignIn, setShowTherapistSignIn] = useState(false);
   const [showPatientAuth, setShowPatientAuth] = useState(false);
   const [patientMode, setPatientMode] = useState("login"); // 'login' | 'signup'
@@ -116,6 +118,14 @@ export default function Home() {
     };
 
     fetchTherapists();
+    
+    // Listen for login popup trigger from navbar
+    const handleShowLoginPopup = () => setShowLoginPopup(true);
+    window.addEventListener('showLoginPopup', handleShowLoginPopup);
+    
+    return () => {
+      window.removeEventListener('showLoginPopup', handleShowLoginPopup);
+    };
   }, []);
 
   const handleSearch = (e) => {
@@ -311,74 +321,64 @@ export default function Home() {
   };
 
   return (
-    <div style={{ padding: "0", minHeight: "100vh", background: "linear-gradient(135deg, #EBE5D9 0%, #CCBBDB 50%, #EBE5D9 100%)" }}>
-      <div style={{ padding: "2rem" }}>
+    <div style={{ 
+      padding: "0", 
+      minHeight: "100vh", 
+      background: "linear-gradient(135deg, #EBE5D9 0%, #CCBBDB 50%, #EBE5D9 100%)",
+      position: "relative"
+    }}>
+      {/* Background GIF */}
+      <img 
+        src={helpGif} 
+        alt="Mental Health Support Background" 
+        style={{
+          position: "fixed",
+          top: "20%",
+          right: "5%",
+          width: "700px",
+          height: "700px",
+          zIndex: 1,
+          opacity: 0.7,
+          pointerEvents: "none"
+        }}
+      />
+      
+      <div style={{ padding: "2rem", position: "relative", zIndex: 1 }}>
       {/* Hero Section */}
       <div style={{ textAlign: "center", color: "#758976", marginBottom: "3rem" }}>
-        <h1 style={{ 
-          fontSize: "3rem", 
-          margin: "0 0 1rem 0", 
-          fontWeight: "700",
-          background: "linear-gradient(135deg, #9E83B8, #758976)",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-          backgroundClip: "text"
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "2rem",
+          marginBottom: "2rem",
+          flexWrap: "wrap"
         }}>
-          Welcome to TherapyConnect
-        </h1>
-        <p style={{ fontSize: "1.2rem", margin: "0 0 2rem 0", color: "#A2ABA1", fontWeight: "500" }}>
-          Find the right therapist for you, book sessions, and manage appointments.
-        </p>
-
-        {/* User Actions */}
-        <div style={{ margin: "2rem 0", display: "flex", justifyContent: "center", gap: "1rem", flexWrap: "wrap" }}>
-          <button 
-            onClick={() => {
-              setShowPatientAuth(true);
-              setPatientMode("login");
-            }}
-            style={{ 
-              padding: "1rem 2rem",
-              background: "rgba(255,255,255,0.2)",
-              border: "2px solid white",
-              color: "white",
-              borderRadius: "50px",
-              fontSize: "1rem",
-              cursor: "pointer",
-              transition: "all 0.3s"
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.background = "rgba(255,255,255,0.3)";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.background = "rgba(255,255,255,0.2)";
-            }}
-          >
-            👤 Patient Login
-          </button>
-          
-          <button 
-            onClick={() => setShowTherapistSignIn(true)}
-            style={{ 
-              padding: "1rem 2rem",
-              background: "rgba(76, 175, 80, 0.8)",
-              border: "2px solid #4CAF50",
-              color: "white",
-              borderRadius: "50px",
-              fontSize: "1rem",
-              cursor: "pointer",
-              transition: "all 0.3s"
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.background = "rgba(76, 175, 80, 1)";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.background = "rgba(76, 175, 80, 0.8)";
-            }}
-          >
-            🩺 Therapist Login
-          </button>
+          <div style={{ flex: "1", minWidth: "300px" }}>
+            <h1 style={{ 
+              fontSize: "3rem", 
+              margin: "0 0 1rem 0", 
+              fontWeight: "700",
+              background: "linear-gradient(135deg, #9E83B8, #758976)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+              fontFamily: "'Times New Roman', serif"
+            }}>
+              Welcome to TherapyConnect
+            </h1>
+            <p style={{ 
+              fontSize: "1.2rem", 
+              margin: "0 0 2rem 0", 
+              color: "#A2ABA1", 
+              fontWeight: "500",
+              fontFamily: "'Times New Roman', serif"
+            }}>
+              Find the right therapist for you, book sessions, and manage appointments.
+            </p>
+          </div>
         </div>
+
 
         {/* Search Section */}
         <form onSubmit={handleSearch} style={{ marginBottom: "2rem" }}>
@@ -1067,6 +1067,125 @@ export default function Home() {
         </div>
       )}
 
+      {/* Platform Information Section */}
+      <div style={{
+        padding: "2rem",
+        textAlign: "center"
+      }}>
+        <h2 style={{
+          fontSize: "1.8rem",
+          fontWeight: "600",
+          color: "#758976",
+          fontFamily: "'Times New Roman', serif",
+          marginBottom: "1rem"
+        }}>
+          About TherapyConnect
+        </h2>
+        
+        <p style={{
+          fontSize: "1.1rem",
+          color: "#758976",
+          lineHeight: "1.6",
+          fontFamily: "'Times New Roman', serif",
+          marginBottom: "2rem",
+          maxWidth: "600px",
+          margin: "0 auto 2rem auto"
+        }}>
+          A comprehensive mental health platform connecting patients with qualified therapists for accessible, convenient, and effective care.
+        </p>
+
+        <div style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: "2rem",
+          flexWrap: "wrap"
+        }}>
+          <div style={{
+            background: "#EBE5D9",
+            padding: "1.5rem",
+            borderRadius: "15px",
+            minWidth: "200px",
+            maxWidth: "250px"
+          }}>
+            <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>🩺</div>
+            <h3 style={{
+              fontSize: "1.1rem",
+              fontWeight: "600",
+              marginBottom: "0.5rem",
+              color: "#758976",
+              fontFamily: "'Times New Roman', serif"
+            }}>
+              Qualified Therapists
+            </h3>
+            <p style={{
+              fontSize: "0.9rem",
+              lineHeight: "1.4",
+              color: "#758976",
+              fontFamily: "'Times New Roman', serif",
+              margin: 0
+            }}>
+              Licensed professionals ready to support you
+            </p>
+          </div>
+
+          <div style={{
+            background: "#FFFBAD",
+            padding: "1.5rem",
+            borderRadius: "15px",
+            minWidth: "200px",
+            maxWidth: "250px"
+          }}>
+            <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>📅</div>
+            <h3 style={{
+              fontSize: "1.1rem",
+              fontWeight: "600",
+              marginBottom: "0.5rem",
+              color: "#758976",
+              fontFamily: "'Times New Roman', serif"
+            }}>
+              Easy Scheduling
+            </h3>
+            <p style={{
+              fontSize: "0.9rem",
+              lineHeight: "1.4",
+              color: "#758976",
+              fontFamily: "'Times New Roman', serif",
+              margin: 0
+            }}>
+              Book appointments at your convenience
+            </p>
+          </div>
+
+          <div style={{
+            background: "#EBE5D9",
+            padding: "1.5rem",
+            borderRadius: "15px",
+            minWidth: "200px",
+            maxWidth: "250px"
+          }}>
+            <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>🔒</div>
+            <h3 style={{
+              fontSize: "1.1rem",
+              fontWeight: "600",
+              marginBottom: "0.5rem",
+              color: "#758976",
+              fontFamily: "'Times New Roman', serif"
+            }}>
+              Secure & Private
+            </h3>
+            <p style={{
+              fontSize: "0.9rem",
+              lineHeight: "1.4",
+              color: "#758976",
+              fontFamily: "'Times New Roman', serif",
+              margin: 0
+            }}>
+              Your privacy is our top priority
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Main Content Container */}
       <div style={{ 
         display: "flex", 
@@ -1082,15 +1201,16 @@ export default function Home() {
           boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
           width: "100%"
         }}>
-          <h2 style={{ 
+          <h3 style={{ 
             textAlign: "center", 
             color: "#333", 
             marginBottom: "2rem",
             fontSize: "2rem",
-            fontWeight: "300"
+            fontWeight: "200",
+            fontFamily: "'Times New Roman', serif"
           }}>
-            Our Therapists
-          </h2>
+            Find your therapist...
+          </h3>
           
           {loading ? (
             <div style={{ textAlign: "center", padding: "2rem" }}>
@@ -1306,6 +1426,130 @@ export default function Home() {
           background: transparent;
         }
       `}</style>
+
+      {/* Login Choice Popup */}
+      {showLoginPopup && (
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          background: "rgba(0, 0, 0, 0.5)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          zIndex: 1000
+        }}>
+          <div style={{
+            background: "white",
+            borderRadius: "20px",
+            padding: "3rem",
+            boxShadow: "0 20px 60px rgba(0, 0, 0, 0.3)",
+            textAlign: "center",
+            maxWidth: "400px",
+            width: "90%"
+          }}>
+            <h2 style={{
+              fontSize: "1.8rem",
+              fontWeight: "600",
+              color: "#758976",
+              fontFamily: "'Times New Roman', serif",
+              marginBottom: "1rem"
+            }}>
+              Choose Login Type
+            </h2>
+            
+            <p style={{
+              fontSize: "1rem",
+              color: "#666",
+              fontFamily: "'Times New Roman', serif",
+              marginBottom: "2rem"
+            }}>
+              Are you a patient looking for therapy or a therapist providing services?
+            </p>
+
+            <div style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "1rem"
+            }}>
+              <button
+                onClick={() => {
+                  setShowLoginPopup(false);
+                  setShowPatientAuth(true);
+                  setPatientMode("login");
+                }}
+                style={{
+                  padding: "1rem 2rem",
+                  background: "linear-gradient(135deg, #4CAF50, #8BC34A)",
+                  border: "none",
+                  color: "white",
+                  borderRadius: "15px",
+                  fontSize: "1.1rem",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                  transition: "all 0.3s ease",
+                  fontFamily: "'Times New Roman', serif"
+                }}
+                onMouseEnter={(e) => e.target.style.transform = "translateY(-2px)"}
+                onMouseLeave={(e) => e.target.style.transform = "translateY(0px)"}
+              >
+                👤 I'm a Patient
+              </button>
+
+              <button
+                onClick={() => {
+                  setShowLoginPopup(false);
+                  setShowTherapistSignIn(true);
+                }}
+                style={{
+                  padding: "1rem 2rem",
+                  background: "linear-gradient(135deg, #758976, #9E83B8)",
+                  border: "none",
+                  color: "white",
+                  borderRadius: "15px",
+                  fontSize: "1.1rem",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                  transition: "all 0.3s ease",
+                  fontFamily: "'Times New Roman', serif"
+                }}
+                onMouseEnter={(e) => e.target.style.transform = "translateY(-2px)"}
+                onMouseLeave={(e) => e.target.style.transform = "translateY(0px)"}
+              >
+                🩺 I'm a Therapist
+              </button>
+
+              <button
+                onClick={() => setShowLoginPopup(false)}
+                style={{
+                  padding: "0.75rem 1.5rem",
+                  background: "transparent",
+                  border: "1px solid #ccc",
+                  color: "#666",
+                  borderRadius: "15px",
+                  fontSize: "1rem",
+                  cursor: "pointer",
+                  transition: "all 0.3s ease",
+                  fontFamily: "'Times New Roman', serif",
+                  marginTop: "1rem"
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = "#f5f5f5";
+                  e.target.style.borderColor = "#999";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = "transparent";
+                  e.target.style.borderColor = "#ccc";
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       </div>
     </div>
   );
