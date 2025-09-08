@@ -70,6 +70,50 @@ class PatientViewSet(viewsets.ModelViewSet):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
+
+    @action(detail=False, methods=['post'], permission_classes=[AllowAny])
+    def login(self, request):
+        """Patient login using email or phone_no and password"""
+        identifier = request.data.get('identifier')  # email or phone_no
+        password = request.data.get('password')
+
+        if not identifier or not password:
+            return Response({"error": "identifier and password are required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            if '@' in identifier:
+                patient = Patient.objects.get(email=identifier)
+            else:
+                patient = Patient.objects.get(phone_no=identifier)
+        except Patient.DoesNotExist:
+            return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        if patient.password != password:
+            return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        # Issue simple tokens similar to therapist (no user model)
+        refresh = RefreshToken()
+        refresh['patient_id'] = patient.id
+        refresh['user_type'] = 'patient'
+        refresh['phone_no'] = patient.phone_no
+
+        return Response({
+            "message": "Login successful",
+            "access_token": str(refresh.access_token),
+            "refresh_token": str(refresh),
+            "token_type": "Bearer",
+            "expires_in": 86400,
+            "patient": {
+                "id": patient.id,
+                "first_name": patient.first_name,
+                "last_name": patient.last_name,
+                "email": patient.email,
+                "phone_no": patient.phone_no,
+                "full_name": patient.get_full_name(),
+                "profile_picture": patient.profile_picture.url if patient.profile_picture else None,
+                "wallet_balance": float(patient.wallet_balance)
+            }
+        })
     
     def retrieve(self, request, pk=None, *args, **kwargs):
         """Retrieve a specific patient by ID"""

@@ -175,5 +175,49 @@ export const getTherapistAvailability = (therapistId, date) =>
   API.get(`/availabilities/?therapist_id=${therapistId}&date=${date}`);
 export const bookSession = (data) => API.post(`/sessions/`, data);
 
+export const patientSignup = async (username, email, password) => {
+  try {
+    const response = await API.post('/auth/signup/', { username, email, password });
+    if (response.data.access) {
+      setTokens(response.data.access, response.data.refresh);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+    }
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const patientLogin = async (identifier, password) => {
+  try {
+    const response = await API.post('/patients/login/', { identifier, password });
+    if (response.data.access_token) {
+      setTokens(response.data.access_token, response.data.refresh_token);
+      localStorage.setItem('user', JSON.stringify(response.data.patient));
+    }
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const patientCreate = async (data) => {
+  // POST /patients/
+  return API.post('/patients/', data);
+};
+
+export const checkPatientUnique = async ({ phone_no, email, ssn }) => {
+  // Fetch list with filters and see if any exist
+  const params = {};
+  if (phone_no) params.phone = phone_no;
+  if (email) params.email = email;
+  const resp = await API.get('/patients/', { params });
+  const list = Array.isArray(resp.data) ? resp.data : [];
+  const phoneExists = phone_no ? list.some(p => p.phone_no === phone_no) : false;
+  const emailExists = email ? list.some(p => p.email === email) : false;
+  // For SSN, API doesn't expose filter; caller can provide separately if needed
+  return { phoneExists, emailExists };
+};
+
 export default API;
 

@@ -16,6 +16,7 @@ class PatientSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['created_at', 'updated_at', 'age', 'full_name']
         extra_kwargs = {
+            'id': {'required': False},
             'password': {'write_only': True},
             'ssn': {'required': False},
             'email': {'required': False},
@@ -27,7 +28,20 @@ class PatientSerializer(serializers.ModelSerializer):
         }
     
     def create(self, validated_data):
-        # Hash the password before saving
+        # Ensure patient ID is generated if not provided
+        if 'id' not in validated_data or not validated_data.get('id'):
+            import random
+            import string
+            from .models import Patient as PatientModel
+            def generate_patient_id():
+                return 'p_' + ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
+            new_id = generate_patient_id()
+            # Guarantee uniqueness
+            while PatientModel.objects.filter(id=new_id).exists():
+                new_id = generate_patient_id()
+            validated_data['id'] = new_id
+
+        # Hash the password before saving (plaintext kept to match current model behavior)
         password = validated_data.pop('password', None)
         patient = super().create(validated_data)
         if password:

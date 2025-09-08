@@ -49,7 +49,7 @@ export default function Navbar() {
         {user ? (
           <button onClick={handleLogout}>Logout</button>
         ) : (
-          <Link to="/auth">
+          <Link to="/?auth=patient">
             <button>Login / Signup</button>
           </Link>
         )}
