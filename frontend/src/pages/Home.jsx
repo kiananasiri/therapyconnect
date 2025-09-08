@@ -45,6 +45,7 @@ export default function Home() {
   });
   const [patientDetailsError, setPatientDetailsError] = useState("");
   const [patientDetailsLoading, setPatientDetailsLoading] = useState(false);
+  const [showSlide, setShowSlide] = useState(true); // true for text, false for GIF
   const [therapistAuth, setTherapistAuth] = useState({ email: "", password: "" });
   const [loginLoading, setLoginLoading] = useState(false);
   const [loginError, setLoginError] = useState("");
@@ -126,6 +127,15 @@ export default function Home() {
     return () => {
       window.removeEventListener('showLoginPopup', handleShowLoginPopup);
     };
+  }, []);
+
+  // Slideshow effect for hero section
+  useEffect(() => {
+    const slideInterval = setInterval(() => {
+      setShowSlide(prev => !prev);
+    }, 8000); // Switch every 8 seconds
+
+    return () => clearInterval(slideInterval);
   }, []);
 
   const handleSearch = (e) => {
@@ -335,6 +345,29 @@ export default function Home() {
               background-position: 0% 50%;
             }
           }
+          @keyframes slideIn {
+            from {
+              opacity: 0;
+              transform: translateX(-50px);
+            }
+            to {
+              opacity: 1;
+              transform: translateX(0);
+            }
+          }
+          @keyframes slideOut {
+            from {
+              opacity: 1;
+              transform: translateX(0);
+            }
+            to {
+              opacity: 0;
+              transform: translateX(50px);
+            }
+          }
+          .slide-content {
+            animation: slideIn 0.8s ease-out;
+          }
         `}
       </style>
       <div style={{ 
@@ -377,130 +410,174 @@ export default function Home() {
           borderRadius: "30px",
           padding: "2.5rem 2rem",
           border: "1px solid rgba(255, 255, 255, 0.4)",
-          boxShadow: "0 20px 60px rgba(186, 104, 200, 0.2)"
+          boxShadow: "0 20px 60px rgba(186, 104, 200, 0.2)",
+          height: "450px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center"
+        }}>
+          
+          {showSlide ? (
+            // Text Content Slide
+            <div className="slide-content" style={{ textAlign: "center", width: "100%" }}>
+              <div style={{
+                display: "inline-block",
+                background: "#BA68C8",
+                borderRadius: "20px",
+                padding: "0.5rem 2rem",
+                marginBottom: "1rem"
+              }}>
+                <span style={{
+                  color: "white",
+                  fontSize: "0.9rem",
+                  fontWeight: "600",
+                  letterSpacing: "1px",
+                  textTransform: "uppercase",
+                  fontFamily: "'Times New Roman', serif"
+                }}>
+                  Mental Health Platform
+                </span>
+              </div>
+              
+              <h1 style={{ 
+                fontSize: "3.5rem", 
+                margin: "0 0 1rem 0", 
+                fontWeight: "300",
+                color: "#2C3E50",
+                fontFamily: "'Times New Roman', serif",
+                lineHeight: "1.2",
+                letterSpacing: "-1px"
+              }}>
+                Your Journey to
+                <br />
+                <span style={{
+                  background: "linear-gradient(135deg, #9E83B8, #758976)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  fontWeight: "700"
+                }}>
+                  Wellness Starts Here
+                </span>
+        </h1>
+              
+              <p style={{ 
+                fontSize: "1.2rem", 
+                margin: "0 auto 2rem auto", 
+                color: "#5D6D7E",
+                fontWeight: "400",
+                fontFamily: "'Times New Roman', serif",
+                lineHeight: "1.6",
+                maxWidth: "700px"
+              }}>
+                Connect with licensed therapists in a secure, convenient environment. 
+                <br />
+                Professional mental health care, tailored to your needs.
+              </p>
+            </div>
+          ) : (
+            // GIF Content Slide
+            <div className="slide-content" style={{ textAlign: "center", width: "100%" }}>
+              <img 
+                src={helpGif}
+                alt="Mental Health Support"
+                style={{
+                  width: "350px",
+                  height: "350px",
+                  objectFit: "cover",
+                  flexShrink: 0
+                }}
+              />
+              <h2 style={{
+                fontSize: "2rem",
+                fontWeight: "600",
+                color: "#2C3E50",
+                fontFamily: "'Times New Roman', serif",
+                marginTop: "1.5rem",
+                marginBottom: "0.5rem"
+              }}>
+                We're Here to Help
+              </h2>
+              <p style={{
+                fontSize: "1.1rem",
+                color: "#5D6D7E",
+                fontFamily: "'Times New Roman', serif",
+                maxWidth: "600px",
+                margin: "0 auto"
+              }}>
+                Take the first step towards better mental health with our caring professionals.
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Feature Badges - Outside the hero box */}
+        <div style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: "1.5rem",
+          flexWrap: "wrap",
+          marginTop: "2rem",
+          marginBottom: "2rem"
         }}>
           <div style={{
-            display: "inline-block",
-            background: "#BA68C8",
-            borderRadius: "20px",
-            padding: "0.5rem 2rem",
-            marginBottom: "1rem"
+            background: "rgba(102, 187, 106, 0.2)",
+            border: "2px solid rgba(102, 187, 106, 0.4)",
+            borderRadius: "15px",
+            padding: "1rem 1.5rem",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem"
           }}>
+            <span style={{ fontSize: "1.2rem" }}>✓</span>
             <span style={{
-              color: "white",
-              fontSize: "0.9rem",
+              color: "#2E7D32",
               fontWeight: "600",
-              letterSpacing: "1px",
-              textTransform: "uppercase",
+              fontSize: "0.9rem",
               fontFamily: "'Times New Roman', serif"
             }}>
-              Mental Health Platform
+              Licensed Professionals
             </span>
           </div>
           
-          <h1 style={{ 
-            fontSize: "3.5rem", 
-            margin: "0 0 1rem 0", 
-            fontWeight: "300",
-            color: "#2C3E50",
-            fontFamily: "'Times New Roman', serif",
-            lineHeight: "1.2",
-            letterSpacing: "-1px"
-          }}>
-            Your Journey to
-            <br />
-            <span style={{
-              background: "linear-gradient(135deg, #9E83B8, #758976)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-              fontWeight: "700"
-            }}>
-              Wellness Starts Here
-            </span>
-        </h1>
-          
-          <p style={{ 
-            fontSize: "1.2rem", 
-            margin: "0 0 2rem 0", 
-            color: "#5D6D7E",
-            fontWeight: "400",
-            fontFamily: "'Times New Roman', serif",
-            lineHeight: "1.6",
-            maxWidth: "700px",
-            margin: "0 auto 3rem auto"
-          }}>
-            Connect with licensed therapists in a secure, convenient environment. 
-            <br />
-            Professional mental health care, tailored to your needs.
-          </p>
-
           <div style={{
+            background: "rgba(186, 104, 200, 0.2)",
+            border: "2px solid rgba(186, 104, 200, 0.4)",
+            borderRadius: "15px",
+            padding: "1rem 1.5rem",
             display: "flex",
-            justifyContent: "center",
-            gap: "1.5rem",
-            flexWrap: "wrap",
-            marginBottom: "2rem"
+            alignItems: "center",
+            gap: "0.5rem"
           }}>
-            <div style={{
-              background: "rgba(102, 187, 106, 0.2)",
-              border: "2px solid rgba(102, 187, 106, 0.4)",
-              borderRadius: "15px",
-              padding: "1rem 1.5rem",
-              display: "flex",
-              alignItems: "center",
-              gap: "0.5rem"
+            <span style={{ fontSize: "1.2rem" }}>✓</span>
+            <span style={{
+              color: "#7B1FA2",
+              fontWeight: "600",
+              fontSize: "0.9rem",
+              fontFamily: "'Times New Roman', serif"
             }}>
-              <span style={{ fontSize: "1.2rem" }}>✓</span>
-              <span style={{
-                color: "#2E7D32",
-                fontWeight: "600",
-                fontSize: "0.9rem",
-                fontFamily: "'Times New Roman', serif"
-              }}>
-                Licensed Professionals
-              </span>
-            </div>
-            
-            <div style={{
-              background: "rgba(186, 104, 200, 0.2)",
-              border: "2px solid rgba(186, 104, 200, 0.4)",
-              borderRadius: "15px",
-              padding: "1rem 1.5rem",
-              display: "flex",
-              alignItems: "center",
-              gap: "0.5rem"
+              Secure & Private
+            </span>
+          </div>
+          
+          <div style={{
+            background: "rgba(255, 213, 79, 0.2)",
+            border: "2px solid rgba(255, 213, 79, 0.4)",
+            borderRadius: "15px",
+            padding: "1rem 1.5rem",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem"
+          }}>
+            <span style={{ fontSize: "1.2rem" }}>✓</span>
+            <span style={{
+              color: "#F57F17",
+              fontWeight: "600",
+              fontSize: "0.9rem",
+              fontFamily: "'Times New Roman', serif"
             }}>
-              <span style={{ fontSize: "1.2rem" }}>✓</span>
-              <span style={{
-                color: "#7B1FA2",
-                fontWeight: "600",
-                fontSize: "0.9rem",
-                fontFamily: "'Times New Roman', serif"
-              }}>
-                Secure & Private
-              </span>
-            </div>
-            
-            <div style={{
-              background: "rgba(255, 213, 79, 0.2)",
-              border: "2px solid rgba(255, 213, 79, 0.4)",
-              borderRadius: "15px",
-              padding: "1rem 1.5rem",
-              display: "flex",
-              alignItems: "center",
-              gap: "0.5rem"
-            }}>
-              <span style={{ fontSize: "1.2rem" }}>✓</span>
-              <span style={{
-                color: "#F57F17",
-                fontWeight: "600",
-                fontSize: "0.9rem",
-                fontFamily: "'Times New Roman', serif"
-              }}>
-                24/7 Available
-              </span>
-            </div>
+              24/7 Available
+            </span>
           </div>
         </div>
 
@@ -1765,7 +1842,7 @@ export default function Home() {
               >
                 Cancel
               </button>
-            </div>
+    </div>
           </div>
         </div>
       )}
