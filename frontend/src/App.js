@@ -9,6 +9,7 @@ import TherapistSettings from "./pages/TherapisSettings.jsx";
 import PatientSettings from "./pages/PateintSettings.jsx";
 import TherapistList from "./pages/TherapistList";
 import TherapistDetail from "./pages/TherapistDetail";
+import TherapistProfile from "./pages/TherapistProfile";
 
 import { UserProvider } from "./contexts/UserContext";
 import Navbar from "./components/Navbar";
@@ -26,6 +27,7 @@ function AppContent() {
           <Route path="/dashboard/therapist" element={<TherapistDashboard />} />
           <Route path="/therapists" element={<TherapistList />} />
           <Route path="/therapists/:id" element={<TherapistDetail />} />
+          <Route path="/profile" element={<TherapistProfile />} />
         </Routes>
       </main>
     </div>
