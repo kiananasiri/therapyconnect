@@ -10,3 +10,4 @@ google-auth-httplib2
 Pillow
 channels
 channels-redis
+python-dotenv

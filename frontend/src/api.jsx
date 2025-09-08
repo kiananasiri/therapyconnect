@@ -1,9 +1,13 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: process.env.REACT_APP_BACKEND_URL || "http://localhost:8000/api",
+  baseURL: process.env.REACT_APP_BACKEND_URL || (process.env.NODE_ENV === 'production' ? '/api' : "http://localhost:8000/api"),
   withCredentials: true,
 });
+
+if (process.env.NODE_ENV === 'production' && !process.env.REACT_APP_BACKEND_URL) {
+  console.warn('⚠️ No REACT_APP_BACKEND_URL set in production! Falling back to relative /api path');
+}
 
 console.log('🔧 API Configuration:', {
   baseURL: API.defaults.baseURL,
@@ -12,7 +16,14 @@ console.log('🔧 API Configuration:', {
 });
 
 // Patient APIs
-export const getPatient = (id) => API.get(`/patients/${id}`);
+export const getPatient = (id) => API.get(`/patients/${id}`).catch(error => {
+  console.error('API Connection Error:', {
+    status: error.response?.status,
+    message: error.message,
+    baseURL: API.defaults.baseURL
+  });
+  throw error;
+});
 export const updatePatient = (id, data) => API.put(`/patients/${id}`, data);
 export const updatePatientPassword = (id, password) =>
   API.put(`/patients/${id}/password`, { password });

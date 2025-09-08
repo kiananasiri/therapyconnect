@@ -171,3 +171,6 @@ cython_debug/
 .pypirc
 *.env
 .env
+/backend/.env
+/backend/.backend # This file used for virtual environment
+/frontend/.env.production

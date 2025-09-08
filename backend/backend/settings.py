@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 from datetime import timedelta
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -18,12 +19,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
+# Load environment variables
+import os
+
+load_dotenv()
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-27d=@2*0o#($r1utfd3q-(=h4k(_igr2mom%9i7a^qa+)xttcr'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-default-key-change-this')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.gFileEditViewInsertFormatToolsExtensionsHelpetenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = [
     "localhost",
@@ -92,11 +97,11 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'therapy_db',
-        'USER': 'mmd',
-        'PASSWORD': 'mmd',
-        'HOST': 'db',
-        'PORT': '5432',
+        'NAME': os.getenv('DB_NAME', 'therapy_db'),
+        'USER': os.getenv('DB_USER', 'postgres'),
+        'PASSWORD': os.getenv('DB_PASSWORD', ''),
+        'HOST': os.getenv('DB_HOST', 'db'),
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
 
@@ -130,9 +135,9 @@ REST_FRAMEWORK = {
     ),
 }
 
-# OAuth Credentials (replace with real keys)
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "1086395291999-7594u8buab5enl8d85ar1me0u52jlo8q.apps.googleusercontent.com"
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "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"
+# OAuth Credentials
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('GOOGLE_OAUTH2_KEY', '')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('GOOGLE_OAUTH2_SECRET', '')
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
