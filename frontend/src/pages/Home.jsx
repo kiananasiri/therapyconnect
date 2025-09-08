@@ -60,7 +60,6 @@ export default function Home() {
         
         if (response.data && response.data.length > 0) {
           setTherapists(response.data);
-          console.log(`✅ Successfully loaded ${response.data.length} therapists from database`);
         } else {
           console.log('⚠️ No therapists found in database, using fallback data');
           // Only use fallback if no data from API

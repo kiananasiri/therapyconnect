@@ -181,7 +181,6 @@ export default function TherapistDashboard() {
         );
         
         setPatientSessions(sortedSessions);
-        console.log(`✅ Loaded ${sortedSessions.length} sessions for ${patient.first_name} ${patient.last_name}`);
       } else {
         console.error('❌ Sessions data is not an array:', sessions);
         setPatientSessions([]);
@@ -1259,10 +1258,10 @@ export default function TherapistDashboard() {
               ) : (
                 <div style={{
                   position: "relative",
-                  minHeight: "600px"
+                  minHeight: "700px"
                 }}>
                   {/* Hour Grid */}
-                  {Array.from({ length: 12 }, (_, i) => {
+                  {Array.from({ length: 14 }, (_, i) => {
                     const hour = i + 8; // Start from 8 AM
                     const hour12 = hour > 12 ? hour - 12 : hour;
                     const ampm = hour >= 12 ? 'PM' : 'AM';
@@ -1303,6 +1302,7 @@ export default function TherapistDashboard() {
 
                   {/* Sessions */}
                   {dayViewSessions.map((session) => {
+                    
                     const startTime = new Date(`2000-01-01T${session.start_time}:00`);
                     const startHour = startTime.getHours();
                     const startMinute = startTime.getMinutes();
@@ -1311,8 +1311,8 @@ export default function TherapistDashboard() {
                     const topPosition = ((startHour - 8) * 50) + (startMinute / 60 * 50);
                     const height = Math.max((session.duration / 60) * 50, 30); // Minimum 30px height
                     
-                    // Only show sessions that fall within our 8 AM - 8 PM range
-                    if (startHour < 8 || startHour >= 20) return null;
+                    // Only show sessions that fall within our 8 AM - 10 PM range
+                    if (startHour < 8 || startHour >= 22) return null;
                     
                     return (
                       <div
