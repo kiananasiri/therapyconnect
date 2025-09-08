@@ -499,16 +499,7 @@ export default function Home() {
                 lineHeight: "1.2",
                 letterSpacing: "-0.5px"
               }}>
-                We're Here to{" "}
-                <span style={{
-                  background: "linear-gradient(135deg, #BA68C8, #ffc872)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                  fontWeight: "700"
-                }}>
-                  Help
-                </span>
+                We're Here to Help
               </h2>
               <p style={{
                 fontSize: "1.3rem",
@@ -553,15 +544,6 @@ export default function Home() {
                 letterSpacing: "-0.5px"
               }}>
                 Let your Mind Bloom
-                <span style={{
-                  background: "linear-gradient(135deg, #66BB6A, #BA68C8)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                  fontWeight: "700"
-                }}>
-                  Confidence
-                </span>
               </h2>
               <p style={{
                 fontSize: "1.3rem",
