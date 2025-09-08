@@ -4,6 +4,7 @@ import { getTherapists, therapistLogin, patientLogin, patientCreate, checkPatien
 import { useUser } from "../contexts/UserContext";
 import avatar from "../assets/avatar.png";
 import helpGif from "../assets/Mtv Help Sticker by INTO ACTION.gif";
+import flowersGif from "../assets/Mental Health Flowers Sticker by mtv.gif";
 
 // Helper to persist patient user in localStorage (align with therapist handling)
 const storeUser = (user) => {
@@ -45,7 +46,7 @@ export default function Home() {
   });
   const [patientDetailsError, setPatientDetailsError] = useState("");
   const [patientDetailsLoading, setPatientDetailsLoading] = useState(false);
-  const [showSlide, setShowSlide] = useState(true); // true for text, false for GIF
+  const [currentSlide, setCurrentSlide] = useState(0); // 0: text, 1: helpGif, 2: flowersGif
   const [therapistAuth, setTherapistAuth] = useState({ email: "", password: "" });
   const [loginLoading, setLoginLoading] = useState(false);
   const [loginError, setLoginError] = useState("");
@@ -132,7 +133,7 @@ export default function Home() {
   // Slideshow effect for hero section
   useEffect(() => {
     const slideInterval = setInterval(() => {
-      setShowSlide(prev => !prev);
+      setCurrentSlide(prev => (prev + 1) % 3); // Cycle through 0, 1, 2
     }, 8000); // Switch every 8 seconds
 
     return () => clearInterval(slideInterval);
@@ -417,7 +418,7 @@ export default function Home() {
           justifyContent: "center"
         }}>
           
-          {showSlide ? (
+          {currentSlide === 0 ? (
             // Text Content Slide
             <div className="slide-content" style={{ textAlign: "center", width: "100%" }}>
               <div style={{
@@ -459,7 +460,7 @@ export default function Home() {
                 }}>
                   Wellness Starts Here
                 </span>
-        </h1>
+              </h1>
               
               <p style={{ 
                 fontSize: "1.2rem", 
@@ -475,8 +476,8 @@ export default function Home() {
                 Professional mental health care, tailored to your needs.
               </p>
             </div>
-          ) : (
-            // GIF Content Slide
+          ) : currentSlide === 1 ? (
+            // Help GIF Content Slide
             <div className="slide-content" style={{ textAlign: "center", width: "100%" }}>
               <img 
                 src={helpGif}
@@ -489,23 +490,96 @@ export default function Home() {
                 }}
               />
               <h2 style={{
-                fontSize: "2rem",
-                fontWeight: "600",
+                fontSize: "2.5rem",
+                fontWeight: "300",
                 color: "#2C3E50",
                 fontFamily: "'Times New Roman', serif",
-                marginTop: "1.5rem",
-                marginBottom: "0.5rem"
+                marginTop: "2rem",
+                marginBottom: "1rem",
+                lineHeight: "1.2",
+                letterSpacing: "-0.5px"
               }}>
-                We're Here to Help
+                We're Here to{" "}
+                <span style={{
+                  background: "linear-gradient(135deg, #BA68C8, #ffc872)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  fontWeight: "700"
+                }}>
+                  Help
+                </span>
               </h2>
               <p style={{
-                fontSize: "1.1rem",
+                fontSize: "1.3rem",
                 color: "#5D6D7E",
                 fontFamily: "'Times New Roman', serif",
-                maxWidth: "600px",
-                margin: "0 auto"
+                maxWidth: "650px",
+                margin: "0 auto",
+                lineHeight: "1.6",
+                fontWeight: "400"
               }}>
-                Take the first step towards better mental health with our caring professionals.
+                Take the first step towards{" "}
+                <span style={{
+                  color: "#BA68C8",
+                  fontWeight: "600"
+                }}>
+                  better mental health
+                </span>{" "}
+                with our caring professionals.
+              </p>
+            </div>
+          ) : (
+            // Flowers GIF Content Slide
+            <div className="slide-content" style={{ textAlign: "center", width: "100%" }}>
+              <img 
+                src={flowersGif}
+                alt="Mental Health Flowers"
+                style={{
+                  width: "350px",
+                  height: "350px",
+                  objectFit: "cover",
+                  flexShrink: 0
+                }}
+              />
+              <h2 style={{
+                fontSize: "2.5rem",
+                fontWeight: "300",
+                color: "#2C3E50",
+                fontFamily: "'Times New Roman', serif",
+                marginTop: "2rem",
+                marginBottom: "1rem",
+                lineHeight: "1.2",
+                letterSpacing: "-0.5px"
+              }}>
+                Let your Mind Bloom
+                <span style={{
+                  background: "linear-gradient(135deg, #66BB6A, #BA68C8)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  fontWeight: "700"
+                }}>
+                  Confidence
+                </span>
+              </h2>
+              <p style={{
+                fontSize: "1.3rem",
+                color: "#5D6D7E",
+                fontFamily: "'Times New Roman', serif",
+                maxWidth: "650px",
+                margin: "0 auto",
+                lineHeight: "1.6",
+                fontWeight: "400"
+              }}>
+                Nurture your mental wellness and{" "}
+                <span style={{
+                  color: "#66BB6A",
+                  fontWeight: "600"
+                }}>
+                  flourish
+                </span>{" "}
+                with personalized therapeutic support.
               </p>
             </div>
           )}
@@ -632,7 +706,7 @@ export default function Home() {
                 }}
               />
             </div>
-            <button 
+          <button 
               type="submit" 
             style={{ 
                 padding: "1.2rem 2.5rem",
@@ -642,18 +716,18 @@ export default function Home() {
                 borderRadius: "20px",
               fontSize: "1rem",
                 fontWeight: "600",
-                cursor: "pointer",
+              cursor: "pointer",
                 fontFamily: "'Times New Roman', serif",
                 transition: "all 0.3s ease",
                 boxShadow: "0 5px 20px rgba(255, 200, 114, 0.4)",
                 position: "relative",
                 zIndex: 10
-              }}
-              onMouseEnter={(e) => {
+            }}
+            onMouseEnter={(e) => {
                 e.target.style.transform = "translateY(-2px)";
                 e.target.style.boxShadow = "0 8px 30px rgba(255, 200, 114, 0.6)";
-              }}
-              onMouseLeave={(e) => {
+            }}
+            onMouseLeave={(e) => {
                 e.target.style.transform = "translateY(0px)";
                 e.target.style.boxShadow = "0 5px 20px rgba(255, 200, 114, 0.4)";
               }}
