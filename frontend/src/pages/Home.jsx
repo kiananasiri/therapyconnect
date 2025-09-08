@@ -632,28 +632,30 @@ export default function Home() {
                 }}
               />
             </div>
-          <button 
+            <button 
               type="submit" 
             style={{ 
                 padding: "1.2rem 2.5rem",
-                background: "linear-gradient(135deg, #BA68C8, #FFD54F, #66BB6A)",
+                background: "#ffc872",
               color: "white",
                 border: "none",
                 borderRadius: "20px",
               fontSize: "1rem",
                 fontWeight: "600",
-              cursor: "pointer",
+                cursor: "pointer",
                 fontFamily: "'Times New Roman', serif",
                 transition: "all 0.3s ease",
-                boxShadow: "0 5px 20px rgba(186, 104, 200, 0.4)"
-            }}
-            onMouseEnter={(e) => {
+                boxShadow: "0 5px 20px rgba(255, 200, 114, 0.4)",
+                position: "relative",
+                zIndex: 10
+              }}
+              onMouseEnter={(e) => {
                 e.target.style.transform = "translateY(-2px)";
-                e.target.style.boxShadow = "0 8px 30px rgba(186, 104, 200, 0.6)";
-            }}
-            onMouseLeave={(e) => {
+                e.target.style.boxShadow = "0 8px 30px rgba(255, 200, 114, 0.6)";
+              }}
+              onMouseLeave={(e) => {
                 e.target.style.transform = "translateY(0px)";
-                e.target.style.boxShadow = "0 5px 20px rgba(186, 104, 200, 0.4)";
+                e.target.style.boxShadow = "0 5px 20px rgba(255, 200, 114, 0.4)";
               }}
             >
               🔍 Find Therapist
