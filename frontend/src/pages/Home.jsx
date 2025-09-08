@@ -542,7 +542,7 @@ export default function Home() {
                 fontSize: "1.3rem",
                 color: "#5D6D7E",
                 fontFamily: "'Times New Roman', serif",
-                maxWidth: "650px",
+                maxWidth: "750px",
                 margin: "0 auto",
                 lineHeight: "1.6",
                 fontWeight: "400"
