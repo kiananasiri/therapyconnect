@@ -363,7 +363,7 @@ export default function Home() {
         }}>
           <div style={{
             display: "inline-block",
-            background: "linear-gradient(135deg, #BA68C8, #66BB6A)",
+            background: "#BA68C8",
             borderRadius: "20px",
             padding: "0.5rem 2rem",
             marginBottom: "1rem"
