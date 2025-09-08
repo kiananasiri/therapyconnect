@@ -345,11 +345,11 @@ export default function Home() {
         }}
       />
       
-      <div style={{ padding: "2rem", position: "relative", zIndex: 1 }}>
+      <div style={{ padding: "0.5rem", position: "relative", zIndex: 1 }}>
       {/* Hero Section */}
       <div style={{ 
         textAlign: "center", 
-        padding: "4rem 2rem",
+        padding: "1rem 2rem 2rem 2rem",
         maxWidth: "1200px",
         margin: "0 auto"
       }}>
@@ -357,7 +357,7 @@ export default function Home() {
           background: "rgba(255, 255, 255, 0.3)",
           backdropFilter: "blur(20px)",
           borderRadius: "30px",
-          padding: "4rem 3rem",
+          padding: "2.5rem 2rem",
           border: "1px solid rgba(255, 255, 255, 0.4)",
           boxShadow: "0 20px 60px rgba(186, 104, 200, 0.2)"
         }}>
@@ -366,7 +366,7 @@ export default function Home() {
             background: "linear-gradient(135deg, #BA68C8, #66BB6A)",
             borderRadius: "20px",
             padding: "0.5rem 2rem",
-            marginBottom: "2rem"
+            marginBottom: "1rem"
           }}>
             <span style={{
               color: "white",
@@ -381,8 +381,8 @@ export default function Home() {
           </div>
           
           <h1 style={{ 
-            fontSize: "4rem", 
-            margin: "0 0 2rem 0", 
+            fontSize: "3.5rem", 
+            margin: "0 0 1rem 0", 
             fontWeight: "300",
             color: "#2C3E50",
             fontFamily: "'Times New Roman', serif",
@@ -400,11 +400,11 @@ export default function Home() {
             }}>
               Wellness Starts Here
             </span>
-          </h1>
+        </h1>
           
           <p style={{ 
-            fontSize: "1.3rem", 
-            margin: "0 0 3rem 0", 
+            fontSize: "1.2rem", 
+            margin: "0 0 2rem 0", 
             color: "#5D6D7E",
             fontWeight: "400",
             fontFamily: "'Times New Roman', serif",
@@ -492,8 +492,8 @@ export default function Home() {
           background: "rgba(255, 255, 255, 0.6)",
           backdropFilter: "blur(15px)",
           borderRadius: "25px",
-          padding: "2rem",
-          marginTop: "3rem",
+          padding: "1.5rem",
+          marginTop: "1.5rem",
           border: "2px solid rgba(186, 104, 200, 0.3)",
           boxShadow: "0 10px 40px rgba(186, 104, 200, 0.2)"
         }}>
@@ -516,12 +516,12 @@ export default function Home() {
                 placeholder="Search therapists by name or specialty..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                style={{ 
+            style={{ 
                   width: "100%",
                   padding: "1.2rem 1.5rem", 
                   borderRadius: "20px",
                   border: "2px solid rgba(186, 104, 200, 0.3)",
-                  fontSize: "1rem",
+              fontSize: "1rem",
                   fontFamily: "'Times New Roman', serif",
                   background: "rgba(255, 255, 255, 0.9)",
                   transition: "all 0.3s ease",
@@ -537,33 +537,33 @@ export default function Home() {
                 }}
               />
             </div>
-            <button 
+          <button 
               type="submit" 
-              style={{ 
+            style={{ 
                 padding: "1.2rem 2.5rem",
                 background: "linear-gradient(135deg, #BA68C8, #FFD54F, #66BB6A)",
-                color: "white",
+              color: "white",
                 border: "none",
                 borderRadius: "20px",
-                fontSize: "1rem",
+              fontSize: "1rem",
                 fontWeight: "600",
-                cursor: "pointer",
+              cursor: "pointer",
                 fontFamily: "'Times New Roman', serif",
                 transition: "all 0.3s ease",
                 boxShadow: "0 5px 20px rgba(186, 104, 200, 0.4)"
-              }}
-              onMouseEnter={(e) => {
+            }}
+            onMouseEnter={(e) => {
                 e.target.style.transform = "translateY(-2px)";
                 e.target.style.boxShadow = "0 8px 30px rgba(186, 104, 200, 0.6)";
-              }}
-              onMouseLeave={(e) => {
+            }}
+            onMouseLeave={(e) => {
                 e.target.style.transform = "translateY(0px)";
                 e.target.style.boxShadow = "0 5px 20px rgba(186, 104, 200, 0.4)";
               }}
             >
               🔍 Find Therapist
-            </button>
-          </form>
+          </button>
+        </form>
         </div>
       </div>
 
@@ -1226,20 +1226,20 @@ export default function Home() {
 
       {/* Platform Information Section */}
       <div style={{
-        padding: "6rem 2rem",
+        padding: "1rem 2rem 4rem 2rem",
         maxWidth: "1200px",
         margin: "0 auto"
       }}>
         <div style={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))",
-          gap: "2rem",
+          gap: "1.5rem",
           alignItems: "center"
         }}>
           <div style={{
             background: "rgba(255, 255, 255, 0.8)",
             backdropFilter: "blur(20px)",
-            padding: "3rem",
+            padding: "2rem",
             borderRadius: "25px",
             border: "2px solid rgba(102, 187, 106, 0.3)",
             boxShadow: "0 15px 50px rgba(102, 187, 106, 0.2)",
@@ -1291,7 +1291,7 @@ export default function Home() {
           <div style={{
             background: "rgba(255, 255, 255, 0.8)",
             backdropFilter: "blur(20px)",
-            padding: "3rem",
+            padding: "2rem",
             borderRadius: "25px",
             border: "2px solid rgba(186, 104, 200, 0.3)",
             boxShadow: "0 15px 50px rgba(186, 104, 200, 0.2)",
@@ -1343,7 +1343,7 @@ export default function Home() {
           <div style={{
             background: "rgba(255, 255, 255, 0.8)",
             backdropFilter: "blur(20px)",
-            padding: "3rem",
+            padding: "2rem",
             borderRadius: "25px",
             border: "2px solid rgba(255, 213, 79, 0.4)",
             boxShadow: "0 15px 50px rgba(255, 213, 79, 0.2)",
@@ -1652,7 +1652,7 @@ export default function Home() {
           <div style={{
             background: "white",
             borderRadius: "20px",
-            padding: "3rem",
+            padding: "2rem",
             boxShadow: "0 20px 60px rgba(0, 0, 0, 0.3)",
             textAlign: "center",
             maxWidth: "400px",
