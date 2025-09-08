@@ -57,7 +57,7 @@ class Patient(models.Model):
     )
     
     # Required unique email field
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=True, null=True, default=None)
     
     # Optional address field
     address = models.TextField(blank=True, null=True)
