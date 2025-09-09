@@ -199,6 +199,7 @@ CHANNEL_LAYERS = {
         },
     },
 }
+ALLOWED_HOSTS = ["*"]
 
 # WebSocket Configuration
 WS_ALLOWED_HOSTS = [

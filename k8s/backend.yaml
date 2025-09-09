@@ -1,8 +1,8 @@
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend
+  namespace: university
 spec:
   replicas: 1
   selector:
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: spiritualguest/therapyconnect-backend:latest
+          image: your_dockerhub_user/therapyconnect-backend:latest
           ports:
             - containerPort: 8000
           envFrom:
@@ -31,6 +31,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: backend
+  namespace: university
 spec:
   ports:
     - port: 8000
