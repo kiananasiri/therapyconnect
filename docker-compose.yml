@@ -4,12 +4,14 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_started
     ports:
       - "8000:8000"
     volumes:
       - ./backend:/app
-    environment:
-      - DATABASE_URL=postgresql://mmd:mmd@db:5432/therapy_db
+    env_file:
+      - ./backend/.env
     command: >
       sh -c "python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"
@@ -21,8 +23,9 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
+    env_file:
+      - ./frontend/.env.production
     environment:
-      - REACT_APP_BACKEND_URL=http://localhost:8000/api
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
       - WDS_SOCKET_PORT=3000
@@ -32,19 +35,27 @@ services:
 
   db:
     image: postgres:15
+    env_file:
+      - ./backend/.env
     ports:
       - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: therapy_db
-      POSTGRES_USER: mmd
-      POSTGRES_PASSWORD: mmd
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U mmd -d therapy_db"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-mmd} -d ${POSTGRES_DB:-therapy_db}"]
       interval: 10s
       timeout: 5s
       retries: 10
 
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+
 volumes:
   db_data:
+  redis_data:

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from datetime import timedelta
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,12 +20,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
+# Load environment variables
+import os
+
+load_dotenv()
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-27d=@2*0o#($r1utfd3q-(=h4k(_igr2mom%9i7a^qa+)xttcr'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-default-key-change-this')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', True)
 
 ALLOWED_HOSTS = [
     "localhost",
@@ -94,8 +99,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('DB_NAME', 'therapy_db'),
-        'USER': os.getenv('DB_USER', 'mmd'),
-        'PASSWORD': os.getenv('DB_PASSWORD', 'mmd'),
+        'USER': os.getenv('DB_USER', 'postgres'),
+        'PASSWORD': os.getenv('DB_PASSWORD', ''),
         'HOST': os.getenv('DB_HOST', 'db'),
         'PORT': os.getenv('DB_PORT', '5432'),
     }
@@ -127,19 +132,13 @@ AUTHENTICATION_BACKENDS = (
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'therapy.authentication.TherapistJWTAuthentication',  # Use our custom authentication
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',  # Changed to AllowAny by default
-    ],
-    'DEFAULT_RENDERER_CLASSES': [
-        'rest_framework.renderers.JSONRenderer',
-    ],
 }
 
-# OAuth Credentials (replace with real keys)
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "1086395291999-7594u8buab5enl8d85ar1me0u52jlo8q.apps.googleusercontent.com"
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "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"
+# OAuth Credentials
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('GOOGLE_OAUTH2_KEY', '')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('GOOGLE_OAUTH2_SECRET', '')
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -178,26 +177,32 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # React frontend URL
-    "http://frontend:3000",
-    "https://localhost:3000",  # React frontend URL
-    "https://frontend:3000",
-    "http://65.109.187.67:3000",  # Server IP frontend URL
-    "https://65.109.187.67:3000",  # Server IP frontend URL (HTTPS)
-]
+# CORS_ALLOWED_ORIGINS = [
+#     BACKEND_URL := os.getenv('BACKEND_URL', 'http://localhost:8000'),
+#     "http://localhost:3000",
+# ]
+CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
 CORS_ALLOW_HEADERS = ["Authorization", "Content-Type"]
+CSRF_TRUSTED_ORIGINS = [
+    FRONTEND_URL := os.getenv('FRONTEND_URL', 'http://localhost:3000'),
+]
 
-# JWT Session Configuration
-# Sessions are now handled via JWT tokens instead of Redis/WebSocket
-# All real-time features will use HTTP polling or Server-Sent Events if needed
+# Channels Configuration
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('redis', 6379)],
+        },
+    },
+}
 
-# Session Configuration (for admin and other Django features)
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-SESSION_COOKIE_AGE = 86400  # 24 hours
-SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
-SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SAMESITE = 'Lax'
+# WebSocket Configuration
+WS_ALLOWED_HOSTS = [
+    "localhost",
+    "frontend",
+    "backend",
+]
