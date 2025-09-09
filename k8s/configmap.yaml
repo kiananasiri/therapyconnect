@@ -1,0 +1,12 @@
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: therapyconnect-config
+data:
+  REACT_APP_BACKEND_URL: "http://backend:8000/api"
+  CHOKIDAR_USEPOLLING: "true"
+  WATCHPACK_POLLING: "true"
+  WDS_SOCKET_PORT: "3000"
+  HOST: "0.0.0.0"
+  BROWSER: "none"

@@ -174,3 +174,4 @@ cython_debug/
 /backend/.env
 /backend/.backend # This file used for virtual environment
 /frontend/.env.production
+/k8s/secrets.yaml
